@@ -42,12 +42,23 @@ typedef unsigned int uint;
                               \
 	 }
 
+//Random 
+#ifdef _DEBUG
+#define RAND() getPseudoRand() 
+#else
+#define RAND() getRand()
+#endif
+
 // Configuration -----------
 #define SCREEN_SIZE 3
-#define SCREEN_WIDTH 384
+#define SCREEN_WIDTH 384//TODO revisar en algun momento por si se ocurre una mejor manera de manejarlo
 #define SCREEN_HEIGHT 240
 #define FULLSCREEN false
 #define VSYNC true
-#define TITLE "Super Awesome Game"
+#define TITLE "Space Harrier-Game"
+
+int getPseudoRand();
+int getRand();
+
 
 #endif //__GLOBALS_H__

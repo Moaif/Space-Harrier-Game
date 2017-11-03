@@ -53,7 +53,7 @@ update_status ModuleSceneSpace::Update()
 {
 
 	// Draw everything --------------------------------------
-	App->renderer->Blit(background, 0, 0, NULL);
+	App->renderer->Blit(background, 0, 0, 0, NULL);
 	
 	return UPDATE_CONTINUE;
 }

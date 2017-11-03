@@ -15,11 +15,11 @@ struct Particle
 	// TODO 1: Fill in the structure with all the properties you need for each particle
 	bool to_delete = false;
 	bool firstSound=true;
-	iPoint position = { 0, 0 };
+	fPoint position = { 0, 0 , 1};
 	unsigned int efxIndex;
 	Animation anim;
-	bool onlyOnce = false;;
-	int speed;
+	bool onlyOnce = false;
+	float speed;
 
 	// TODO 11: Add an optional collider to each particle
 	Collider* collider;
@@ -44,7 +44,7 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider* col,Collider* other);
 
-	void AddParticle(const Particle& particle, int x, int y); // feel free to expand this call
+	void AddParticle(const Particle& particle, float x, float y); // feel free to expand this call
 
 private:
 

@@ -88,12 +88,13 @@ bool ModuleRender::CleanUp()
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, float speed)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, float speed)
 {
 	bool ret = true;
 	SDL_Rect rect;
 	rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
 	rect.y = (int)(camera.y * speed) + y * SCREEN_SIZE;
+
 
 	if(section != NULL)
 	{
@@ -105,8 +106,20 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, f
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	rect.w *= SCREEN_SIZE;
-	rect.h *= SCREEN_SIZE;
+	if (z==0) {
+		z = 1;
+	}
+
+	rect.w *=SCREEN_SIZE;
+	rect.h *=SCREEN_SIZE;
+
+	int temp1 = rect.w / z;
+	int temp2 = rect.h / z;
+
+	rect.x += ((rect.w-temp1)/2);
+	rect.y += ((rect.h-temp2)/2);
+	rect.w = temp1;
+	rect.h = temp2;
 
 	if(SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{

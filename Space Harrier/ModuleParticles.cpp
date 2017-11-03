@@ -18,17 +18,19 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
-	graphics = App->textures->Load("assets/particles.png");
+	graphics = App->textures->Load("assets/Shoots.png");
 
 
-	// TODO 2: Create a prototype for the laser particle
-	// audio: rtype/laser.wav
-	// coords: {232, 103, 16, 12}; {249, 103, 16, 12};
-	laser.anim.frames.push_back({ 232, 103, 16, 12 });
-	laser.anim.frames.push_back({ 249, 103, 16, 12 });
+	// Creating shoot particle
+	laser.anim.frames.push_back({ 1, 1, 91, 61 });
+	laser.anim.frames.push_back({ 95, 0, 91, 61 });
+	laser.anim.frames.push_back({ 188, 1, 91, 61 });
+	laser.anim.frames.push_back({ 284, 0, 91, 61 });
+	laser.anim.randFrame = true;
+	laser.anim.speed = 0.01f;
 	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser.speed = 10;
-	laser.collider = App->collision->AddCollider({-16,-12,16,12},LASERS,this);
+	laser.speed = 0.5f;
+	laser.collider = App->collision->AddCollider({-16,-12,91,61},LASERS,this);//Is generated out of screen
 
 	// TODO 12: Create a new "Explosion" particle 
 	// audio: rtype/explosion.wav
@@ -86,7 +88,7 @@ update_status ModuleParticles::Update()
 		Particle* p = *it;
 
 		p->Update();
-		App->renderer->Blit(graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()));
+		App->renderer->Blit(graphics, (int)p->position.x,(int) p->position.y,(int) p->position.z, &(p->anim.GetCurrentFrame()));
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
 				p->to_delete = true;
@@ -103,14 +105,14 @@ update_status ModuleParticles::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleParticles::AddParticle(const Particle& particle, int x, int y)
+void ModuleParticles::AddParticle(const Particle& particle, float x, float y)
 {
 	// TODO 4: Fill in a method to create an instance of a prototype particle	
 	Particle* p = new Particle(particle);
 	p->position = { x,y };
 	if (p->collider != nullptr) {
-		p->collider->rect.x = x;
-		p->collider->rect.y = y;
+		p->collider->rect.x =(int) x;
+		p->collider->rect.y =(int) y;
 	}
 	active.push_back(p);
 }
@@ -148,12 +150,17 @@ Particle::~Particle()
 
 void Particle::Update()
 {
-	// TODO 5: This is the core of the particle logic
-	// draw and audio will be managed by ModuleParticle::Update()
-	// Note: Set to_delete to true is you want it deleted
-	position.x += speed;
+	if (position.z >= MAX_Z) {
+		to_delete = true;
+	}
+	position.z += speed;
 	if (collider != nullptr) {
-		collider->rect.x = position.x;
+		float temp1 = (anim.GetCurrentFrame().w / position.z);
+		float temp2 = (anim.GetCurrentFrame().h / position.z);
+		collider->rect.x +=(int) ((anim.GetCurrentFrame().w-temp1)/2);
+		collider->rect.y +=(int) ((anim.GetCurrentFrame().h - temp2)/2);
+		collider->rect.w = (int)temp1;
+		collider->rect.h = (int)temp2;
 	}
 }
 

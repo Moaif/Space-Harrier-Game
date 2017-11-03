@@ -111,5 +111,8 @@
     <ClCompile Include="ModuleSceneSpace.cpp">
       <Filter>Game Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

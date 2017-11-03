@@ -19,6 +19,7 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	run.frames.push_back({ 25, 4, 20, 47 });
 	run.frames.push_back({ 49, 2, 25, 49 });
 	run.frames.push_back({ 75, 3, 21, 47 });
+	run.speed = 0.1f;
 
 	center.frames.push_back({ 108,2,26,49 });
 
@@ -45,8 +46,9 @@ bool ModulePlayer::Start()
 	destroyed = false;
 	position.x = 150;
 	position.y = 120;
+	position.z = 0;
 	//Collider
-	collider = App->collision->AddCollider({ 150,120,32,14 }, PLAYER, this);
+	collider = App->collision->AddCollider({ 150,120,25,50 }, PLAYER, this);
 
 	return true;
 }
@@ -98,14 +100,16 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		// TODO 6: Shoot a laser using the particle system
-		App->particles->AddParticle(App->particles->laser, position.x, position.y);
+		float x =(float) (position.x + current_animation->GetCurrentFrame().w / 2) - (App->particles->laser.anim.GetCurrentFrame().w / 2);
+		float y =(float) (position.y + current_animation->GetCurrentFrame().h / 2) - (App->particles->laser.anim.GetCurrentFrame().h / 2);
+		App->particles->AddParticle(App->particles->laser, x, y);
 	}
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
 		collider->rect.x = position.x;
 		collider->rect.y = position.y;
-		App->renderer->Blit(graphics, position.x, position.y, &(current_animation->GetCurrentFrame()));
+		App->renderer->Blit(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()));
 	}
 
 	return UPDATE_CONTINUE;
