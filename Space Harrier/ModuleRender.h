@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include "Point.h"
 
 struct SDL_Texture;
 struct SDL_Renderer;
@@ -23,9 +24,14 @@ public:
 	bool Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, float speed = 1.0f);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
 
+private:
+	float DepthScale(float z);
+
 public:
 	SDL_Renderer* renderer = nullptr;
 	SDL_Rect camera;
+	iPoint horizon;
+	int nearClippingPlane;
 };
 
 #endif // __MODULERENDER_H__

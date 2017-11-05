@@ -44,8 +44,8 @@ bool ModulePlayer::Start()
 	graphics = App->textures->Load("assets/character.png");
 
 	destroyed = false;
-	position.x = 150;
-	position.y = 120;
+	position.x = 0;
+	position.y = 0;
 	position.z = 0;
 	//Collider
 	collider = App->collision->AddCollider({ 150,120,25,50 }, PLAYER, this);
@@ -74,6 +74,7 @@ update_status ModulePlayer::Update()
 		if (current_animation != &run) {
 			VerifyFlyAnimation();
 		}
+		VerifyHorizonX();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
@@ -82,6 +83,7 @@ update_status ModulePlayer::Update()
 		if (current_animation != &run) {
 			VerifyFlyAnimation();
 		}
+		VerifyHorizonX();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
@@ -144,4 +146,23 @@ void ModulePlayer::VerifyFlyAnimation() {
 		current_animation = &right2;
 		return;
 	}
+}
+
+void ModulePlayer::VerifyHorizonX() {
+	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 3)) {
+		App->renderer->horizon.x = - HORIZON_OFFSET;
+		return;
+	}
+	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 3 * 2)) {
+		App->renderer->horizon.x = position.x;
+		return;
+	}
+	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH )) {
+		App->renderer->horizon.x = SCREEN_WIDTH + HORIZON_OFFSET;
+		return;
+	}
+}
+
+void ModulePlayer::VerifyHorizonY() {
+
 }

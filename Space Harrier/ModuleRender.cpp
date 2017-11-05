@@ -10,6 +10,9 @@ ModuleRender::ModuleRender()
 	camera.x = camera.y = 0;
 	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
 	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
+	horizon.x = SCREEN_WIDTH / 2;
+	horizon.y = SCREEN_HEIGHT / 2;
+	nearClippingPlane = 3;
 }
 
 // Destructor
@@ -92,9 +95,9 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* sect
 {
 	bool ret = true;
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
-	rect.y = (int)(camera.y * speed) + y * SCREEN_SIZE;
 
+	float scale = DepthScale(z);
+	float inversescale = 1.0 - scale;
 
 	if(section != NULL)
 	{
@@ -106,20 +109,19 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* sect
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	if (z==0) {
-		z = 1;
-	}
+	float temp = rect.h - (scale*rect.h);
+	rect.w = (scale*rect.w);
+	rect.h = (scale*rect.h);
 
 	rect.w *=SCREEN_SIZE;
 	rect.h *=SCREEN_SIZE;
 
-	int temp1 = rect.w / z;
-	int temp2 = rect.h / z;
+	rect.x = (x * scale) + (horizon.x * inversescale);
+	rect.y = y + (temp / 2);
 
-	rect.x += ((rect.w-temp1)/2);
-	rect.y += ((rect.h-temp2)/2);
-	rect.w = temp1;
-	rect.h = temp2;
+	rect.x = (int)(camera.x * speed) + rect.x * SCREEN_SIZE;
+	rect.y = (int)(camera.y * speed) + rect.y * SCREEN_SIZE;
+
 
 	if(SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
@@ -153,4 +155,14 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+float ModuleRender::DepthScale(float z) {
+	float dist = nearClippingPlane + z;
+
+	if (dist == 0)
+		return 0;
+
+
+	return nearClippingPlane / dist;
 }

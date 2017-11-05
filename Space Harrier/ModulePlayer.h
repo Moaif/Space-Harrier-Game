@@ -5,6 +5,8 @@
 #include "Animation.h"
 #include "Point.h"
 
+#define HORIZON_OFFSET 20
+
 struct SDL_Texture;
 
 class ModulePlayer : public Module
@@ -20,6 +22,8 @@ public:
 
 private:
 	void VerifyFlyAnimation();
+	void VerifyHorizonX();
+	void VerifyHorizonY();
 
 public:
 

@@ -11,7 +11,11 @@
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
 ModuleSceneSpace::ModuleSceneSpace(bool active) : Module(active)
-{}
+{
+	tree.frames.push_back({206,48,44,163});
+	z = 0;
+	sw = false;
+}
 
 ModuleSceneSpace::~ModuleSceneSpace()
 {}
@@ -22,6 +26,7 @@ bool ModuleSceneSpace::Start()
 	LOG("Loading space scene");
 	
 	background = App->textures->Load("assets/background.png");
+	trees = App->textures->Load("assets/Arboles.png");
 
 	App->player->Enable();
 	App->particles->Enable();
@@ -51,9 +56,23 @@ bool ModuleSceneSpace::CleanUp()
 // Update: draw background
 update_status ModuleSceneSpace::Update()
 {
+	if (sw) {
+		z--;
+		if (z == 0) {
+			sw = false;
+		}
+	}
+	else
+	{
+		z++;
+		if (z == 24) {
+			sw = true;
+		}
+	}
 
 	// Draw everything --------------------------------------
 	App->renderer->Blit(background, 0, 0, 0, NULL);
+	App->renderer->Blit(trees,100,0,z,&(tree.GetCurrentFrame()));
 	
 	return UPDATE_CONTINUE;
 }

@@ -19,6 +19,10 @@ public:
 	
 	SDL_Texture* background = nullptr;
 	SDL_Texture* stars = nullptr;
+	SDL_Texture* trees = nullptr;
+	Animation tree;
+	int z;
+	bool sw;
 };
 
 #endif // __MODULESCENESPACE_H__
