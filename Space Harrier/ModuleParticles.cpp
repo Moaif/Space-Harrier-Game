@@ -88,7 +88,8 @@ update_status ModuleParticles::Update()
 		Particle* p = *it;
 
 		p->Update();
-		App->renderer->Blit(graphics, (int)p->position.x,(int) p->position.y,(int) p->position.z, &(p->anim.GetCurrentFrame()));
+		SDL_Rect screenPoint = App->renderer->ToScreenPoint(p->position.x,p->position.y,p->position.z,&(p->anim.GetCurrentFrame()));
+		App->renderer->Blit(graphics, screenPoint.x, screenPoint.y, &(p->anim.GetCurrentFrame()),&screenPoint);
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
 				p->to_delete = true;

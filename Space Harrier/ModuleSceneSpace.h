@@ -21,8 +21,7 @@ public:
 	SDL_Texture* stars = nullptr;
 	SDL_Texture* trees = nullptr;
 	Animation tree;
-	int z;
-	bool sw;
+	float z,z2,x,x2;
 };
 
 #endif // __MODULESCENESPACE_H__

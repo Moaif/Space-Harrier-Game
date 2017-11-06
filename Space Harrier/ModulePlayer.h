@@ -35,7 +35,7 @@ public:
 	Animation right1;
 	Animation left2;
 	Animation right2;
-	iPoint position;
+	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
 };

@@ -91,16 +91,17 @@ bool ModuleRender::CleanUp()
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, float speed)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection)
 {
 	bool ret = true;
 	SDL_Rect rect;
 
-	float scale = DepthScale(z);
-	float inversescale = 1.0 - scale;
-
-	if(section != NULL)
+	if(blitSection != NULL)
 	{
+		rect.w = blitSection->w;
+		rect.h = blitSection->h;
+	}
+	else if (section !=NULL) {
 		rect.w = section->w;
 		rect.h = section->h;
 	}
@@ -109,19 +110,19 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* sect
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	float temp = rect.h - (scale*rect.h);
-	rect.w = (scale*rect.w);
-	rect.h = (scale*rect.h);
+	//Center (0,0) is in the mid-down of the window
+	x = x + (SCREEN_WIDTH / 2);
+	y = SCREEN_HEIGHT - y;
 
-	rect.w *=SCREEN_SIZE;
-	rect.h *=SCREEN_SIZE;
+	//Now we calculate the left-top point where the image should start
+	x = x - (rect.w / 2);
+	y = y - rect.h ;
 
-	rect.x = (x * scale) + (horizon.x * inversescale);
-	rect.y = y + (temp / 2);
+	rect.x = x * SCREEN_SIZE;
+	rect.y = y * SCREEN_SIZE;
 
-	rect.x = (int)(camera.x * speed) + rect.x * SCREEN_SIZE;
-	rect.y = (int)(camera.y * speed) + rect.y * SCREEN_SIZE;
-
+	rect.w *= SCREEN_SIZE;
+	rect.h *= SCREEN_SIZE;
 
 	if(SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
@@ -165,4 +166,21 @@ float ModuleRender::DepthScale(float z) {
 
 
 	return nearClippingPlane / dist;
+}
+
+SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
+
+	SDL_Rect rect;
+
+	float scale = DepthScale(z);
+	float inversescale = 1.0f - scale;
+
+	float temp = section->h - (scale*section->h);
+	rect.w = (int)(scale*section->w);
+	rect.h = (int)(scale*section->h);
+
+	rect.x =(int) ((x * scale) + (horizon.x * inversescale));
+	rect.y =(int) (y + (temp / 2));
+
+	return rect;
 }
