@@ -19,7 +19,7 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	run.frames.push_back({ 25, 4, 20, 47 });
 	run.frames.push_back({ 49, 2, 25, 49 });
 	run.frames.push_back({ 75, 3, 21, 47 });
-	run.speed = 0.1f;
+	run.speed = 0.05f;
 
 	center.frames.push_back({ 108,2,26,49 });
 
@@ -70,32 +70,45 @@ update_status ModulePlayer::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		position.x -= speed;
-		if (current_animation != &run) {
-			VerifyFlyAnimation();
+		if (position.x > ((-SCREEN_WIDTH/2)+current_animation->GetCurrentFrame().w/2)) {
+			position.x -= speed;
+			if (current_animation != &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonX();
 		}
-		VerifyHorizonX();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		position.x += speed;
-		if (current_animation != &run) {
-			VerifyFlyAnimation();
+		if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
+			position.x += speed;
+			if (current_animation != &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonX();
 		}
-		VerifyHorizonX();
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		position.y -= speed;//TODO se pasara a run al colisionar con el terreno
+		if (position.y > 0) {
+			position.y -= speed;
+			if (position.y <= 0) {
+				current_animation = &run;
+			}
+			VerifyHorizonY();
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		position.y += speed;
-		if (current_animation == &run) {
-			VerifyFlyAnimation();
+		if (position.y < (SCREEN_HEIGHT-current_animation->GetCurrentFrame().h)) {
+			position.y += speed;
+			if (current_animation == &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonY();
 		}
 	}
 
@@ -159,4 +172,8 @@ void ModulePlayer::VerifyHorizonX() {
 
 void ModulePlayer::VerifyHorizonY() {
 
+	//Calculate percentual position from character
+	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
+	App->renderer->horizon.y = HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN));
+	App->renderer->SetAlphaLineParametersPercentual(temp);
 }

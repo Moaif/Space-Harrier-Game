@@ -57,6 +57,9 @@ typedef unsigned int uint;
 #define VSYNC true
 #define TITLE "Space Harrier-Game"
 
+#define HORIZON_Y_MIN 20
+#define HORIZON_Y_MAX 100
+
 int getPseudoRand();
 int getRand();
 

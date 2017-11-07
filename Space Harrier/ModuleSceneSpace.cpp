@@ -29,6 +29,7 @@ bool ModuleSceneSpace::Start()
 	
 	background = App->textures->Load("assets/background.png");
 	trees = App->textures->Load("assets/Arboles.png");
+	floor = App->textures->Load("assets/Floor.png");
 
 	App->player->Enable();
 	App->particles->Enable();
@@ -74,10 +75,13 @@ update_status ModuleSceneSpace::Update()
 
 	// Draw everything --------------------------------------
 	App->renderer->Blit(background, 0, 0, nullptr, nullptr);
+	SDL_Rect temp = {0,0,SCREEN_WIDTH,App->renderer->horizon.y};
+	App->renderer->Blit(floor,0,0,nullptr,&temp);
 	SDL_Rect screenPoint = App->renderer->ToScreenPoint(x,0,z,&(tree.GetCurrentFrame()));
 	App->renderer->Blit(trees,screenPoint.x,screenPoint.y,&(tree.GetCurrentFrame()),&screenPoint);
 	SDL_Rect screenPoint2 = App->renderer->ToScreenPoint(x2, 0, z2, &(tree.GetCurrentFrame()));
 	App->renderer->Blit(trees, screenPoint2.x, screenPoint2.y, &(tree.GetCurrentFrame()), &screenPoint2);
+	App->renderer->DrawAlphaLines();
 
 	return UPDATE_CONTINUE;
 }

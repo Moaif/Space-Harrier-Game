@@ -20,6 +20,7 @@ public:
 	SDL_Texture* background = nullptr;
 	SDL_Texture* stars = nullptr;
 	SDL_Texture* trees = nullptr;
+	SDL_Texture* floor = nullptr;
 	Animation tree;
 	float z,z2,x,x2;
 };

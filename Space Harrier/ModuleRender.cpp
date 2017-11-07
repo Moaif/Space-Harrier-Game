@@ -10,8 +10,9 @@ ModuleRender::ModuleRender()
 	camera.x = camera.y = 0;
 	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
 	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
-	horizon.x = SCREEN_WIDTH / 2;
-	horizon.y = SCREEN_HEIGHT / 2;
+	horizon = { 0,HORIZON_Y_MIN };
+	alphaLineDistanceStart = ALPHA_DISTANCE_MIN;
+	alphaLineSizeStart = ALPHA_SIZE_MIN;
 	nearClippingPlane = 3;
 }
 
@@ -158,14 +159,25 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-float ModuleRender::DepthScale(float z) {
-	float dist = nearClippingPlane + z;
+void ModuleRender::DrawAlphaLines()
+{
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 50);
+	alphaLineDistance = alphaLineDistanceStart;
+	alphaLineSize = alphaLineSizeStart;
+	float coef = alphaLineIteration / alphaLineDistance;
+	float offsetDif = 0;
 
-	if (dist == 0)
-		return 0;
+	while (alphaLineDistance <= (horizon.y*SCREEN_SIZE))
+	{
+		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - (alphaLineDistance-(coef*alphaLineSize)), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*(coef/2)) };
+		SDL_RenderFillRect(renderer, &test);
 
+		offsetDif = alphaLineSize / 4.0f;
+		alphaLineSize -= offsetDif;
+		alphaLineDistance += (alphaLineSize * 2.0f);
+	}
 
-	return nearClippingPlane / dist;
+	alphaLineIteration = (alphaLineIteration + 2) % (int)(alphaLineDistanceStart*2);
 }
 
 SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
@@ -180,7 +192,23 @@ SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) 
 	rect.h = (int)(scale*section->h);
 
 	rect.x =(int) ((x * scale) + (horizon.x * inversescale));
-	rect.y =(int) (y + (temp / 2));
+	rect.y =(int) ((y * scale) + (horizon.y * inversescale));
 
 	return rect;
+}
+
+void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
+	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
+	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
+}
+
+
+float ModuleRender::DepthScale(float z) {
+	float dist = nearClippingPlane + z;
+
+	if (dist == 0)
+		return 0;
+
+
+	return nearClippingPlane / dist;
 }
