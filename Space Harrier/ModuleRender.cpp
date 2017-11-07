@@ -10,6 +10,10 @@ ModuleRender::ModuleRender()
 	camera.x = camera.y = 0;
 	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
 	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
+	horizon = { 0,HORIZON_Y_MIN };
+	alphaLineDistanceStart = ALPHA_DISTANCE_MIN;
+	alphaLineSizeStart = ALPHA_SIZE_MIN;
+	nearClippingPlane = 3;
 }
 
 // Destructor
@@ -88,16 +92,17 @@ bool ModuleRender::CleanUp()
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, float speed)
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection)
 {
 	bool ret = true;
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
-	rect.y = (int)(camera.y * speed) + y * SCREEN_SIZE;
 
-
-	if(section != NULL)
+	if(blitSection != NULL)
 	{
+		rect.w = blitSection->w;
+		rect.h = blitSection->h;
+	}
+	else if (section !=NULL) {
 		rect.w = section->w;
 		rect.h = section->h;
 	}
@@ -106,20 +111,19 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y,int z, SDL_Rect* sect
 		SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
 	}
 
-	if (z==0) {
-		z = 1;
-	}
+	//Center (0,0) is in the mid-down of the window
+	x = x + (SCREEN_WIDTH / 2);
+	y = SCREEN_HEIGHT - y;
 
-	rect.w *=SCREEN_SIZE;
-	rect.h *=SCREEN_SIZE;
+	//Now we calculate the left-top point where the image should start
+	x = x - (rect.w / 2);
+	y = y - rect.h ;
 
-	int temp1 = rect.w / z;
-	int temp2 = rect.h / z;
+	rect.x = x * SCREEN_SIZE;
+	rect.y = y * SCREEN_SIZE;
 
-	rect.x += ((rect.w-temp1)/2);
-	rect.y += ((rect.h-temp2)/2);
-	rect.w = temp1;
-	rect.h = temp2;
+	rect.w *= SCREEN_SIZE;
+	rect.h *= SCREEN_SIZE;
 
 	if(SDL_RenderCopy(renderer, texture, section, &rect) != 0)
 	{
@@ -153,4 +157,58 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+void ModuleRender::DrawAlphaLines()
+{
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 50);
+	alphaLineDistance = alphaLineDistanceStart;
+	alphaLineSize = alphaLineSizeStart;
+	float coef = alphaLineIteration / alphaLineDistance;
+	float offsetDif = 0;
+
+	while (alphaLineDistance <= (horizon.y*SCREEN_SIZE))
+	{
+		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - (alphaLineDistance-(coef*alphaLineSize)), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*(coef/2)) };
+		SDL_RenderFillRect(renderer, &test);
+
+		offsetDif = alphaLineSize / 4.0f;
+		alphaLineSize -= offsetDif;
+		alphaLineDistance += (alphaLineSize * 2.0f);
+	}
+
+	alphaLineIteration = (alphaLineIteration + 2) % (int)(alphaLineDistanceStart*2);
+}
+
+SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
+
+	SDL_Rect rect;
+
+	float scale = DepthScale(z);
+	float inversescale = 1.0f - scale;
+
+	float temp = section->h - (scale*section->h);
+	rect.w = (int)(scale*section->w);
+	rect.h = (int)(scale*section->h);
+
+	rect.x =(int) ((x * scale) + (horizon.x * inversescale));
+	rect.y =(int) ((y * scale) + (horizon.y * inversescale));
+
+	return rect;
+}
+
+void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
+	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
+	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
+}
+
+
+float ModuleRender::DepthScale(float z) {
+	float dist = nearClippingPlane + z;
+
+	if (dist == 0)
+		return 0;
+
+
+	return nearClippingPlane / dist;
 }

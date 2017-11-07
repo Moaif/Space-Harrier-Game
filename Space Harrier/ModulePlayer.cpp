@@ -19,7 +19,7 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	run.frames.push_back({ 25, 4, 20, 47 });
 	run.frames.push_back({ 49, 2, 25, 49 });
 	run.frames.push_back({ 75, 3, 21, 47 });
-	run.speed = 0.1f;
+	run.speed = 0.05f;
 
 	center.frames.push_back({ 108,2,26,49 });
 
@@ -44,8 +44,8 @@ bool ModulePlayer::Start()
 	graphics = App->textures->Load("assets/character.png");
 
 	destroyed = false;
-	position.x = 150;
-	position.y = 120;
+	position.x = 0;
+	position.y = 0;
 	position.z = 0;
 	//Collider
 	collider = App->collision->AddCollider({ 150,120,25,50 }, PLAYER, this);
@@ -70,30 +70,45 @@ update_status ModulePlayer::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
-		position.x -= speed;
-		if (current_animation != &run) {
-			VerifyFlyAnimation();
+		if (position.x > ((-SCREEN_WIDTH/2)+current_animation->GetCurrentFrame().w/2)) {
+			position.x -= speed;
+			if (current_animation != &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonX();
 		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
-		position.x += speed;
-		if (current_animation != &run) {
-			VerifyFlyAnimation();
+		if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
+			position.x += speed;
+			if (current_animation != &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonX();
 		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
-		position.y += speed;//TODO se pasara a run al colisionar con el terreno
+		if (position.y > 0) {
+			position.y -= speed;
+			if (position.y <= 0) {
+				current_animation = &run;
+			}
+			VerifyHorizonY();
+		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
-		position.y -= speed;
-		if (current_animation == &run) {
-			VerifyFlyAnimation();
+		if (position.y < (SCREEN_HEIGHT-current_animation->GetCurrentFrame().h)) {
+			position.y += speed;
+			if (current_animation == &run) {
+				VerifyFlyAnimation();
+			}
+			VerifyHorizonY();
 		}
 	}
 
@@ -107,9 +122,10 @@ update_status ModulePlayer::Update()
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
-		collider->rect.x = position.x;
-		collider->rect.y = position.y;
-		App->renderer->Blit(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()));
+		collider->rect.x =(int) position.x;
+		collider->rect.y =(int) position.y;
+		SDL_Rect screenPos = App->renderer->ToScreenPoint(position.x,position.y,position.z,&(current_animation->GetCurrentFrame()));
+		App->renderer->Blit(graphics, screenPos.x, screenPos.y, &(current_animation->GetCurrentFrame()),&screenPos);
 	}
 
 	return UPDATE_CONTINUE;
@@ -124,24 +140,40 @@ void ModulePlayer::OnCollision(Collider * col,Collider* other) {
 
 void ModulePlayer::VerifyFlyAnimation() {
 
-	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 5)) {
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
 		current_animation = &left2;
 		return;
 	}
-	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 5*2)) {
+	if ((position.x + (SCREEN_WIDTH / 2))<= (SCREEN_WIDTH / 5*2)) {
 		current_animation = &left1;
 		return;
 	}
-	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 5*3)) {
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*3)) {
 		current_animation = &center;
 		return;
 	}
-	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= (SCREEN_WIDTH / 5*4)) {
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*4)) {
 		current_animation = &right1;
 		return;
 	}
-	if ((position.x + current_animation->GetCurrentFrame().w / 2) <= SCREEN_WIDTH) {
+	if ((position.x + (SCREEN_WIDTH/2)) <= (SCREEN_WIDTH )) {
 		current_animation = &right2;
 		return;
 	}
+}
+
+void ModulePlayer::VerifyHorizonX() {
+	
+	//Calculate percentual position from character
+	float temp = position.x / (SCREEN_WIDTH / 2);
+	App->renderer->horizon.x = (temp*((SCREEN_WIDTH / 2) + HORIZON_OFFSET));
+
+}
+
+void ModulePlayer::VerifyHorizonY() {
+
+	//Calculate percentual position from character
+	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
+	App->renderer->horizon.y = HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN));
+	App->renderer->SetAlphaLineParametersPercentual(temp);
 }
