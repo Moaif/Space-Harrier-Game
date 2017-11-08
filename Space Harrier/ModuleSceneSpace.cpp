@@ -59,9 +59,9 @@ bool ModuleSceneSpace::CleanUp()
 // Update: draw background
 update_status ModuleSceneSpace::Update()
 {
-	float speed = 0.05;
-	z -=(speed + speed * (z/MAX_Z));
-	z2 -= (speed + speed * (z2 / MAX_Z));
+	float speed = 0.1386;
+	z -=(speed + speed * (z/MAX_Z)*SCREEN_SIZE);
+	z2 -= (speed + speed * (z2 / MAX_Z)*SCREEN_SIZE);
 	if (z <= 0) {
 		z = 100;
 		x = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);

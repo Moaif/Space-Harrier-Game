@@ -44,9 +44,10 @@ public:
 private:
 	float alphaLineDistanceStart;
 	float alphaLineSizeStart;
+	float speed = 60;
 	float alphaLineDistance;
 	float alphaLineSize;
-	float alphaLineIteration=0;
+	int alphaLineIteration=0;
 
 };
 

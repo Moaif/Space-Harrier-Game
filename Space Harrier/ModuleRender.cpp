@@ -164,15 +164,19 @@ void ModuleRender::DrawAlphaLines()
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
 	alphaLineDistance = alphaLineDistanceStart;
 	alphaLineSize = alphaLineSizeStart;
-	int tempIteration = (int)alphaLineIteration % (int)(alphaLineDistanceStart * 2);
-	float coef = tempIteration / alphaLineDistance;
 	float offsetDif = 0;
 	float distDif = alphaLineDistanceStart;
-	float speed = 20;
+	float normalIteration = alphaLineIteration*((alphaLineDistanceStart + alphaLineSizeStart) / speed);
+	int tempIteration = (int)normalIteration % (int)(alphaLineDistanceStart * 2);
+	float coef = tempIteration / alphaLineDistance*2;
+	if (coef >= 1) {
+		alphaLineIteration = 0;
+	}
+
 
 	while ((alphaLineDistance+alphaLineSizeStart) <= (horizon.y*SCREEN_SIZE))
 	{
-		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - ((alphaLineDistance+alphaLineSizeStart)-(coef/2*(distDif+alphaLineSize))), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*(coef/2)) };
+		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - ((alphaLineDistance+alphaLineSizeStart)-(coef*(distDif+alphaLineSize))), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*coef) };
 		SDL_RenderFillRect(renderer, &test);
 
 		offsetDif = alphaLineSize / 2.8f;
@@ -187,7 +191,7 @@ void ModuleRender::DrawAlphaLines()
 		alphaLineDistance += distDif+alphaLineSize;
 	}
 
-	alphaLineIteration = (alphaLineIteration + ((alphaLineDistanceStart+alphaLineSizeStart)/speed));
+	alphaLineIteration = (alphaLineIteration + 1);
 }
 
 SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
@@ -206,6 +210,7 @@ SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) 
 
 	return rect;
 }
+
 
 void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
 	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
