@@ -2,6 +2,7 @@
 #define __MODULE_H__
 
 #define MAX_Z 100
+#define MIN_Z -3
 
 class Application;
 struct Collider;

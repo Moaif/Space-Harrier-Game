@@ -73,6 +73,24 @@ update_status ModuleRender::Update()
 
 update_status ModuleRender::PostUpdate()
 {
+	while (!blitQueue.empty())
+	{
+		BlitStruct temp = blitQueue.top();
+		if (temp.sectionNull && temp.blitSectionNull) {
+			Blit(temp.texture, temp.x, temp.y, nullptr,nullptr);
+		}
+		else if (temp.sectionNull) {
+			Blit(temp.texture, temp.x, temp.y, nullptr, &temp.blitSection);
+		}
+		else if (temp.blitSectionNull)
+		{
+			Blit(temp.texture, temp.x, temp.y, &temp.section, nullptr);
+		}
+		else {
+			Blit(temp.texture, temp.x, temp.y, &temp.section, &temp.blitSection);
+		}
+		blitQueue.pop();
+	}
 	SDL_RenderPresent(renderer);
 	return UPDATE_CONTINUE;
 }
@@ -89,6 +107,25 @@ bool ModuleRender::CleanUp()
 	}
 
 	return true;
+}
+
+void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, SDL_Rect* blitSection) {
+	SDL_Rect empty = { 0,0,0,0 };
+	BlitStruct temp;
+	if (section == nullptr && blitSection == nullptr) {
+		temp = { texture,x,y,z,empty,empty,true,true };
+	}
+	else if (section == nullptr) {
+		temp = { texture,x,y,z,empty,*blitSection,true,false };
+	}
+
+	else if (blitSection == nullptr) {
+		temp = { texture,x,y,z,*section,empty,false,true };
+	}
+	else {
+		temp = { texture,x,y,z,*section,*blitSection,false,false };
+	}
+	blitQueue.push(temp);
 }
 
 // Blit to screen

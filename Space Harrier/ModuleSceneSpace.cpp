@@ -34,6 +34,7 @@ bool ModuleSceneSpace::Start()
 	App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
+	App->playing = true;
 
 	App->audio->PlayMusic("assets/stage1.ogg", 1.0f);
 	
@@ -62,11 +63,11 @@ update_status ModuleSceneSpace::Update()
 	float speed = 0.1386;
 	z -=(speed + speed * (z/MAX_Z)*SCREEN_SIZE);
 	z2 -= (speed + speed * (z2 / MAX_Z)*SCREEN_SIZE);
-	if (z <= 0) {
+	if (z <= -3) {
 		z = 100;
 		x = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 	}
-	if (z2 <= 0) {
+	if (z2 <= -3) {
 		z2 = 100;
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 	}
@@ -79,9 +80,9 @@ update_status ModuleSceneSpace::Update()
 	App->renderer->Blit(floor,0,0,nullptr,&temp);
 	App->renderer->DrawAlphaLines();
 	SDL_Rect screenPoint = App->renderer->ToScreenPoint(x,0,z,&(tree.GetCurrentFrame()));
-	App->renderer->Blit(trees,screenPoint.x,screenPoint.y,&(tree.GetCurrentFrame()),&screenPoint);
+	App->renderer->AddToBlitBuffer(trees,screenPoint.x,screenPoint.y,z,&(tree.GetCurrentFrame()),&screenPoint);
 	SDL_Rect screenPoint2 = App->renderer->ToScreenPoint(x2, 0, z2, &(tree.GetCurrentFrame()));
-	App->renderer->Blit(trees, screenPoint2.x, screenPoint2.y, &(tree.GetCurrentFrame()), &screenPoint2);
+	App->renderer->AddToBlitBuffer(trees, screenPoint2.x, screenPoint2.y,z2, &(tree.GetCurrentFrame()), &screenPoint2);
 
 	return UPDATE_CONTINUE;
 }

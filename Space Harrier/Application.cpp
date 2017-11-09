@@ -33,6 +33,8 @@ Application::Application()
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
+
+	playing = false;
 }
 
 Application::~Application()
@@ -75,6 +77,23 @@ update_status Application::Update()
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->PostUpdate();
+
+	//Game pause
+	if (input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && playing) {
+		//Hacer copia del renderer actual
+		while (true)
+		{
+			//Ir printeando a intervalos "PAUSE" en el renderer, alternando entre la copia, 
+			//y otra surface con el string pintado
+			if (input->PreUpdate() == UPDATE_STOP) {
+				return UPDATE_STOP;
+			 }
+			if (input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+				break;
+			}
+		}
+		//al salir, volver a colocar la copia al renderer, para que siga como antes
+	}
 
 	return ret;
 }

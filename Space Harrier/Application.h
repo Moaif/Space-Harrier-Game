@@ -45,6 +45,8 @@ public:
 	ModuleSceneIntro* scene_intro;
 	ModuleSceneSpace* scene_space;
 
+	bool playing;
+
 private:
 
 	std::list<Module*> modules;

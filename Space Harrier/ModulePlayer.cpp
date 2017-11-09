@@ -125,7 +125,7 @@ update_status ModulePlayer::Update()
 		collider->rect.x =(int) position.x;
 		collider->rect.y =(int) position.y;
 		SDL_Rect screenPos = App->renderer->ToScreenPoint(position.x,position.y,position.z,&(current_animation->GetCurrentFrame()));
-		App->renderer->Blit(graphics, screenPos.x, screenPos.y, &(current_animation->GetCurrentFrame()),&screenPos);
+		App->renderer->AddToBlitBuffer(graphics, screenPos.x, screenPos.y, INT_MIN,&(current_animation->GetCurrentFrame()),&screenPos);
 	}
 
 	return UPDATE_CONTINUE;
@@ -136,6 +136,14 @@ void ModulePlayer::OnCollision(Collider * col,Collider* other) {
 		collider->to_delete = true;
 		destroyed = true;
 	}
+}
+
+void ModulePlayer::SetLives(int amount) {
+	lives = amount;
+}
+
+int ModulePlayer::GetLives() {
+	return lives;
 }
 
 void ModulePlayer::VerifyFlyAnimation() {

@@ -20,6 +20,9 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider * col,Collider* other);
 
+	void SetLives(int amount);
+	int GetLives();
+
 private:
 	void VerifyFlyAnimation();
 	void VerifyHorizonX();
@@ -38,6 +41,9 @@ public:
 	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
+
+private:
+	int lives = 0;
 };
 
 #endif

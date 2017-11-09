@@ -6,6 +6,7 @@
 #include "ModuleRender.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleSceneIntro.h"
+#include "ModulePlayer.h"
 
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
@@ -46,10 +47,16 @@ update_status ModuleSceneIntro::Update()
 {
 	App->renderer->Blit(background, 0, 0, nullptr, nullptr);
 
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->fade->isFading() == false)
+	if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		App->fade->FadeToBlack((Module*)App->scene_space, this);
-		App->audio->PlayFx(fx);
+		if (App->fade->isFading() == false && App->player->GetLives() > 0) {
+			App->fade->FadeToBlack((Module*)App->scene_space, this);
+			App->audio->PlayFx(fx);
+		}
+		else
+		{
+			App->player->SetLives(3);
+		}
 	}
 
 	return UPDATE_CONTINUE;

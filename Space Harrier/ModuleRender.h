@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Point.h"
+#include <queue>
 
 #define ALPHA_DISTANCE_MAX 20.0f*SCREEN_SIZE
 #define ALPHA_DISTANCE_MIN 5.0f*SCREEN_SIZE
@@ -13,6 +14,24 @@
 struct SDL_Texture;
 struct SDL_Renderer;
 struct SDL_Rect;
+
+struct BlitStruct
+{
+	SDL_Texture* texture;
+	int x;
+	int y;
+	int z;
+	SDL_Rect section;
+	SDL_Rect blitSection;
+	bool sectionNull;
+	bool blitSectionNull;
+};
+
+struct CompareDepth {
+	bool operator()(BlitStruct const & p1, BlitStruct const & p2) {
+		return p1.z < p2.z;
+	}
+};
 
 class ModuleRender : public Module
 {
@@ -26,6 +45,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
+	void AddToBlitBuffer(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, SDL_Rect* blitSection);
 	bool Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
 	void ModuleRender::DrawAlphaLines();
@@ -42,6 +62,7 @@ public:
 	int nearClippingPlane;
 
 private:
+	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
 	float alphaLineDistanceStart;
 	float alphaLineSizeStart;
 	float speed = 60;
