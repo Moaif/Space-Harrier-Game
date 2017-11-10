@@ -12,7 +12,6 @@ struct SDL_Texture;
 
 struct Particle
 {
-	// TODO 1: Fill in the structure with all the properties you need for each particle
 	bool to_delete = false;
 	bool firstSound=true;
 	fPoint position = { 0, 0 , 1};
@@ -21,7 +20,6 @@ struct Particle
 	bool onlyOnce = false;
 	float speed;
 
-	// TODO 11: Add an optional collider to each particle
 	Collider* collider;
 
 

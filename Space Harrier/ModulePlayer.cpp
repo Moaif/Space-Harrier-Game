@@ -27,8 +27,8 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 
 	left2.frames.push_back({ 170,3,20,48});
 
-	right1.frames.push_back({ 197,3,20,48});
-	right2.frames.push_back({ 221,3,22,49});
+	right1.frames.push_back({ 221,3,22,49});
+	right2.frames.push_back({ 197,3,20,48 });
 
 	current_animation = &run;
 }

@@ -4,6 +4,11 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "SDL/include/SDL.h"
+#include <iostream>
+#include "Font.h"
+
+using namespace std;
+
 
 ModuleRender::ModuleRender()
 {
@@ -169,6 +174,35 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	}
 
 	return ret;
+}
+
+void ModuleRender::Print(const Font* font, int x, int y, string mesage) {
+	int xSize = font->GetXSize();
+	int ySize = font->GetYSize();
+
+	SDL_Surface* tempSurface = font->GetImage();
+	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize , ySize, 32, 0, 0, 0, 0);
+
+	SDL_Rect srcrect;
+	srcrect.h = ySize;
+	srcrect.w = xSize;
+	SDL_Rect dstrect;
+	dstrect.h = ySize;
+	dstrect.w = xSize;
+	if (tempSurface == nullptr)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
+	}
+	for (int i = 0; i < mesage.size(); ++i) {
+		int offset = font->GetCharOffset(mesage[i]);
+		srcrect.x = offset*xSize;
+		srcrect.y = 0;
+		dstrect.x = i*xSize;
+		dstrect.y = 0;
+		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
+	}
+	SDL_Texture* tempTexture= SDL_CreateTextureFromSurface(renderer,surfaceFinal);
+	Blit(tempTexture,x,y,nullptr,nullptr);
 }
 
 bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)

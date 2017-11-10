@@ -60,6 +60,10 @@ typedef unsigned int uint;
 #define HORIZON_Y_MIN 20
 #define HORIZON_Y_MAX 100
 
+#define MAX_Z 100
+#define MIN_Z -3
+
+
 int getPseudoRand();
 int getRand();
 

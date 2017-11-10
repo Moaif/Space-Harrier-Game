@@ -7,11 +7,14 @@
 #include "ModuleFadeToBlack.h"
 #include "ModuleSceneIntro.h"
 #include "ModulePlayer.h"
+#include "ModuleFont.h"
 
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
 ModuleSceneIntro::ModuleSceneIntro(bool active) : Module(active)
-{}
+{
+	robot.frames.push_back({ 2,0,280,325 });
+}
 
 ModuleSceneIntro::~ModuleSceneIntro()
 {}
@@ -28,7 +31,11 @@ bool ModuleSceneIntro::Start()
 		fx = App->audio->LoadFx("assets/starting.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
-	
+	red = App->fonts->GetFont("Red",__FILE__,__LINE__);
+	blue = App->fonts->GetFont("Blue", __FILE__, __LINE__);
+	green = App->fonts->GetFont("Green", __FILE__, __LINE__);
+	yellow = App->fonts->GetFont("Yellow", __FILE__, __LINE__);
+
 	return true;
 }
 
@@ -45,7 +52,13 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->Blit(background, 0, 0, nullptr, nullptr);
+	SDL_Rect temp = { 0,0,70,100 };
+	App->renderer->Blit(background, 100, 0, &(robot.GetCurrentFrame()), &temp );
+	App->renderer->Print(red,-40,0,"Esto es el menu");
+	App->renderer->Print(blue, -40, 40, "Esto es el menu");
+	App->renderer->Print(green, -40, 80, "Esto es el menu");
+	App->renderer->Print(yellow, -40, 120, "Esto es el menu");
+
 
 	if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
