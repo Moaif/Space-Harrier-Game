@@ -150,22 +150,27 @@ void ModulePlayer::VerifyFlyAnimation() {
 
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
 		current_animation = &left2;
+		App->renderer->SetXSpeed(10);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2))<= (SCREEN_WIDTH / 5*2)) {
 		current_animation = &left1;
+		App->renderer->SetXSpeed(5);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*3)) {
 		current_animation = &center;
+		App->renderer->SetXSpeed(0);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*4)) {
 		current_animation = &right1;
+		App->renderer->SetXSpeed(-5);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH/2)) <= (SCREEN_WIDTH )) {
 		current_animation = &right2;
+		App->renderer->SetXSpeed(-10);
 		return;
 	}
 }
@@ -173,8 +178,8 @@ void ModulePlayer::VerifyFlyAnimation() {
 void ModulePlayer::VerifyHorizonX() {
 	
 	//Calculate percentual position from character
-	float temp = position.x / (SCREEN_WIDTH / 2);
-	App->renderer->horizon.x = (temp*((SCREEN_WIDTH / 2) + HORIZON_OFFSET));
+	float temp = (position.x + (SCREEN_WIDTH / 2))/SCREEN_WIDTH;
+	App->renderer->horizon.x = HORIZON_X_MIN + (temp*(HORIZON_X_MAX - HORIZON_X_MIN));
 
 }
 

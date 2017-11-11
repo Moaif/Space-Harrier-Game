@@ -48,14 +48,17 @@ public:
 
 	void AddToBlitBuffer(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, SDL_Rect* blitSection);
 	bool Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection);
-	void Print(const Font* font,int x,int y,std::string message);
+	bool Print(const Font* font,int x,int y,std::string message);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
-	void ModuleRender::DrawAlphaLines();
+	bool DrawFloor(SDL_Texture* texture);
 	SDL_Rect ToScreenPoint(float x,float y,float z, SDL_Rect* section);
 	void SetAlphaLineParametersPercentual(float percent);
+	void SetXSpeed(float value);
 
 private:
+	void ModuleRender::DrawAlphaLines();
 	float DepthScale(float z);
+
 
 public:
 	SDL_Renderer* renderer = nullptr;
@@ -65,9 +68,11 @@ public:
 
 private:
 	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
+	float increasePixelIteration;
 	float alphaLineDistanceStart;
 	float alphaLineSizeStart;
-	float speed = 60;
+	float xSpeed = 0.0f;
+	float ySpeed = 60.0f;
 	float alphaLineDistance;
 	float alphaLineSize;
 	int alphaLineIteration=0;

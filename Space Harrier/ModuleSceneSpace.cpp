@@ -63,11 +63,11 @@ update_status ModuleSceneSpace::Update()
 	float speed = 0.1386;
 	z -=(speed + speed * (z/MAX_Z)*SCREEN_SIZE);
 	z2 -= (speed + speed * (z2 / MAX_Z)*SCREEN_SIZE);
-	if (z <= -3) {
+	if (z <= -2) {
 		z = 100;
 		x = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 	}
-	if (z2 <= -3) {
+	if (z2 <= -2) {
 		z2 = 100;
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 	}
@@ -76,9 +76,7 @@ update_status ModuleSceneSpace::Update()
 
 	// Draw everything --------------------------------------
 	App->renderer->Blit(background, 0, 0, nullptr, nullptr);
-	SDL_Rect temp = {0,0,SCREEN_WIDTH,App->renderer->horizon.y};
-	App->renderer->Blit(floor,0,0,nullptr,&temp);
-	App->renderer->DrawAlphaLines();
+	App->renderer->DrawFloor(floor);
 	SDL_Rect screenPoint = App->renderer->ToScreenPoint(x,0,z,&(tree.GetCurrentFrame()));
 	App->renderer->AddToBlitBuffer(trees,screenPoint.x,screenPoint.y,z,&(tree.GetCurrentFrame()),&screenPoint);
 	SDL_Rect screenPoint2 = App->renderer->ToScreenPoint(x2, 0, z2, &(tree.GetCurrentFrame()));

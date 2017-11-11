@@ -176,7 +176,8 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	return ret;
 }
 
-void ModuleRender::Print(const Font* font, int x, int y, string mesage) {
+bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
+	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
 
@@ -192,6 +193,7 @@ void ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 	if (tempSurface == nullptr)
 	{
 		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
+		ret = false;
 	}
 	for (int i = 0; i < mesage.size(); ++i) {
 		int offset = font->GetCharOffset(mesage[i]);
@@ -202,7 +204,15 @@ void ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
 	}
 	SDL_Texture* tempTexture= SDL_CreateTextureFromSurface(renderer,surfaceFinal);
-	Blit(tempTexture,x,y,nullptr,nullptr);
+	if (tempTexture == nullptr) {
+		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
+		ret = false;
+	}
+	if (ret) {
+		ret=Blit(tempTexture, x, y, nullptr, nullptr);
+	}
+
+	return ret;
 }
 
 bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
@@ -230,6 +240,62 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
+bool ModuleRender::DrawFloor(SDL_Texture* texture)
+{
+	bool ret = true;
+	SDL_Rect rect;
+	int textW, textH;
+
+	SDL_QueryTexture(texture, NULL, NULL, &textW, &textH);
+
+	rect.w = textW;
+	rect.h = horizon.y;
+
+	//Set (0,0) on the bottom-middle screen.
+	int pX = (SCREEN_WIDTH / 2) - (rect.w / 2);
+	int pY = SCREEN_HEIGHT - rect.h;
+
+	rect.x = pX * SCREEN_SIZE;
+	rect.y = pY * SCREEN_SIZE;
+	rect.w *= SCREEN_SIZE;
+	rect.h *= SCREEN_SIZE;
+
+	float maxAditionalPixelsX = ((textW - SCREEN_WIDTH) / 2) * SCREEN_SIZE;
+
+	if (increasePixelIteration >= maxAditionalPixelsX || increasePixelIteration <= -maxAditionalPixelsX)
+	{
+		increasePixelIteration = 1.0f;
+	}
+	increasePixelIteration += xSpeed;
+
+	float pixelsPerRow = (float)textH / rect.h;
+	float pixelsPerRowOffset = 0.0f;
+
+	SDL_Rect textureLine = { 0, 0, textW, 1 };
+	rect.h = 1;
+
+	int originalRectX = rect.x;
+	float deviation = 0.0f;
+
+	for (int i = 0; i <= (horizon.y*SCREEN_SIZE); ++i)
+	{
+		deviation = (((float)i / ((float)horizon.y*(float)SCREEN_SIZE))*increasePixelIteration);
+		rect.x = originalRectX + round(deviation);
+		if (SDL_RenderCopy(renderer, texture, &textureLine, &rect) !=0 ) {
+			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
+			ret = false;
+		}
+		pixelsPerRowOffset += pixelsPerRow;
+		textureLine.y = (int)pixelsPerRowOffset;
+		rect.y += 1;
+	}
+
+	//TODO -> Make this function do the vertical lines move
+	DrawAlphaLines();
+
+	return ret;
+}
+
 void ModuleRender::DrawAlphaLines()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
@@ -237,7 +303,7 @@ void ModuleRender::DrawAlphaLines()
 	alphaLineSize = alphaLineSizeStart;
 	float offsetDif = 0;
 	float distDif = alphaLineDistanceStart;
-	float normalIteration = alphaLineIteration*((alphaLineDistanceStart + alphaLineSizeStart) / speed);
+	float normalIteration = alphaLineIteration*((alphaLineDistanceStart + alphaLineSizeStart) / ySpeed);
 	int tempIteration = (int)normalIteration % (int)(alphaLineDistanceStart * 2);
 	float coef = tempIteration / alphaLineDistance*2;
 	if (coef >= 1) {
@@ -286,6 +352,10 @@ SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) 
 void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
 	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
 	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
+}
+
+void ModuleRender::SetXSpeed(float value) {
+	xSpeed = value;
 }
 
 

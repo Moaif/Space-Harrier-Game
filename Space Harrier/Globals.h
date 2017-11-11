@@ -60,6 +60,9 @@ typedef unsigned int uint;
 #define HORIZON_Y_MIN 20
 #define HORIZON_Y_MAX 100
 
+#define HORIZON_X_MIN -200
+#define HORIZON_X_MAX 200
+
 #define MAX_Z 100
 #define MIN_Z -3
 
