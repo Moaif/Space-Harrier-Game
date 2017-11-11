@@ -68,7 +68,7 @@ public:
 
 private:
 	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
-	float increasePixelIteration;
+	float increasePixelIteration=0.0f;
 	float alphaLineDistanceStart;
 	float alphaLineSizeStart;
 	float xSpeed = 0.0f;
