@@ -248,7 +248,7 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 
 	SDL_QueryTexture(texture, NULL, NULL, &textW, &textH);
 
-	rect.w = textW;
+	rect.w = SCREEN_WIDTH;
 	rect.h = horizon.y;
 
 	//Set (0,0) on the bottom-middle screen.
@@ -260,27 +260,27 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
 
-	float maxAditionalPixelsX = ((textW - SCREEN_WIDTH) / 2) * SCREEN_SIZE;
+	float maxAditionalPixelsX = ((textW - SCREEN_WIDTH) / 2);
 
-	if (increasePixelIteration >= maxAditionalPixelsX || increasePixelIteration <= -maxAditionalPixelsX)
+	if (increasePixelIteration >= 120.0f || increasePixelIteration <= -120.0f)
 	{
-		increasePixelIteration = 1.0f;
+		increasePixelIteration = 2.0f;
 	}
 	increasePixelIteration += xSpeed;
 
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;
 
-	SDL_Rect textureLine = { 0, 0, textW, 1 };
+	SDL_Rect textureLine = { maxAditionalPixelsX, 0, (textW-maxAditionalPixelsX*2), 1 };
 	rect.h = 1;
 
-	int originalRectX = rect.x;
+	int originalRectX = textureLine.x;
 	float deviation = 0.0f;
 
 	for (int i = 0; i <= (horizon.y*SCREEN_SIZE); ++i)
 	{
 		deviation = (((float)i / ((float)horizon.y*(float)SCREEN_SIZE))*increasePixelIteration);
-		rect.x = originalRectX + round(deviation);
+		textureLine.x = originalRectX + (int)deviation;
 		if (SDL_RenderCopy(renderer, texture, &textureLine, &rect) !=0 ) {
 			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
 			ret = false;
@@ -290,7 +290,6 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 		rect.y += 1;
 	}
 
-	//TODO -> Make this function do the vertical lines move
 	DrawAlphaLines();
 
 	return ret;

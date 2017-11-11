@@ -29,7 +29,7 @@ bool ModuleSceneSpace::Start()
 	
 	background = App->textures->Load("assets/background.png");
 	trees = App->textures->Load("assets/Arboles.png");
-	floor = App->textures->Load("assets/Floor.png");
+	floor = App->textures->Load("assets/Floor.bmp");
 
 	App->player->Enable();
 	App->particles->Enable();
