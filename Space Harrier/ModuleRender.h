@@ -13,8 +13,8 @@
 
 #define STAGE_SPEED_MAX 2
 #define STAGE_SPEED_MIN -2
-#define BACKGROUND_SPEED_MAX 2
-#define BACKGROUND_SPEED_MIN -2
+#define BACKGROUND_SPEED_MAX 1
+#define BACKGROUND_SPEED_MIN -1
 
 struct SDL_Texture;
 struct SDL_Renderer;

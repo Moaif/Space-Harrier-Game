@@ -254,7 +254,8 @@ bool ModuleRender::DrawBackground(SDL_Texture* texture) {
 
 	if ((backgroundOffset + SCREEN_WIDTH) > w) {
 		SDL_Rect rect2 = { 0,0,(int)((backgroundOffset + SCREEN_WIDTH) - w),h };
-		if (!Blit(texture, (-(SCREEN_WIDTH / 2)) + (w / 2), horizon.y, &rect, nullptr)) {
+		rect.w = SCREEN_WIDTH - rect2.w+1;//With round, somethimes it leaves 1 pixel without drawing, thats why we add +1
+		if (!Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w/ 2), horizon.y, &rect, nullptr)) {
 			return false;
 		}
 		ret = Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2), horizon.y, &rect2, nullptr);
@@ -267,6 +268,9 @@ bool ModuleRender::DrawBackground(SDL_Texture* texture) {
 	backgroundOffset += backgroundSpeed;
 	if (backgroundOffset >= w) {
 		backgroundOffset = 0;
+	}
+	if (backgroundOffset < 0) {
+		backgroundOffset = (float)w;
 	}
 
 	return ret;

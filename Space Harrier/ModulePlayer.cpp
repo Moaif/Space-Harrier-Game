@@ -158,12 +158,12 @@ void ModulePlayer::VerifyFlyAnimation() {
 
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
 		current_animation = &left2;
-		App->renderer->SetXSpeed(10);
+		App->renderer->SetXSpeed(-10);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2))<= (SCREEN_WIDTH / 5*2)) {
 		current_animation = &left1;
-		App->renderer->SetXSpeed(5);
+		App->renderer->SetXSpeed(-5);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*3)) {
@@ -173,12 +173,12 @@ void ModulePlayer::VerifyFlyAnimation() {
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*4)) {
 		current_animation = &right1;
-		App->renderer->SetXSpeed(-5);
+		App->renderer->SetXSpeed(5);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH/2)) <= (SCREEN_WIDTH )) {
 		current_animation = &right2;
-		App->renderer->SetXSpeed(-10);
+		App->renderer->SetXSpeed(10);
 		return;
 	}
 }
@@ -186,7 +186,7 @@ void ModulePlayer::VerifyFlyAnimation() {
 void ModulePlayer::VerifyFloorSpeed() {
 
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
-		App->renderer->SetXSpeed(10);
+		App->renderer->SetXSpeed(-10);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 2)) {
@@ -198,11 +198,11 @@ void ModulePlayer::VerifyFloorSpeed() {
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 4)) {
-		App->renderer->SetXSpeed(-5);
+		App->renderer->SetXSpeed(5);
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH)) {
-		App->renderer->SetXSpeed(-10);
+		App->renderer->SetXSpeed(10);
 		return;
 	}
 }
