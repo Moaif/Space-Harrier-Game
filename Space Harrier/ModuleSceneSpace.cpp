@@ -28,6 +28,7 @@ bool ModuleSceneSpace::Start()
 	LOG("Loading space scene");
 	
 	background = App->textures->Load("assets/background.png");
+	stage = App->textures->Load("assets/Stage3.png");
 	trees = App->textures->Load("assets/Arboles.png");
 	floor = App->textures->Load("assets/Floor.bmp");
 
@@ -60,7 +61,7 @@ bool ModuleSceneSpace::CleanUp()
 // Update: draw background
 update_status ModuleSceneSpace::Update()
 {
-	float speed = 0.1386;
+	float speed = 0.1386f;
 	z -=(speed + speed * (z/MAX_Z)*SCREEN_SIZE);
 	z2 -= (speed + speed * (z2 / MAX_Z)*SCREEN_SIZE);
 	if (z <= -2) {
@@ -76,6 +77,7 @@ update_status ModuleSceneSpace::Update()
 
 	// Draw everything --------------------------------------
 	App->renderer->Blit(background, 0, 0, nullptr, nullptr);
+	App->renderer->DrawStage(stage);
 	App->renderer->DrawFloor(floor);
 	SDL_Rect screenPoint = App->renderer->ToScreenPoint(x,0,z,&(tree.GetCurrentFrame()));
 	App->renderer->AddToBlitBuffer(trees,screenPoint.x,screenPoint.y,z,&(tree.GetCurrentFrame()),&screenPoint);

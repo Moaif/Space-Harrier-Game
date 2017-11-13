@@ -195,7 +195,7 @@ bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
 		ret = false;
 	}
-	for (int i = 0; i < mesage.size(); ++i) {
+	for (unsigned int i = 0; i < mesage.size(); ++i) {
 		int offset = font->GetCharOffset(mesage[i]);
 		srcrect.x = offset*xSize;
 		srcrect.y = 0;
@@ -240,6 +240,74 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
+bool ModuleRender::DrawBackground(SDL_Texture* texture) {
+	bool ret = true;
+	SDL_Rect rect;
+	int w, h;
+
+	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+	rect.h = h;
+	rect.w = SCREEN_WIDTH;
+	rect.x = (int)backgroundOffset;
+	rect.y = 0;
+
+	if ((backgroundOffset + SCREEN_WIDTH) > w) {
+		SDL_Rect rect2 = { 0,0,(int)((backgroundOffset + SCREEN_WIDTH) - w),h };
+		if (!Blit(texture, (-(SCREEN_WIDTH / 2)) + (w / 2), horizon.y, &rect, nullptr)) {
+			return false;
+		}
+		ret = Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2), horizon.y, &rect2, nullptr);
+	}
+	else
+	{
+		ret = Blit(texture, 0, horizon.y, &rect, nullptr);
+	}
+
+	backgroundOffset += backgroundSpeed;
+	if (backgroundOffset >= w) {
+		backgroundOffset = 0;
+	}
+
+	return ret;
+}
+
+bool ModuleRender::DrawStage(SDL_Texture* texture) {
+	bool ret = true;
+	SDL_Rect rect;
+	int w, h;
+
+	SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+	rect.h = h;
+	rect.w = SCREEN_WIDTH;
+	rect.x = (int)stageOffset;
+	rect.y = 0;
+
+	if ((stageOffset + SCREEN_WIDTH) > w) {
+		SDL_Rect rect2 = { 0,0,(int)((stageOffset + SCREEN_WIDTH) - w),h };
+		rect.w = SCREEN_WIDTH - rect2.w;
+		if (!Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w / 2), horizon.y, &rect, nullptr)) {
+			return false;
+		}
+		ret=Blit(texture,(SCREEN_WIDTH/2)-(rect2.w/2),horizon.y,&rect2,nullptr);
+	}
+	else
+	{
+		ret= Blit(texture, 0, horizon.y, &rect, nullptr);
+	}
+
+	stageOffset += stageSpeed;
+	if (stageOffset >= w) {
+		stageOffset = 0;
+	}
+	if (stageOffset < 0) {
+		stageOffset = (float)w;
+	}
+
+	return ret;
+}
+
 bool ModuleRender::DrawFloor(SDL_Texture* texture)
 {
 	bool ret = true;
@@ -260,7 +328,7 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
 
-	float maxAditionalPixelsX = ((textW - SCREEN_WIDTH) / 2);
+	float maxAditionalPixelsX = ((textW - SCREEN_WIDTH) / 2.0f);
 
 	if (increasePixelIteration >= 120.0f || increasePixelIteration <= -120.0f)
 	{
@@ -271,7 +339,7 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;
 
-	SDL_Rect textureLine = { maxAditionalPixelsX, 0, (textW-maxAditionalPixelsX*2), 1 };
+	SDL_Rect textureLine = { (int)maxAditionalPixelsX, 0, (int)(textW-maxAditionalPixelsX*2), 1 };
 	rect.h = 1;
 
 	int originalRectX = textureLine.x;
@@ -312,7 +380,7 @@ void ModuleRender::DrawAlphaLines()
 
 	while ((alphaLineDistance+alphaLineSizeStart) <= (horizon.y*SCREEN_SIZE))
 	{
-		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - ((alphaLineDistance+alphaLineSizeStart)-(coef*(distDif+alphaLineSize))), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*coef) };
+		const SDL_Rect test = { 0,(int)( SCREEN_HEIGHT*SCREEN_SIZE - ((alphaLineDistance+alphaLineSizeStart)-(coef*(distDif+alphaLineSize)))), SCREEN_WIDTH*SCREEN_SIZE, (int)(alphaLineSize+(offsetDif*coef)) };
 		SDL_RenderFillRect(renderer, &test);
 
 		offsetDif = alphaLineSize / 2.8f;
@@ -355,6 +423,11 @@ void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
 
 void ModuleRender::SetXSpeed(float value) {
 	xSpeed = value;
+}
+
+void ModuleRender::SetBackgroundParametersPercentual(float percent) {
+	backgroundSpeed = BACKGROUND_SPEED_MIN + (percent*(BACKGROUND_SPEED_MAX - BACKGROUND_SPEED_MIN));
+	stageSpeed = STAGE_SPEED_MIN + (percent*(STAGE_SPEED_MAX - STAGE_SPEED_MIN));
 }
 
 

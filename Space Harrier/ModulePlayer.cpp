@@ -75,6 +75,10 @@ update_status ModulePlayer::Update()
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
 			}
+			else
+			{
+				VerifyFloorSpeed();
+			}
 			VerifyHorizonX();
 		}
 	}
@@ -85,6 +89,10 @@ update_status ModulePlayer::Update()
 			position.x += speed;
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
+			}
+			else
+			{
+				VerifyFloorSpeed();
 			}
 			VerifyHorizonX();
 		}
@@ -175,11 +183,36 @@ void ModulePlayer::VerifyFlyAnimation() {
 	}
 }
 
+void ModulePlayer::VerifyFloorSpeed() {
+
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
+		App->renderer->SetXSpeed(10);
+		return;
+	}
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 2)) {
+		App->renderer->SetXSpeed(5);
+		return;
+	}
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 3)) {
+		App->renderer->SetXSpeed(0);
+		return;
+	}
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 4)) {
+		App->renderer->SetXSpeed(-5);
+		return;
+	}
+	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH)) {
+		App->renderer->SetXSpeed(-10);
+		return;
+	}
+}
+
 void ModulePlayer::VerifyHorizonX() {
 	
 	//Calculate percentual position from character
 	float temp = (position.x + (SCREEN_WIDTH / 2))/SCREEN_WIDTH;
-	App->renderer->horizon.x = HORIZON_X_MIN + (temp*(HORIZON_X_MAX - HORIZON_X_MIN));
+	App->renderer->horizon.x = (int)(HORIZON_X_MIN + (temp*(HORIZON_X_MAX - HORIZON_X_MIN)));
+	App->renderer->SetBackgroundParametersPercentual(temp);
 
 }
 
@@ -187,6 +220,6 @@ void ModulePlayer::VerifyHorizonY() {
 
 	//Calculate percentual position from character
 	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
-	App->renderer->horizon.y = HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN));
+	App->renderer->horizon.y = (int)(HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
 	App->renderer->SetAlphaLineParametersPercentual(temp);
 }

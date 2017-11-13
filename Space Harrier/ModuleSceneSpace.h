@@ -18,6 +18,7 @@ public:
 public:
 	
 	SDL_Texture* background = nullptr;
+	SDL_Texture* stage = nullptr;
 	SDL_Texture* stars = nullptr;
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* floor = nullptr;

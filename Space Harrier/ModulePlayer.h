@@ -25,6 +25,7 @@ public:
 
 private:
 	void VerifyFlyAnimation();
+	void VerifyFloorSpeed();
 	void VerifyHorizonX();
 	void VerifyHorizonY();
 
