@@ -14,6 +14,7 @@ class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
 class ModuleFont;
+class ModuleEnemy;
 
 // Game modules ---
 class ModulePlayer;
@@ -40,6 +41,7 @@ public:
 	ModuleFadeToBlack* fade;
 	ModuleCollision* collision;
 	ModuleParticles* particles;
+	ModuleEnemy* enemies;
 	ModuleFont* fonts;
 
 	// Game modules ---

@@ -9,12 +9,9 @@ enum CollisionType
 	PLAYER,
 	LASERS,
 	WALLS,
+	ENEMY,
 	MAXIMO
 };
-
-// TODO 9: Create a matrix of game specific types of collision for early discard
-// Example: lasers should not collide with lasers but should collider with walls
-// enemy shots will collide with other enemies ? and against walls ?
 
 struct Collider
 {
@@ -23,9 +20,8 @@ struct Collider
 	Module* callback;
 	bool to_delete = false;
 
-	// TODO 10: Add a way to notify other classes that a collision happened
 
-	Collider(SDL_Rect rectangle,CollisionType type,Module* callback) : // expand this call if you need to
+	Collider(SDL_Rect rectangle,CollisionType type,Module* callback) : 
 		rect(rectangle),type(type),callback(callback)
 	{}
 

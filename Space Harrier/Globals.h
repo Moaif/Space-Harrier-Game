@@ -66,6 +66,7 @@ typedef unsigned int uint;
 #define MAX_Z 100
 #define MIN_Z -3
 
+#define ENEMY_Z_SPEED 0.1386f
 
 int getPseudoRand();
 int getRand();

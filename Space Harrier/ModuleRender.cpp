@@ -3,6 +3,7 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModulePlayer.h"
 #include "SDL/include/SDL.h"
 #include <iostream>
 #include "Font.h"
@@ -338,7 +339,7 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 	{
 		increasePixelIteration = 2.0f;
 	}
-	increasePixelIteration += xSpeed;
+	increasePixelIteration += App->player->speed;
 
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;

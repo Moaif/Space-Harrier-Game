@@ -42,6 +42,7 @@ public:
 	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
+	float speed=0.0f;
 
 private:
 	int lives = 0;

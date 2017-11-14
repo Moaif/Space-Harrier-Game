@@ -14,6 +14,9 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{ad89cf24-f35e-4d0c-90e5-820c054c274d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemys">
+      <UniqueIdentifier>{a72247da-5fe9-4f77-9361-1b005d461055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ModuleRender.h">
@@ -73,6 +76,15 @@
     <ClInclude Include="Font.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEnemy.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -125,6 +137,12 @@
     </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEnemy.cpp">
+      <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>Enemys</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

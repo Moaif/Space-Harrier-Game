@@ -6,9 +6,9 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Point.h"
-#include "ModuleCollision.h"
 
 struct SDL_Texture;
+struct Collider;
 
 struct Particle
 {

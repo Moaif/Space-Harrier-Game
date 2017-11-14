@@ -30,7 +30,8 @@ bool ModuleParticles::Start()
 	laser.anim.speed = 0.01f;
 	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
 	laser.speed = 0.5f;
-	laser.collider = App->collision->AddCollider({-16,-12,91,61},LASERS,this);//Is generated out of screen
+	laser.collider = new Collider({ 0,0,91,61 },LASERS,this);
+
 
 	// TODO 12: Create a new "Explosion" particle 
 	// audio: rtype/explosion.wav

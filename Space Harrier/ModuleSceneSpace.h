@@ -23,7 +23,7 @@ public:
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* floor = nullptr;
 	Animation tree;
-	float z,z2,x,x2;
+	float x,x2;
 };
 
 #endif // __MODULESCENESPACE_H__
