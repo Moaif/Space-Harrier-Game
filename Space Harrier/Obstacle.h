@@ -5,15 +5,12 @@
 
 class Obstacle : public Enemy {
 public:
-	Obstacle(bool destructible = true, bool noDmg=false);
+	Obstacle(bool destructible = true);
 	~Obstacle();
 
 	Enemy* Copy() const override;
 	void Update() override;
 
-private:
-	bool destructible =true;
-	bool noDmg = false;
 };
 
 #endif // !_OBSTACLE_

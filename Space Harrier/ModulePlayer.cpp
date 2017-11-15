@@ -48,7 +48,7 @@ bool ModulePlayer::Start()
 	position.y = 0;
 	position.z = 0;
 	//Collider
-	collider = App->collision->AddCollider({ 150,120,25,50 }, PLAYER, this);
+	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,25,50 },position.z, PLAYER, this);
 
 	return true;
 }
@@ -66,12 +66,12 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	int speed = 1;
+	int movement_speed = 3;
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if (position.x > ((-SCREEN_WIDTH/2)+current_animation->GetCurrentFrame().w/2)) {
-			position.x -= speed;
+			position.x -= movement_speed;
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
 			}
@@ -86,7 +86,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
-			position.x += speed;
+			position.x += movement_speed;
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
 			}
@@ -101,7 +101,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
 		if (position.y > 0) {
-			position.y -= speed;
+			position.y -= movement_speed;
 			if (position.y <= 0) {
 				current_animation = &run;
 			}
@@ -112,7 +112,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		if (position.y < (SCREEN_HEIGHT-current_animation->GetCurrentFrame().h)) {
-			position.y += speed;
+			position.y += movement_speed;
 			if (current_animation == &run) {
 				VerifyFlyAnimation();
 			}
@@ -122,9 +122,8 @@ update_status ModulePlayer::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		// TODO 6: Shoot a laser using the particle system
-		float x =(float) (position.x + current_animation->GetCurrentFrame().w / 2) - (App->particles->laser.anim.GetCurrentFrame().w / 2);
-		float y =(float) (position.y + current_animation->GetCurrentFrame().h / 2) - (App->particles->laser.anim.GetCurrentFrame().h / 2);
+		float x =(float) position.x;
+		float y =(float) position.y + (current_animation->GetCurrentFrame().h/2);
 		App->particles->AddParticle(App->particles->laser, x, y);
 	}
 
@@ -133,7 +132,7 @@ update_status ModulePlayer::Update()
 		collider->rect.x =(int) position.x;
 		collider->rect.y =(int) position.y;
 		SDL_Rect screenPos = App->renderer->ToScreenPoint(position.x,position.y,position.z,&(current_animation->GetCurrentFrame()));
-		App->renderer->AddToBlitBuffer(graphics, screenPos.x, screenPos.y, INT_MIN,&(current_animation->GetCurrentFrame()),&screenPos);
+		App->renderer->AddToBlitBuffer(graphics, screenPos.x, screenPos.y, PLAYER_Z,&(current_animation->GetCurrentFrame()),&screenPos);
 	}
 
 	return UPDATE_CONTINUE;
@@ -158,12 +157,12 @@ void ModulePlayer::VerifyFlyAnimation() {
 
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
 		current_animation = &left2;
-		speed=-10;
+		CalculateSpeed();
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2))<= (SCREEN_WIDTH / 5*2)) {
 		current_animation = &left1;
-		speed=-5;
+		CalculateSpeed();
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*3)) {
@@ -173,36 +172,28 @@ void ModulePlayer::VerifyFlyAnimation() {
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*4)) {
 		current_animation = &right1;
-		speed=5;
+		CalculateSpeed();
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH/2)) <= (SCREEN_WIDTH )) {
 		current_animation = &right2;
-		speed=10;
+		CalculateSpeed();
 		return;
 	}
 }
 
 void ModulePlayer::VerifyFloorSpeed() {
 
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
-		speed=-10;
-		return;
-	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 2)) {
-		speed=-5;
+		CalculateSpeed();
 		return;
 	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 3)) {
 		speed=0;
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 4)) {
-		speed=5;
-		return;
-	}
 	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH)) {
-		speed=10;
+		CalculateSpeed();
 		return;
 	}
 }
@@ -211,7 +202,6 @@ void ModulePlayer::VerifyHorizonX() {
 	
 	//Calculate percentual position from character
 	float temp = (position.x + (SCREEN_WIDTH / 2))/SCREEN_WIDTH;
-	//App->renderer->horizon.x = (int)(HORIZON_X_MIN + (temp*(HORIZON_X_MAX - HORIZON_X_MIN)));
 	App->renderer->SetBackgroundParametersPercentual(temp);
 
 }
@@ -222,4 +212,9 @@ void ModulePlayer::VerifyHorizonY() {
 	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
 	App->renderer->horizon.y = (int)(HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
 	App->renderer->SetAlphaLineParametersPercentual(temp);
+}
+
+void ModulePlayer::CalculateSpeed() {
+	float temp = (position.x + (SCREEN_WIDTH / 2)) / SCREEN_WIDTH;
+	speed = MIN_X_SPEED + (temp*(MAX_X_SPEED - MIN_X_SPEED));
 }

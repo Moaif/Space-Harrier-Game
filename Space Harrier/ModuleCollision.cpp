@@ -9,14 +9,34 @@ using namespace std;
 ModuleCollision::ModuleCollision()
 {
 	hits[PLAYER][PLAYER] = false;
-	hits[PLAYER][LASERS] = false;
-	hits[PLAYER][WALLS] = true;
-	hits[LASERS][PLAYER] = false;
-	hits[LASERS][LASERS] = false;
-	hits[LASERS][WALLS] = true;
-	hits[WALLS][PLAYER] = true;
-	hits[WALLS][LASERS] = true;
-	hits[WALLS][WALLS] = false;
+	hits[PLAYER][LASER] = false;
+	hits[PLAYER][ENEMY_SHOOT] = true;
+	hits[PLAYER][ENEMY] = true;
+	hits[PLAYER][NO_DMG_ENEMY] = true;
+
+	hits[LASER][PLAYER] = false;
+	hits[LASER][LASER] = false;
+	hits[LASER][ENEMY_SHOOT] = false;
+	hits[LASER][ENEMY] = true;
+	hits[LASER][NO_DMG_ENEMY] = true;
+
+	hits[ENEMY_SHOOT][PLAYER] = true;
+	hits[ENEMY_SHOOT][LASER] = false;
+	hits[ENEMY_SHOOT][ENEMY_SHOOT] = false;
+	hits[ENEMY_SHOOT][ENEMY] = false;
+	hits[ENEMY_SHOOT][NO_DMG_ENEMY] = false;
+
+	hits[ENEMY][PLAYER] = true;
+	hits[ENEMY][LASER] = true;
+	hits[ENEMY][ENEMY_SHOOT] = false;
+	hits[ENEMY][ENEMY] = false;
+	hits[ENEMY][NO_DMG_ENEMY] = false;
+
+	hits[NO_DMG_ENEMY][PLAYER] = true;
+	hits[NO_DMG_ENEMY][LASER] = true;
+	hits[NO_DMG_ENEMY][ENEMY_SHOOT] = false;
+	hits[NO_DMG_ENEMY][ENEMY] = false;
+	hits[NO_DMG_ENEMY][NO_DMG_ENEMY] = false;
 
 }
 
@@ -47,7 +67,7 @@ update_status ModuleCollision::Update()
 	// After making it work, review that you are doing the minumum checks possible
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
-			if ((*it)->CheckCollision((*it2)->rect)) {
+			if ((*it)->CheckCollision((*it2)->rect,(*it2)->z)) {
 				if (hits[(*it)->type][(*it2)->type]) {
 					(*it)->callback->OnCollision((*it),(*it2));
 					(*it2)->callback->OnCollision((*it2),(*it));
@@ -84,9 +104,9 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,CollisionType type,Module* callback)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,CollisionType type,Module* callback)
 {
-	Collider* ret = new Collider(rect,type,callback);
+	Collider* ret = new Collider(rect,z,type,callback);
 
 	colliders.push_back(ret);
 
@@ -95,12 +115,11 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,CollisionType type,M
 
 // -----------------------------------------------------
 
-bool Collider::CheckCollision(const SDL_Rect& r) const
+bool Collider::CheckCollision(const SDL_Rect& r,float z) const
 {
-	// TODO 7: Create by hand (avoid consulting the internet) a simple collision test
-	// Return true if rectangle argument "r" if intersecting with "this->rect"
 	bool xHit = true;
 	bool yHit = true;
+	bool zHit = true;
 
 	//Xcollision
 	if (r.x > (this->rect.x + this->rect.w) || (r.x+r.w) < this->rect.x) {
@@ -112,5 +131,11 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 		yHit = false;
 	}
 
-	return (xHit && yHit);
+	//Zcollision
+	float offset = Z_SPEED;
+	if (z < this->z - offset || z > this->z + offset) {
+		zHit = false;
+	}
+
+	return (xHit && yHit && zHit);
 }

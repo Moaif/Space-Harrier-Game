@@ -11,7 +11,7 @@ ModuleEnemy::ModuleEnemy()
 {
 	tree = new Obstacle();
 	tree->anim.frames.push_back({ 206,48,44,163 });
-	tree->collider = new Collider({0,0,44,163}, ENEMY, this);
+	tree->collider = new Collider({0,0,0,0},MAX_Z, ENEMY, this);
 	
 }
 
@@ -89,8 +89,12 @@ void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z)
 
 void ModuleEnemy::OnCollision(Collider* col, Collider* other) {
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it) {
-		if ((*it)->collider == col) {
-			
+		if ((*it)->collider == col && (*it)->destructible) {
+			--((*it)->hits);
+			if ((*it)->hits <=0) {
+				(*it)->collider->to_delete = true;
+				(*it)->to_delete = true;
+			}
 		}
 	}
 }

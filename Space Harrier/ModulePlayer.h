@@ -5,7 +5,9 @@
 #include "Animation.h"
 #include "Point.h"
 
-#define HORIZON_OFFSET 20
+#define MIN_X_SPEED -10
+#define MAX_X_SPEED 10
+
 
 struct SDL_Texture;
 
@@ -28,6 +30,7 @@ private:
 	void VerifyFloorSpeed();
 	void VerifyHorizonX();
 	void VerifyHorizonY();
+	void CalculateSpeed();
 
 public:
 

@@ -14,7 +14,7 @@ struct Collider;
 
 class Enemy {
 public:
-	Enemy() {}
+	Enemy(bool destructible=true):destructible(destructible) {}
 	virtual ~Enemy() {}
 
 	virtual Enemy* Copy() const { return nullptr; }
@@ -24,12 +24,12 @@ public:
 	bool to_delete = false;
 	fPoint position = { 0, 0 , 1 };
 	Animation anim;
-	fPoint speed = {0,0,ENEMY_Z_SPEED};
+	fPoint speed = {0,0,Z_SPEED};
 	int hits=1;
+	bool destructible = true;
 
 	Collider* collider;
 	SDL_Rect screenPoint = {0,0,0,0};
-
 
 };
 

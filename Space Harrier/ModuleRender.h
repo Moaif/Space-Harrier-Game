@@ -59,8 +59,8 @@ public:
 	bool DrawStage(SDL_Texture* texture);
 	bool DrawFloor(SDL_Texture* texture);
 	SDL_Rect ToScreenPoint(float x,float y,float z, SDL_Rect* section);
+	SDL_Rect ToScreenPointBasic(float x, float y, float z, SDL_Rect* section);
 	void SetAlphaLineParametersPercentual(float percent);
-	void SetXSpeed(float value);
 	void SetBackgroundParametersPercentual(float percent);
 
 private:
@@ -70,7 +70,6 @@ private:
 
 public:
 	SDL_Renderer* renderer = nullptr;
-	SDL_Rect camera;
 	iPoint horizon;
 	int nearClippingPlane;
 
@@ -82,7 +81,6 @@ private:
 	float increasePixelIteration=0.0f;
 	float alphaLineDistanceStart;
 	float alphaLineSizeStart;
-	float xSpeed = 0.0f;
 	float ySpeed = 60.0f;
 	float alphaLineDistance;
 	float alphaLineSize;

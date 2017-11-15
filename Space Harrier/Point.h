@@ -20,7 +20,7 @@ public:
 	// Operators ------------------------------------------------
 	Point operator -(const Point &v) const
 	{
-		p2Vector2 r;
+		p3Vector3 r;
 
 		r.x = x - v.x;
 		r.y = y - v.y;
@@ -31,7 +31,7 @@ public:
 
 	Point operator + (const Point &v) const
 	{
-		p2Vector2 r;
+		p3Vector3 r;
 
 		r.x = x + v.x;
 		r.y = y + v.y;

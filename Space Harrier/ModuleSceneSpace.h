@@ -4,6 +4,7 @@
 #include "Module.h"
 
 struct SDL_Texture;
+class Font;
 
 class ModuleSceneSpace : public Module
 {
@@ -24,6 +25,8 @@ public:
 	SDL_Texture* floor = nullptr;
 	Animation tree;
 	float x,x2;
+private:
+	const Font* blue;
 };
 
 #endif // __MODULESCENESPACE_H__

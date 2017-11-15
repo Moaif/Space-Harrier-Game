@@ -30,7 +30,6 @@ bool ModuleSceneIntro::Start()
 	if(fx == 0)
 		fx = App->audio->LoadFx("assets/starting.wav");
 
-	App->renderer->camera.x = App->renderer->camera.y = 0;
 	red = App->fonts->GetFont("Red",__FILE__,__LINE__);
 	blue = App->fonts->GetFont("Blue", __FILE__, __LINE__);
 	green = App->fonts->GetFont("Green", __FILE__, __LINE__);

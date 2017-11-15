@@ -7,31 +7,27 @@
 enum CollisionType
 {
 	PLAYER,
-	LASERS,
-	WALLS,
+	LASER,
+	ENEMY_SHOOT,
 	ENEMY,
+	NO_DMG_ENEMY,
 	MAXIMO
 };
 
 struct Collider
 {
 	SDL_Rect rect = { 0,0,0,0 };
+	float z;
 	CollisionType type;
 	Module* callback;
 	bool to_delete = false;
 
 
-	Collider(SDL_Rect rectangle,CollisionType type,Module* callback) : 
+	Collider(SDL_Rect rectangle,float z,CollisionType type,Module* callback) : 
 		rect(rectangle),type(type),callback(callback)
 	{}
 
-	void SetPos(int x, int y)
-	{
-		rect.x = x;
-		rect.y = y;
-	}
-
-	bool CheckCollision(const SDL_Rect& r) const;
+	bool CheckCollision(const SDL_Rect& r,float z) const;
 };
 
 class ModuleCollision : public Module
@@ -46,7 +42,7 @@ public:
 
 	bool CleanUp();
 
-	Collider* AddCollider(const SDL_Rect& rect,CollisionType type,Module* callback);
+	Collider* AddCollider(const SDL_Rect& rect,float z,CollisionType type,Module* callback);
 	void DebugDraw();
 
 private:

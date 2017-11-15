@@ -29,8 +29,8 @@ bool ModuleParticles::Start()
 	laser.anim.randFrame = true;
 	laser.anim.speed = 0.01f;
 	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser.speed = 0.5f;
-	laser.collider = new Collider({ 0,0,91,61 },LASERS,this);
+	laser.speed = Z_SPEED;
+	laser.collider = new Collider({ 0,0,91,61 },1,LASER,this);
 
 
 	// TODO 12: Create a new "Explosion" particle 
@@ -89,10 +89,16 @@ update_status ModuleParticles::Update()
 		Particle* p = *it;
 
 		p->Update();
-		SDL_Rect screenPoint = App->renderer->ToScreenPoint(p->position.x,p->position.y,p->position.z,&(p->anim.GetCurrentFrame()));
-		App->renderer->AddToBlitBuffer(graphics, screenPoint.x, screenPoint.y,(int)p->position.z, &(p->anim.GetCurrentFrame()),&screenPoint);
+		if (p->screenPoint.h == 0 && p->screenPoint.w == 0) {
+			App->renderer->AddToBlitBuffer(graphics, (int)p->position.x, (int)p->position.y, (int)p->position.z, &(p->anim.GetCurrentFrame()), nullptr);
+		}
+		else
+		{
+			App->renderer->AddToBlitBuffer(graphics, (int)p->screenPoint.x, (int)p->screenPoint.y, (int)p->position.z, &(p->anim.GetCurrentFrame()), &(p->screenPoint));
+		}
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
+				p->collider->to_delete = true;
 				p->to_delete = true;
 			}
 		}
@@ -109,9 +115,8 @@ update_status ModuleParticles::Update()
 
 void ModuleParticles::AddParticle(const Particle& particle, float x, float y)
 {
-	// TODO 4: Fill in a method to create an instance of a prototype particle	
 	Particle* p = new Particle(particle);
-	p->position = { x,y };
+	p->position = { x,(y - (p->anim.GetCurrentFrame().h / 2)) };
 	if (p->collider != nullptr) {
 		p->collider->rect.x =(int) x;
 		p->collider->rect.y =(int) y;
@@ -122,8 +127,9 @@ void ModuleParticles::AddParticle(const Particle& particle, float x, float y)
 void ModuleParticles::OnCollision(Collider* col,Collider* other) {
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it) {
 		if ((*it)->collider == col) {
+			(*it)->collider->to_delete = true;
 			(*it)->to_delete = true;
-			AddParticle(explosion,(*it)->position.x,(*it)->position.y);
+			//AddParticle(explosion,(*it)->position.x,(*it)->position.y);
 		}
 	}
 }
@@ -142,7 +148,7 @@ Particle::Particle(const Particle& p) : anim(p.anim), position(p.position),efxIn
 	}
 	else
 	{
-		collider = App->collision->AddCollider(p.collider->rect, p.collider->type, p.collider->callback);
+		collider = App->collision->AddCollider(p.collider->rect,p.collider->z, p.collider->type, p.collider->callback);
 	}
 }
 
@@ -152,17 +158,16 @@ Particle::~Particle()
 
 void Particle::Update()
 {
+	position.z += Z_SPEED;
 	if (position.z >= MAX_Z) {
+		collider->to_delete = true;
 		to_delete = true;
 	}
-	position.z += speed;
+	screenPoint = App->renderer->ToScreenPointBasic(position.x,position.y,position.z,&(anim.GetCurrentFrame()));
+
 	if (collider != nullptr) {
-		float temp1 = (anim.GetCurrentFrame().w / position.z);
-		float temp2 = (anim.GetCurrentFrame().h / position.z);
-		collider->rect.x +=(int) ((anim.GetCurrentFrame().w-temp1)/2);
-		collider->rect.y +=(int) ((anim.GetCurrentFrame().h - temp2)/2);
-		collider->rect.w = (int)temp1;
-		collider->rect.h = (int)temp2;
+		collider->rect = screenPoint;
+		collider->z = position.z;
 	}
 }
 

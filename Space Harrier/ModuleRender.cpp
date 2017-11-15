@@ -13,13 +13,10 @@ using namespace std;
 
 ModuleRender::ModuleRender()
 {
-	camera.x = camera.y = 0;
-	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
-	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
 	horizon = { 0,HORIZON_Y_MIN };
 	alphaLineDistanceStart = ALPHA_DISTANCE_MIN;
 	alphaLineSizeStart = ALPHA_SIZE_MIN;
-	nearClippingPlane = 3;
+	nearClippingPlane = 2;
 }
 
 // Destructor
@@ -59,31 +56,11 @@ update_status ModuleRender::PreUpdate()
 // Called every draw update
 update_status ModuleRender::Update()
 {
-	// debug camera
-	int speed = 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
-
-	return UPDATE_CONTINUE;
-}
-
-update_status ModuleRender::PostUpdate()
-{
 	while (!blitQueue.empty())
 	{
 		BlitStruct temp = blitQueue.top();
 		if (temp.sectionNull && temp.blitSectionNull) {
-			Blit(temp.texture, temp.x, temp.y, nullptr,nullptr);
+			Blit(temp.texture, temp.x, temp.y, nullptr, nullptr);
 		}
 		else if (temp.sectionNull) {
 			Blit(temp.texture, temp.x, temp.y, nullptr, &temp.blitSection);
@@ -97,6 +74,11 @@ update_status ModuleRender::PostUpdate()
 		}
 		blitQueue.pop();
 	}
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleRender::PostUpdate()
+{
 	SDL_RenderPresent(renderer);
 	return UPDATE_CONTINUE;
 }
@@ -184,6 +166,7 @@ bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 
 	SDL_Surface* tempSurface = font->GetImage();
 	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize , ySize, 32, 0, 0, 0, 0);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 0, 0, 0));
 
 	SDL_Rect srcrect;
 	srcrect.h = ySize;
@@ -209,9 +192,7 @@ bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	if (ret) {
-		ret=Blit(tempTexture, x, y, nullptr, nullptr);
-	}
+	AddToBlitBuffer(tempTexture, x, y,FONTS_Z, nullptr, nullptr);
 
 	return ret;
 }
@@ -219,20 +200,29 @@ bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
 {
 	bool ret = true;
+	SDL_Rect tempRect;
+
+	//Center (0,0) is in the mid-down of the window
+	tempRect.x = rect.x + (SCREEN_WIDTH / 2);
+	tempRect.y = SCREEN_HEIGHT - rect.y;
+
+	//Now we calculate the left-top point where the image should start
+	tempRect.x = tempRect.x - (rect.w / 2);
+	tempRect.y = tempRect.y - rect.h;
+	tempRect.w = rect.w;
+	tempRect.h = rect.h;
+
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-	SDL_Rect rec(rect);
-	if (use_camera)
-	{
-		rec.x = (int)(camera.x + rect.x * SCREEN_SIZE);
-		rec.y = (int)(camera.y + rect.y * SCREEN_SIZE);
-		rec.w *= SCREEN_SIZE;
-		rec.h *= SCREEN_SIZE;
-	}
+	tempRect.x = (int)(tempRect.x * SCREEN_SIZE);
+	tempRect.y = (int)(tempRect.y * SCREEN_SIZE);
+	tempRect.w *= SCREEN_SIZE;
+	tempRect.h *= SCREEN_SIZE;
+	
 
-	if (SDL_RenderFillRect(renderer, &rec) != 0)
+	if (SDL_RenderFillRect(renderer, &tempRect) != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -400,7 +390,7 @@ void ModuleRender::DrawAlphaLines()
 		alphaLineDistance += distDif+alphaLineSize;
 	}
 
-	alphaLineIteration = (alphaLineIteration + 1);
+	alphaLineIteration = (alphaLineIteration + 2);
 }
 
 SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
@@ -420,15 +410,30 @@ SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) 
 	return rect;
 }
 
+SDL_Rect ModuleRender::ToScreenPointBasic(float x, float y, float z, SDL_Rect* section) {
+	SDL_Rect rect;
+
+	float scale = DepthScale(z);
+
+	rect.w = section->w*scale;
+	rect.h = section->h*scale;
+	LOG("h: %d hS: %d", section->h,rect.h);
+	float wDiff = section->w - rect.w;
+	float hDiff = section->h - rect.h;
+
+	LOG("hDiff %f",hDiff);
+
+	rect.x = x;
+	rect.y = (int)(y + (hDiff/2));
+	return rect;
+}
+
 
 void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
 	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
 	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
 }
 
-void ModuleRender::SetXSpeed(float value) {
-	xSpeed = value;
-}
 
 void ModuleRender::SetBackgroundParametersPercentual(float percent) {
 	backgroundSpeed = BACKGROUND_SPEED_MIN + (percent*(BACKGROUND_SPEED_MAX - BACKGROUND_SPEED_MIN));

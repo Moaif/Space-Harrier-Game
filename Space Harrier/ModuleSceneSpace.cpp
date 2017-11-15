@@ -8,6 +8,7 @@
 #include "ModuleParticles.h"
 #include "ModuleSceneSpace.h"
 #include "ModuleEnemy.h"
+#include "ModuleFont.h"
 
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
@@ -28,6 +29,7 @@ bool ModuleSceneSpace::Start()
 	background = App->textures->Load("assets/Background3.png");
 	stage = App->textures->Load("assets/Stage3.png");
 	floor = App->textures->Load("assets/Floor.bmp");
+	blue = App->fonts->GetFont("Blue",__FILE__,__LINE__);
 
 	App->player->Enable();
 	App->particles->Enable();
@@ -66,5 +68,6 @@ update_status ModuleSceneSpace::Update()
 		App->enemies->AddEnemy(*(App->enemies->tree), x2,0,MAX_Z);
 		x = 0;
 	}
+	App->renderer->Print(blue,-120,210,"Stage 3");
 	return UPDATE_CONTINUE;
 }

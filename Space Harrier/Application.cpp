@@ -22,7 +22,6 @@ Application::Application()
 	modules.push_back(input = new ModuleInput());
 	modules.push_back(window = new ModuleWindow());
 
-	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
 
@@ -34,10 +33,14 @@ Application::Application()
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
-	modules.push_back(enemies = new ModuleEnemy());
-	modules.push_back(fade = new ModuleFadeToBlack());
-
 	modules.push_back(fonts = new ModuleFont());
+	modules.push_back(enemies = new ModuleEnemy());
+
+	//Renderer must be here to draw from buffer after all other modules had request to blit
+	modules.push_back(renderer = new ModuleRender());
+
+	//Fade to black is the last one, in order to work properly
+	modules.push_back(fade = new ModuleFadeToBlack());
 
 	playing = false;
 }

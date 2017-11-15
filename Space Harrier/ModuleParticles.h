@@ -21,6 +21,7 @@ struct Particle
 	float speed;
 
 	Collider* collider;
+	SDL_Rect screenPoint = {0,0,0,0};
 
 
 	Particle();
