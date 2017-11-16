@@ -3,6 +3,8 @@
 
 Obstacle::Obstacle(bool destructible): Enemy(destructible)
 {
+	quad = App->renderer->GetQuad(10);
+	positionQuad = 0.0f;
 }
 Obstacle::~Obstacle() {
 }
@@ -19,7 +21,8 @@ Enemy* Obstacle::Copy() const {
 }
 void Obstacle::Update() {
 	position.x -= App->player->speed;
-	position.z -= Z_SPEED;
+	position.z = MIN_Z +((( (SCREEN_HEIGHT-(quad->y/SCREEN_SIZE))+quad->h*positionQuad)/App->renderer->horizon.y)*(MAX_Z -MIN_Z));
+	LOG("Z: %f quadY: %d quadH: %d hY: %d",position.z, ((SCREEN_HEIGHT - (quad->y / SCREEN_SIZE))),quad->h,App->renderer->horizon.y);
 	screenPoint = (App->renderer->ToScreenPoint(position.x, position.y, position.z, &(anim.GetCurrentFrame())));
 	collider->rect = screenPoint;
 	collider->z = position.z;

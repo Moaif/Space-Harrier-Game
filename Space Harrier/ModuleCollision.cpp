@@ -121,6 +121,7 @@ bool Collider::CheckCollision(const SDL_Rect& r,float z) const
 	bool yHit = true;
 	bool zHit = true;
 
+	//TODO mirar SDL_overlap
 	//Xcollision
 	if (r.x > (this->rect.x + this->rect.w) || (r.x+r.w) < this->rect.x) {
 		xHit = false;

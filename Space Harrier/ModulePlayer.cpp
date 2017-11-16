@@ -211,7 +211,6 @@ void ModulePlayer::VerifyHorizonY() {
 	//Calculate percentual position from character
 	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
 	App->renderer->horizon.y = (int)(HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
-	App->renderer->SetAlphaLineParametersPercentual(temp);
 }
 
 void ModulePlayer::CalculateSpeed() {

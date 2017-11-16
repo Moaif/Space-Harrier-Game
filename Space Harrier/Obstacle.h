@@ -10,7 +10,9 @@ public:
 
 	Enemy* Copy() const override;
 	void Update() override;
-
+private:
+	const SDL_Rect* quad;
+	float positionQuad;
 };
 
 #endif // !_OBSTACLE_

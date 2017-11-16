@@ -63,7 +63,7 @@ update_status ModuleSceneSpace::Update()
 	App->renderer->DrawBackground(background);
 	App->renderer->DrawStage(stage);
 	App->renderer->DrawFloor(floor);
-	if (x++ >= 100) {
+	if (x++ >= 1000) {
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 		App->enemies->AddEnemy(*(App->enemies->tree), x2,0,MAX_Z);
 		x = 0;

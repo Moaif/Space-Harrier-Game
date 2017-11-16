@@ -7,16 +7,27 @@
 #include "SDL/include/SDL.h"
 #include <iostream>
 #include "Font.h"
+#include <math.h>
 
 using namespace std;
 
+const float ModuleRender::SEGMENT_REDUCTION = 0.60f;
+const float ModuleRender::ALPHA_LINES_SPEED = 0.01f;
 
 ModuleRender::ModuleRender()
 {
 	horizon = { 0,HORIZON_Y_MIN };
-	alphaLineDistanceStart = ALPHA_DISTANCE_MIN;
-	alphaLineSizeStart = ALPHA_SIZE_MIN;
 	nearClippingPlane = 2;
+	alphaDivisor = 1;
+	for (int i = 1; i < nHorizonQuads; ++i) {
+		alphaDivisor += pow(SEGMENT_REDUCTION, i);
+	}
+	firstSegmentPositionPercentage = 0.0f;
+	for (int i = 0; i < nHorizonQuads; i++) {
+		quads[i].x = 0;
+		quads[i].w = SCREEN_SIZE*SCREEN_WIDTH;
+	}
+	firstQuadIndex = 0;
 }
 
 // Destructor
@@ -197,7 +208,7 @@ bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
 	return ret;
 }
 
-bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
+bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	bool ret = true;
 	SDL_Rect tempRect;
@@ -225,6 +236,22 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	if (SDL_RenderFillRect(renderer, &tempRect) != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
+		ret = false;
+	}
+
+	return ret;
+}
+
+bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+{
+	bool ret = true;
+
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
+	if (SDL_RenderFillRects(renderer, rects, count) != 0)
+	{
+		LOG("Cannot draw quad to screen. SDL_RenderFillRects error: %s", SDL_GetError());
 		ret = false;
 	}
 
@@ -360,37 +387,34 @@ bool ModuleRender::DrawFloor(SDL_Texture* texture)
 
 void ModuleRender::DrawAlphaLines()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
-	alphaLineDistance = alphaLineDistanceStart;
-	alphaLineSize = alphaLineSizeStart;
-	float offsetDif = 0;
-	float distDif = alphaLineDistanceStart;
-	float normalIteration = alphaLineIteration*((alphaLineDistanceStart + alphaLineSizeStart) / ySpeed);
-	int tempIteration = (int)normalIteration % (int)(alphaLineDistanceStart * 2);
-	float coef = tempIteration / alphaLineDistance*2;
-	if (coef >= 1) {
-		alphaLineIteration = 0;
+	float baseSegmentHeight = (float)(horizon.y*SCREEN_SIZE) / alphaDivisor;
+
+	float startingRenderingPosition = SCREEN_HEIGHT*SCREEN_SIZE - baseSegmentHeight*(1.0f - firstSegmentPositionPercentage);
+	float firstSegmentHeight = baseSegmentHeight * (1.0f - firstSegmentPositionPercentage) + baseSegmentHeight * (1.0f / SEGMENT_REDUCTION) * (firstSegmentPositionPercentage);
+
+	float currentSegmentHeight = firstSegmentHeight;
+	float currentRenderingPosition = startingRenderingPosition;
+
+	int currentQuad = firstQuadIndex;
+	bool hasLoopedArray = false;
+	do {
+		float currentSegmentPrintedHeight = currentSegmentHeight * (1.0f - SEGMENT_REDUCTION);
+		quads[currentQuad].y = (int)currentRenderingPosition;
+		quads[currentQuad].h = (int)currentSegmentPrintedHeight;
+		currentSegmentHeight = currentSegmentHeight * SEGMENT_REDUCTION;
+		currentRenderingPosition -= currentSegmentHeight;
+
+		currentQuad = (currentQuad + 1) % nHorizonQuads;
+		hasLoopedArray = currentQuad == firstQuadIndex;
+	} while (!hasLoopedArray);
+
+	App->renderer->DrawQuads(quads, nHorizonQuads, 0, 0, 0, 50);
+
+	float nextfirstSegmentPositionPercentage = fmod(firstSegmentPositionPercentage + ALPHA_LINES_SPEED, 1.0f);
+	if (nextfirstSegmentPositionPercentage < firstSegmentPositionPercentage) {
+		firstQuadIndex = (firstQuadIndex + 1) % nHorizonQuads;
 	}
-
-
-	while ((alphaLineDistance+alphaLineSizeStart) <= (horizon.y*SCREEN_SIZE))
-	{
-		const SDL_Rect test = { 0,(int)( SCREEN_HEIGHT*SCREEN_SIZE - ((alphaLineDistance+alphaLineSizeStart)-(coef*(distDif+alphaLineSize)))), SCREEN_WIDTH*SCREEN_SIZE, (int)(alphaLineSize+(offsetDif*coef)) };
-		SDL_RenderFillRect(renderer, &test);
-
-		offsetDif = alphaLineSize / 2.8f;
-		alphaLineSize -= offsetDif;
-		if (alphaLineSize <= 1) {
-			alphaLineSize = 1;
-		}
-		distDif = distDif*0.65f;
-		if (distDif <=1) {
-			distDif = 1;
-		}
-		alphaLineDistance += distDif+alphaLineSize;
-	}
-
-	alphaLineIteration = (alphaLineIteration + 2);
+	firstSegmentPositionPercentage = nextfirstSegmentPositionPercentage;
 }
 
 SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
@@ -428,13 +452,6 @@ SDL_Rect ModuleRender::ToScreenPointBasic(float x, float y, float z, SDL_Rect* s
 	return rect;
 }
 
-
-void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
-	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
-	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
-}
-
-
 void ModuleRender::SetBackgroundParametersPercentual(float percent) {
 	backgroundSpeed = BACKGROUND_SPEED_MIN + (percent*(BACKGROUND_SPEED_MAX - BACKGROUND_SPEED_MIN));
 	stageSpeed = STAGE_SPEED_MIN + (percent*(STAGE_SPEED_MAX - STAGE_SPEED_MIN));
@@ -449,4 +466,8 @@ float ModuleRender::DepthScale(float z) {
 
 
 	return nearClippingPlane / dist;
+}
+
+const SDL_Rect* ModuleRender::GetQuad(int index) {
+	return &quads[index];
 }

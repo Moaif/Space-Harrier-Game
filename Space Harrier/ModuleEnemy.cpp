@@ -9,10 +9,6 @@
 
 ModuleEnemy::ModuleEnemy()
 {
-	tree = new Obstacle();
-	tree->anim.frames.push_back({ 206,48,44,163 });
-	tree->collider = new Collider({0,0,0,0},MAX_Z, ENEMY, this);
-	
 }
 
 ModuleEnemy::~ModuleEnemy()
@@ -24,6 +20,10 @@ bool ModuleEnemy::Start()
 	LOG("Loading particles");
 	graphics = App->textures->Load("assets/Shoots.png");
 	trees = App->textures->Load("assets/Arboles.png");
+
+	tree = new Obstacle();
+	tree->anim.frames.push_back({ 206,48,44,163 });
+	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z, ENEMY, this);
 
 	return true;
 }
