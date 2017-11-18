@@ -14,13 +14,14 @@ struct Collider;
 
 class Enemy {
 public:
-	Enemy(bool destructible=true):destructible(destructible) {}
+	Enemy( bool destructible = true) :destructible(destructible) {}
 	virtual ~Enemy() {}
 
 	virtual Enemy* Copy() const { return nullptr; }
 	virtual void Update() {}
 
 public:
+	const string id;
 	bool to_delete = false;
 	fPoint position = { 0, 0 , 1 };
 	Animation anim;

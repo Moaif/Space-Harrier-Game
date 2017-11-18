@@ -6,11 +6,6 @@
 #include "Point.h"
 #include <queue>
 
-#define ALPHA_DISTANCE_MAX 20.0f*SCREEN_SIZE
-#define ALPHA_DISTANCE_MIN 5.0f*SCREEN_SIZE
-#define ALPHA_SIZE_MAX 13.3f*SCREEN_SIZE
-#define ALPHA_SIZE_MIN 3.32f*SCREEN_SIZE
-
 #define STAGE_SPEED_MAX 2
 #define STAGE_SPEED_MIN -2
 #define BACKGROUND_SPEED_MAX 1
@@ -56,43 +51,21 @@ public:
 	bool Print(const Font* font,int x,int y,std::string message);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	bool DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	bool DrawBackground(SDL_Texture* texture);
-	bool DrawStage(SDL_Texture* texture);
-	bool DrawFloor(SDL_Texture* texture);
-	SDL_Rect ToScreenPoint(float x,float y,float z, SDL_Rect* section);
+
 	SDL_Rect ToScreenPointBasic(float x, float y, float z, SDL_Rect* section);
-	void SetBackgroundParametersPercentual(float percent);
-	const SDL_Rect* GetQuad(int index);
 
 private:
-	void ModuleRender::DrawAlphaLines();
 	float DepthScale(float z);
 
 
 public:
 	SDL_Renderer* renderer = nullptr;
-	iPoint horizon;
 	int nearClippingPlane;
 
 private:
 	//Depth buffer
 	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
 
-	//Floor
-	float increasePixelIteration=0.0f;
-	float alphaDivisor;
-	float firstSegmentPositionPercentage;
-	static const float SEGMENT_REDUCTION;
-	static const float ALPHA_LINES_SPEED;
-	static const int nHorizonQuads = 11;
-	int firstQuadIndex;
-	SDL_Rect quads[nHorizonQuads];
-
-	//Background
-	float backgroundOffset = 0.0f;
-	float stageOffset = 0.0f;
-	float backgroundSpeed = 0.0f;
-	float stageSpeed = 0.0f;
 
 };
 

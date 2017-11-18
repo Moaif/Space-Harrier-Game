@@ -1,10 +1,13 @@
 #include "Obstacle.h"
+#include "ModuleFloor.h"
+#include <iostream>
 
 
 Obstacle::Obstacle(bool destructible): Enemy(destructible)
 {
-	quad = App->renderer->GetQuad(10);
-	positionQuad = 0.0f;
+	quad = App->floor->GetQuad(App->floor->lastQuadIndex);
+	positionQuad = (RAND()%100)/100.0;
+	position.z = MAX_Z;
 }
 Obstacle::~Obstacle() {
 }
@@ -20,10 +23,20 @@ Enemy* Obstacle::Copy() const {
 	return temp;
 }
 void Obstacle::Update() {
-	position.x -= App->player->speed;
-	position.z = MIN_Z +((( (SCREEN_HEIGHT-(quad->y/SCREEN_SIZE))+quad->h*positionQuad)/App->renderer->horizon.y)*(MAX_Z -MIN_Z));
-	LOG("Z: %f quadY: %d quadH: %d hY: %d",position.z, ((SCREEN_HEIGHT - (quad->y / SCREEN_SIZE))),quad->h,App->renderer->horizon.y);
-	screenPoint = (App->renderer->ToScreenPoint(position.x, position.y, position.z, &(anim.GetCurrentFrame())));
+	
+	float yScreen = quad->y + quad->h*positionQuad;
+	yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
+	yScreen += position.y;
+	//position.z = yScreen*3/3;
+
+	float xOffset = App->player->speed;
+	position.x -= xOffset;
+	
+	float scale = 1-(yScreen / App->floor->horizon.y);
+	int h = 1+anim.GetCurrentFrame().h*scale;
+	int w = 1+anim.GetCurrentFrame().w*scale;
+	screenPoint = {(int) (position.x*scale),(int)(yScreen),(int)(w),(int)(h) };
+
 	collider->rect = screenPoint;
 	collider->z = position.z;
 	if (position.z <= MIN_Z) {

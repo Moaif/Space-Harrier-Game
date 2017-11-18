@@ -9,9 +9,10 @@
 #include "ModuleParticles.h"
 #include "ModuleEnemy.h"
 #include "ModuleFont.h"
+#include "ModuleFloor.h"
 
 #include "ModuleSceneIntro.h"
-#include "ModuleSceneSpace.h"
+#include "ModuleScene.h"
 #include "ModulePlayer.h"
 
 using namespace std;
@@ -24,11 +25,12 @@ Application::Application()
 
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
+	modules.push_back(floor = new ModuleFloor);
 
 	// Game Modules
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
-	modules.push_back(scene_space = new ModuleSceneSpace(false));
 	modules.push_back(player = new ModulePlayer(false));
+	modules.push_back(scene_space = new ModuleScene(false));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());

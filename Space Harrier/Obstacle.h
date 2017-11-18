@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 
+struct obstacleInfo;
+
 class Obstacle : public Enemy {
 public:
 	Obstacle(bool destructible = true);
@@ -11,7 +13,7 @@ public:
 	Enemy* Copy() const override;
 	void Update() override;
 private:
-	const SDL_Rect* quad;
+	const obstacleInfo* quad;
 	float positionQuad;
 };
 

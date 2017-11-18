@@ -21,9 +21,10 @@ bool ModuleEnemy::Start()
 	graphics = App->textures->Load("assets/Shoots.png");
 	trees = App->textures->Load("assets/Arboles.png");
 
-	tree = new Obstacle();
+	Enemy* tree = new Obstacle();
 	tree->anim.frames.push_back({ 206,48,44,163 });
 	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z, ENEMY, this);
+	enemies["tree1"] = tree;
 
 	return true;
 }
@@ -97,4 +98,12 @@ void ModuleEnemy::OnCollision(Collider* col, Collider* other) {
 			}
 		}
 	}
+}
+
+Enemy* ModuleEnemy::GetById(string id) {
+	map<string, Enemy*>::iterator it = enemies.find(id);
+	if (it != enemies.end()) {
+		return enemies[id];
+	}
+	return nullptr;
 }

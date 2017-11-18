@@ -5,6 +5,7 @@
 #include "Module.h"
 #include <list>
 #include "Enemy.h"
+#include <map>
 
 
 struct SDL_Texture;
@@ -21,15 +22,14 @@ public:
 	void OnCollision(Collider* col, Collider* other);
 
 	void AddEnemy(const Enemy& particle, float x, float y,float z);
+	Enemy* GetById(string id);
 
 private:
 
 	SDL_Texture* graphics = nullptr;
 	SDL_Texture* trees = nullptr;
 	std::list<Enemy*> active;
-
-public:
-	Enemy* tree;
+	std::map<string, Enemy*> enemies;
 };
 
 #endif // !_MODULEENEMY_H_

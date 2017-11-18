@@ -15,11 +15,12 @@ class ModuleCollision;
 class ModuleParticles;
 class ModuleFont;
 class ModuleEnemy;
+class ModuleFloor;
 
 // Game modules ---
 class ModulePlayer;
 class ModuleSceneIntro;
-class ModuleSceneSpace;
+class ModuleScene;
 
 class Application
 {
@@ -43,11 +44,12 @@ public:
 	ModuleParticles* particles;
 	ModuleEnemy* enemies;
 	ModuleFont* fonts;
+	ModuleFloor* floor;
 
 	// Game modules ---
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
-	ModuleSceneSpace* scene_space;
+	ModuleScene* scene_space;
 
 	bool playing;
 

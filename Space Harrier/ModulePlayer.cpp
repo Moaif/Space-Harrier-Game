@@ -8,7 +8,8 @@
 #include "ModuleFadeToBlack.h"
 #include "ModulePlayer.h"
 #include "ModuleSceneIntro.h"
-#include "ModuleSceneSpace.h"
+#include "ModuleScene.h"
+#include "ModuleFloor.h"
 
 // Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
 
@@ -131,8 +132,7 @@ update_status ModulePlayer::Update()
 	if (destroyed == false) {
 		collider->rect.x =(int) position.x;
 		collider->rect.y =(int) position.y;
-		SDL_Rect screenPos = App->renderer->ToScreenPoint(position.x,position.y,position.z,&(current_animation->GetCurrentFrame()));
-		App->renderer->AddToBlitBuffer(graphics, screenPos.x, screenPos.y, PLAYER_Z,&(current_animation->GetCurrentFrame()),&screenPos);
+		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
 	}
 
 	return UPDATE_CONTINUE;
@@ -202,7 +202,7 @@ void ModulePlayer::VerifyHorizonX() {
 	
 	//Calculate percentual position from character
 	float temp = (position.x + (SCREEN_WIDTH / 2))/SCREEN_WIDTH;
-	App->renderer->SetBackgroundParametersPercentual(temp);
+	App->floor->SetBackgroundParametersPercentual(temp);
 
 }
 
@@ -210,7 +210,7 @@ void ModulePlayer::VerifyHorizonY() {
 
 	//Calculate percentual position from character
 	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
-	App->renderer->horizon.y = (int)(HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
+	App->floor->horizon.y = (HORIZON_Y_MIN + (temp*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
 }
 
 void ModulePlayer::CalculateSpeed() {
