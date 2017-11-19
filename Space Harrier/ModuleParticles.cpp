@@ -5,6 +5,7 @@
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
+#include "ModuleTime.h"
 
 #include "SDL/include/SDL_timer.h"
 
@@ -27,10 +28,10 @@ bool ModuleParticles::Start()
 	laser.anim.frames.push_back({ 188, 1, 91, 61 });
 	laser.anim.frames.push_back({ 284, 0, 91, 61 });
 	laser.anim.randFrame = true;
-	laser.anim.speed = 0.01f;
+	laser.anim.speed = 1.0f;
 	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
 	laser.speed = Z_SPEED;
-	laser.collider = new Collider({ 0,0,91,61 },1,LASER,this);
+	laser.collider = new Collider({ 0,0,91,61 },1,laser.speed,LASER,this);
 
 
 	// TODO 12: Create a new "Explosion" particle 
@@ -148,7 +149,7 @@ Particle::Particle(const Particle& p) : anim(p.anim), position(p.position),efxIn
 	}
 	else
 	{
-		collider = App->collision->AddCollider(p.collider->rect,p.collider->z, p.collider->type, p.collider->callback);
+		collider = App->collision->AddCollider(p.collider->rect,p.collider->z,p.collider->speed, p.collider->type, p.collider->callback);
 	}
 }
 
@@ -158,7 +159,7 @@ Particle::~Particle()
 
 void Particle::Update()
 {
-	position.z += Z_SPEED;
+	position.z += Z_SPEED*App->time->GetDeltaTime();
 	if (position.z >= MAX_Z) {
 		collider->to_delete = true;
 		to_delete = true;

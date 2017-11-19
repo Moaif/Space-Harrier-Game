@@ -23,12 +23,14 @@ public:
 	bool DrawBackground(SDL_Texture* texture);
 	bool DrawStage(SDL_Texture* texture);
 	void SetBackgroundParametersPercentual(float percent);
+	void SetHorizonYPerccentual(float percen);
 	const obstacleInfo* GetQuad(int index);
 private:
 	void DrawAlphaLines();
 
 public:
 	fPoint horizon;
+	float actualCameraY;
 	int lastQuadIndex;
 
 private:
@@ -48,6 +50,10 @@ private:
 	float stageOffset = 0.0f;
 	float backgroundSpeed = 0.0f;
 	float stageSpeed = 0.0f;
+
+	//Camera parameters for z-calculation
+	float cameraYMax;
+	float cameraYMin;
 };
 
 #endif // !_MODULEFLOOR_H_

@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
+#include "ModuleTime.h"
 
 using namespace std;
 
@@ -67,7 +68,7 @@ update_status ModuleCollision::Update()
 	// After making it work, review that you are doing the minumum checks possible
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
-			if ((*it)->CheckCollision((*it2)->rect,(*it2)->z)) {
+			if ((*it)->CheckCollision((*it2)->rect,(*it2)->z,(*it2)->speed)) {
 				if (hits[(*it)->type][(*it2)->type]) {
 					(*it)->callback->OnCollision((*it),(*it2));
 					(*it2)->callback->OnCollision((*it2),(*it));
@@ -104,9 +105,9 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,CollisionType type,Module* callback)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,Module* callback)
 {
-	Collider* ret = new Collider(rect,z,type,callback);
+	Collider* ret = new Collider(rect,z,speed,type,callback);
 
 	colliders.push_back(ret);
 
@@ -115,7 +116,7 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,CollisionTyp
 
 // -----------------------------------------------------
 
-bool Collider::CheckCollision(const SDL_Rect& r,float z) const
+bool Collider::CheckCollision(const SDL_Rect& r,float z,float speed) const
 {
 	bool xHit = true;
 	bool yHit = true;
@@ -133,8 +134,8 @@ bool Collider::CheckCollision(const SDL_Rect& r,float z) const
 	}
 
 	//Zcollision
-	float offset = Z_SPEED;
-	if (z < this->z - offset || z > this->z + offset) {
+	float maxSpeed = max(speed,this->speed)*App->time->GetDeltaTime();
+	if (z < this->z - maxSpeed || z > this->z + maxSpeed) {
 		zHit = false;
 	}
 

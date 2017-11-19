@@ -9,6 +9,7 @@
 #include "ModulePlayer.h"
 #include "ModuleCollision.h"
 #include "ModuleRender.h"
+#include "ModuleShadow.h"
 
 struct Collider;
 
@@ -25,7 +26,7 @@ public:
 	bool to_delete = false;
 	fPoint position = { 0, 0 , 1 };
 	Animation anim;
-	fPoint speed = {0,0,Z_SPEED};
+	float speed;
 	int hits=1;
 	bool destructible = true;
 

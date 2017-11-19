@@ -2,10 +2,11 @@
 #include "ModuleFloor.h"
 #include "ModuleRender.h"
 #include "ModulePlayer.h"
+#include "ModuleTime.h"
 #include "SDL/include/SDL.h"
 
 const float ModuleFloor::SEGMENT_REDUCTION = 0.60f;
-const float ModuleFloor::ALPHA_LINES_SPEED = 0.05f;
+const float ModuleFloor::ALPHA_LINES_SPEED = 3.0f;
 
 
 ModuleFloor::ModuleFloor() {
@@ -20,6 +21,10 @@ ModuleFloor::ModuleFloor() {
 		quads[i].w = SCREEN_SIZE*SCREEN_WIDTH;
 	}
 	lastQuadIndex = nHorizonQuads-1;
+
+	cameraYMax = (float)HORIZON_Y_MAX*CLIPDISTANCE / MAX_Z;
+	cameraYMin = (float)HORIZON_Y_MIN*CLIPDISTANCE / MAX_Z;
+	actualCameraY = cameraYMin;//Because it starts at bottom;
 }
 
 ModuleFloor::~ModuleFloor() {
@@ -108,7 +113,7 @@ void ModuleFloor::DrawAlphaLines()
 
 	App->renderer->DrawQuads(quads, nHorizonQuads, 0, 0, 0, 50);
 
-	float nextfirstSegmentPositionPercentage = fmod(firstSegmentPositionPercentage + ALPHA_LINES_SPEED, 1.0f);
+	float nextfirstSegmentPositionPercentage = fmod(firstSegmentPositionPercentage + (ALPHA_LINES_SPEED*App->time->GetDeltaTime()), 1.0f);
 	if (nextfirstSegmentPositionPercentage < firstSegmentPositionPercentage) {
 		lastQuadIndex = (lastQuadIndex + 1) % nHorizonQuads;
 	}
@@ -140,7 +145,7 @@ bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
 		ret = App->renderer->Blit(texture, 0, horizon.y, &rect, nullptr);
 	}
 
-	backgroundOffset += backgroundSpeed;
+	backgroundOffset += backgroundSpeed*App->time->GetDeltaTime();
 	if (backgroundOffset >= w) {
 		backgroundOffset = 0;
 	}
@@ -176,7 +181,7 @@ bool ModuleFloor::DrawStage(SDL_Texture* texture) {
 		ret = App->renderer->Blit(texture, 0, horizon.y, &rect, nullptr);
 	}
 
-	stageOffset += stageSpeed;
+	stageOffset += stageSpeed*App->time->GetDeltaTime();
 	if (stageOffset >= w) {
 		stageOffset = 0;
 	}
@@ -190,6 +195,11 @@ bool ModuleFloor::DrawStage(SDL_Texture* texture) {
 void ModuleFloor::SetBackgroundParametersPercentual(float percent) {
 	backgroundSpeed = BACKGROUND_SPEED_MIN + (percent*(BACKGROUND_SPEED_MAX - BACKGROUND_SPEED_MIN));
 	stageSpeed = STAGE_SPEED_MIN + (percent*(STAGE_SPEED_MAX - STAGE_SPEED_MIN));
+}
+
+void ModuleFloor::SetHorizonYPerccentual(float percen) {
+	horizon.y=(HORIZON_Y_MIN + (percen*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
+	actualCameraY = (cameraYMin +(percen*(cameraYMax - cameraYMin)));
 }
 
 const obstacleInfo* ModuleFloor::GetQuad(int index) {

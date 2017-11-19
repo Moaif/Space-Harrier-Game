@@ -19,12 +19,17 @@ bool ModuleEnemy::Start()
 {
 	LOG("Loading particles");
 	graphics = App->textures->Load("assets/Shoots.png");
-	trees = App->textures->Load("assets/Arboles.png");
+	trees = App->textures->Load("assets/models.png");
 
 	Enemy* tree = new Obstacle();
 	tree->anim.frames.push_back({ 206,48,44,163 });
-	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z, ENEMY, this);
+	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z,0, ENEMY, this);
 	enemies["tree1"] = tree;
+
+	Enemy* rock = new Obstacle();
+	rock->anim.frames.push_back({191,71,61,39});
+	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
+	enemies["rock1"] = rock;
 
 	return true;
 }

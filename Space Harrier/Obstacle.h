@@ -15,6 +15,7 @@ public:
 private:
 	const obstacleInfo* quad;
 	float positionQuad;
+	float lastFrameZ;
 };
 
 #endif // !_OBSTACLE_

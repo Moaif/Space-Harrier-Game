@@ -16,6 +16,8 @@ class ModuleParticles;
 class ModuleFont;
 class ModuleEnemy;
 class ModuleFloor;
+class ModuleShadow;
+class ModuleTime;
 
 // Game modules ---
 class ModulePlayer;
@@ -45,6 +47,8 @@ public:
 	ModuleEnemy* enemies;
 	ModuleFont* fonts;
 	ModuleFloor* floor;
+	ModuleShadow* shadows;
+	ModuleTime* time;
 
 	// Game modules ---
 	ModulePlayer* player;

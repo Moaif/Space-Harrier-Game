@@ -5,8 +5,8 @@
 #include "Animation.h"
 #include "Point.h"
 
-#define MIN_X_SPEED -10
-#define MAX_X_SPEED 10
+#define MIN_X_SPEED -15
+#define MAX_X_SPEED 15
 
 
 struct SDL_Texture;

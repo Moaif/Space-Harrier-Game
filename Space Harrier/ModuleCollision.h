@@ -18,16 +18,17 @@ struct Collider
 {
 	SDL_Rect rect = { 0,0,0,0 };
 	float z;
+	float speed;
 	CollisionType type;
 	Module* callback;
 	bool to_delete = false;
 
 
-	Collider(SDL_Rect rectangle,float z,CollisionType type,Module* callback) : 
-		rect(rectangle),type(type),callback(callback)
+	Collider(SDL_Rect rectangle,float z,float speed,CollisionType type,Module* callback) : 
+		rect(rectangle),z(z),speed(speed),type(type),callback(callback)
 	{}
 
-	bool CheckCollision(const SDL_Rect& r,float z) const;
+	bool CheckCollision(const SDL_Rect& r,float z,float speed) const;
 };
 
 class ModuleCollision : public Module
@@ -42,7 +43,7 @@ public:
 
 	bool CleanUp();
 
-	Collider* AddCollider(const SDL_Rect& rect,float z,CollisionType type,Module* callback);
+	Collider* AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,Module* callback);
 	void DebugDraw();
 
 private:

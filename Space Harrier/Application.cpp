@@ -10,6 +10,8 @@
 #include "ModuleEnemy.h"
 #include "ModuleFont.h"
 #include "ModuleFloor.h"
+#include "ModuleShadow.h"
+#include "ModuleTime.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleScene.h"
@@ -25,7 +27,9 @@ Application::Application()
 
 	modules.push_back(textures = new ModuleTextures());
 	modules.push_back(audio = new ModuleAudio());
-	modules.push_back(floor = new ModuleFloor);
+	modules.push_back(floor = new ModuleFloor());
+	modules.push_back(shadows = new ModuleShadow());
+	modules.push_back(time = new ModuleTime());
 
 	// Game Modules
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
