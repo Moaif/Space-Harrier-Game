@@ -19,14 +19,17 @@ bool ModuleEnemy::Start()
 {
 	LOG("Loading particles");
 	graphics = App->textures->Load("assets/Shoots.png");
-	trees = App->textures->Load("assets/models.png");
+	trees = App->textures->Load("assets/Arboles.png");
+	rocks = App->textures->Load("assets/models.png");
 
-	Enemy* tree = new Obstacle();
+	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
 	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z,0, ENEMY, this);
+	tree->shadow = false;
 	enemies["tree1"] = tree;
+	
 
-	Enemy* rock = new Obstacle();
+	Enemy* rock = new Obstacle(rocks);
 	rock->anim.frames.push_back({191,71,61,39});
 	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
 	enemies["rock1"] = rock;
@@ -74,10 +77,11 @@ update_status ModuleEnemy::Update()
 
 		p->Update();
 		if (p->screenPoint.h ==0 && p->screenPoint.w ==0) {
-			App->renderer->AddToBlitBuffer(trees, p->position.x, p->position.y, (int)p->position.z, &(p->anim.GetCurrentFrame()),nullptr);
+			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()),nullptr);
 		}
 		else {
-			App->renderer->AddToBlitBuffer(trees, p->screenPoint.x, p->screenPoint.y, (int)p->position.z, &(p->anim.GetCurrentFrame()), &(p->screenPoint));
+			resizeStruct resizeInfo = { p->screenPoint.w,p->screenPoint.h };
+			App->renderer->AddToBlitBuffer(p->texture, (float)p->screenPoint.x, (float)p->screenPoint.y, p->position.z, &(p->anim.GetCurrentFrame()), &resizeInfo);
 		}
 	}
 
@@ -96,10 +100,23 @@ void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z)
 void ModuleEnemy::OnCollision(Collider* col, Collider* other) {
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it) {
 		if ((*it)->collider == col && (*it)->destructible) {
-			--((*it)->hits);
-			if ((*it)->hits <=0) {
-				(*it)->collider->to_delete = true;
-				(*it)->to_delete = true;
+			if ((*it)->father == nullptr) {
+				--((*it)->hits);
+				if ((*it)->hits <= 0) {
+					(*it)->collider->to_delete = true;
+					(*it)->to_delete = true;
+				}
+			}
+			else
+			{
+				--((*it)->father->hits);
+				if ((*it)->father->hits <= 0) {
+					for (list<Enemy*>::iterator cIt = (*it)->father->childs.begin(); cIt != (*it)->father->childs.end(); ++cIt) {
+						(*cIt)->collider->to_delete = true;
+						(*cIt)->to_delete = true;
+					}
+					(*it)->father->to_delete = true;
+				}
 			}
 		}
 	}

@@ -51,8 +51,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	SDL_Rect temp = { 0,0,70,100 };
-	App->renderer->Blit(background, 100, 0, &(robot.GetCurrentFrame()), &temp );
+	resizeStruct resizeInfo {70,100 };
+	App->renderer->Blit(background, 100, 0, &(robot.GetCurrentFrame()), &resizeInfo );
 	App->renderer->Print(red,-40,0,"Esto es el menu");
 	App->renderer->Print(blue, -40, 40, "Esto es el menu");
 	App->renderer->Print(green, -40, 80, "Esto es el menu");

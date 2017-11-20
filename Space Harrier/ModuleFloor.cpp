@@ -7,7 +7,12 @@
 
 const float ModuleFloor::SEGMENT_REDUCTION = 0.60f;
 const float ModuleFloor::ALPHA_LINES_SPEED = 3.0f;
-
+const float ModuleFloor::HORIZON_Y_MAX = 100;
+const float ModuleFloor::HORIZON_Y_MIN = 20;
+const float ModuleFloor::STAGE_SPEED_MAX = 60;
+const float ModuleFloor::STAGE_SPEED_MIN = -60;
+const float ModuleFloor::BACKGROUND_SPEED_MAX = 30;
+const float ModuleFloor::BACKGROUND_SPEED_MIN = -30;
 
 ModuleFloor::ModuleFloor() {
 	horizon = { 0,HORIZON_Y_MIN };
@@ -40,7 +45,7 @@ bool ModuleFloor::DrawFloor(SDL_Texture* texture)
 	SDL_QueryTexture(texture, NULL, NULL, &textW, &textH);
 
 	rect.w = SCREEN_WIDTH;
-	rect.h = horizon.y;
+	rect.h = (int) horizon.y;
 
 	//Set (0,0) on the bottom-middle screen.
 	int pX = (SCREEN_WIDTH / 2) - (rect.w / 2);
@@ -57,7 +62,7 @@ bool ModuleFloor::DrawFloor(SDL_Texture* texture)
 	{
 		increasePixelIteration = 2.0f;
 	}
-	increasePixelIteration += App->player->speed;
+	increasePixelIteration += App->player->speedStage;
 
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;
@@ -135,14 +140,14 @@ bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
 	if ((backgroundOffset + SCREEN_WIDTH) > w) {
 		SDL_Rect rect2 = { 0,0,(int)((backgroundOffset + SCREEN_WIDTH) - w),h };
 		rect.w = SCREEN_WIDTH - rect2.w + 1;//With round, somethimes it leaves 1 pixel without drawing, thats why we add +1
-		if (!App->renderer->Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w / 2), horizon.y, &rect, nullptr)) {
+		if (!App->renderer->Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w / 2.0f), horizon.y-1, &rect, nullptr)) {
 			return false;
 		}
-		ret = App->renderer->Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2), horizon.y, &rect2, nullptr);
+		ret = App->renderer->Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2.0f), horizon.y-1, &rect2, nullptr);
 	}
 	else
 	{
-		ret = App->renderer->Blit(texture, 0, horizon.y, &rect, nullptr);
+		ret = App->renderer->Blit(texture, 0, horizon.y-1, &rect, nullptr);
 	}
 
 	backgroundOffset += backgroundSpeed*App->time->GetDeltaTime();
@@ -171,14 +176,14 @@ bool ModuleFloor::DrawStage(SDL_Texture* texture) {
 	if ((stageOffset + SCREEN_WIDTH) > w) {
 		SDL_Rect rect2 = { 0,0,(int)((stageOffset + SCREEN_WIDTH) - w),h };
 		rect.w = SCREEN_WIDTH - rect2.w;
-		if (!App->renderer->Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w / 2), horizon.y, &rect, nullptr)) {
+		if (!App->renderer->Blit(texture, (-(SCREEN_WIDTH / 2)) + (rect.w / 2.0f), horizon.y-1, &rect, nullptr)) {
 			return false;
 		}
-		ret = App->renderer->Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2), horizon.y, &rect2, nullptr);
+		ret = App->renderer->Blit(texture, (SCREEN_WIDTH / 2) - (rect2.w / 2.0f), horizon.y-1, &rect2, nullptr);
 	}
 	else
 	{
-		ret = App->renderer->Blit(texture, 0, horizon.y, &rect, nullptr);
+		ret = App->renderer->Blit(texture, 0, horizon.y-1, &rect, nullptr);
 	}
 
 	stageOffset += stageSpeed*App->time->GetDeltaTime();

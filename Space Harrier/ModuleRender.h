@@ -6,24 +6,25 @@
 #include "Point.h"
 #include <queue>
 
-#define STAGE_SPEED_MAX 2
-#define STAGE_SPEED_MIN -2
-#define BACKGROUND_SPEED_MAX 1
-#define BACKGROUND_SPEED_MIN -1
-
 struct SDL_Texture;
 struct SDL_Renderer;
 struct SDL_Rect;
 class Font;
 
+
+struct resizeStruct {
+	int w;
+	int h;
+};
+
 struct BlitStruct
 {
 	SDL_Texture* texture;
-	int x;
-	int y;
-	int z;
+	float x;
+	float y;
+	float z;
 	SDL_Rect section;
-	SDL_Rect blitSection;
+	resizeStruct blitSection;
 	bool sectionNull;
 	bool blitSectionNull;
 };
@@ -46,9 +47,9 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	void AddToBlitBuffer(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, SDL_Rect* blitSection);
-	bool Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection);
-	bool Print(const Font* font,int x,int y,std::string message);
+	void AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo);
+	bool Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo);
+	bool Print(const Font* font,float x,float y,std::string message);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	bool DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
@@ -65,8 +66,6 @@ public:
 private:
 	//Depth buffer
 	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
-
-
 };
 
 #endif // __MODULERENDER_H__

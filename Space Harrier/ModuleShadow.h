@@ -15,7 +15,7 @@ public:
 	bool Start();
 	bool CleanUp();
 
-	void DrawShadow(int x, int y,float scale);
+	void DrawShadow(float x, float y,float scale);
 
 private:
 	SDL_Texture* shadow;

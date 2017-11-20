@@ -57,14 +57,9 @@ typedef unsigned int uint;
 #define VSYNC true
 #define TITLE "Space Harrier-Game"
 
-#define HORIZON_Y_MIN 20
-#define HORIZON_Y_MAX 100
-
 #define MAX_Z 25
 #define MIN_Z 0
 #define CLIPDISTANCE 3
-
-#define Z_SPEED 40.0f
 
 #define SHADOW_Z 30
 #define PLAYER_Z INT_MIN+1

@@ -5,10 +5,6 @@
 #include "Animation.h"
 #include "Point.h"
 
-#define MIN_X_SPEED -15
-#define MAX_X_SPEED 15
-
-
 struct SDL_Texture;
 
 class ModulePlayer : public Module
@@ -24,6 +20,7 @@ public:
 
 	void SetLives(int amount);
 	int GetLives();
+	fPoint GetRelativeWorldPosition();
 
 private:
 	void VerifyFlyAnimation();
@@ -45,10 +42,14 @@ public:
 	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
-	float speed=0.0f;
+	float speedStage=0.0f;
 
 private:
 	int lives = 0;
+	static const float MIN_X_SPEED;
+	static const float MAX_X_SPEED;
+	static const float MOVEMENT_SPEED;
+	static const float SCREEN_SEGMENT;
 };
 
 #endif

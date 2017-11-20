@@ -12,7 +12,7 @@ ModuleTime::~ModuleTime() {
 }
 
 update_status ModuleTime::PreUpdate() {
-	float currentTicks = SDL_GetTicks();
+	float currentTicks = (float)SDL_GetTicks();
 	deltaTime = (currentTicks - previousTicks)/1000.0f;
 	previousTicks = currentTicks;
 

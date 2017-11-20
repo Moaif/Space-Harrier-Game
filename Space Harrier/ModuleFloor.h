@@ -34,6 +34,10 @@ public:
 	int lastQuadIndex;
 
 private:
+	//Horizon
+	static const float HORIZON_Y_MAX;
+	static const float HORIZON_Y_MIN;
+
 	//Floor
 	float increasePixelIteration = 0.0f;
 	float alphaDivisor;
@@ -50,6 +54,10 @@ private:
 	float stageOffset = 0.0f;
 	float backgroundSpeed = 0.0f;
 	float stageSpeed = 0.0f;
+	static const float STAGE_SPEED_MAX;
+	static const float STAGE_SPEED_MIN;
+	static const float BACKGROUND_SPEED_MAX;
+	static const float BACKGROUND_SPEED_MIN;
 
 	//Camera parameters for z-calculation
 	float cameraYMax;

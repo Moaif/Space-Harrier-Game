@@ -12,7 +12,10 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 
-// Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
+const float ModulePlayer::MIN_X_SPEED = -15;
+const float ModulePlayer::MAX_X_SPEED = 15;
+const float ModulePlayer::MOVEMENT_SPEED = 300;
+const float ModulePlayer::SCREEN_SEGMENT = 0.4;//5 screen zones
 
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
@@ -68,12 +71,10 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	int movement_speed = 300;//TODO cambiar a constante estatica
-
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if (position.x > ((-SCREEN_WIDTH/2)+current_animation->GetCurrentFrame().w/2)) {
-			position.x -= movement_speed*App->time->GetDeltaTime();
+			position.x -= MOVEMENT_SPEED*App->time->GetDeltaTime();
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
 			}
@@ -88,7 +89,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 	{
 		if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
-			position.x += movement_speed*App->time->GetDeltaTime();
+			position.x += MOVEMENT_SPEED*App->time->GetDeltaTime();
 			if (current_animation != &run) {
 				VerifyFlyAnimation();
 			}
@@ -103,7 +104,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 	{
 		if (position.y > 0) {
-			position.y -= movement_speed*App->time->GetDeltaTime();
+			position.y -= MOVEMENT_SPEED*App->time->GetDeltaTime();
 			if (position.y <= 0) {
 				current_animation = &run;
 			}
@@ -114,7 +115,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 	{
 		if (position.y < (SCREEN_HEIGHT-current_animation->GetCurrentFrame().h)) {
-			position.y += movement_speed*App->time->GetDeltaTime();
+			position.y += MOVEMENT_SPEED*App->time->GetDeltaTime();
 			if (current_animation == &run) {
 				VerifyFlyAnimation();
 			}
@@ -133,7 +134,7 @@ update_status ModulePlayer::Update()
 	if (destroyed == false) {
 		collider->rect.x =(int) position.x;
 		collider->rect.y =(int) position.y;
-		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
+		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
 		App->shadows->DrawShadow(position.x,0,1);
 	}
 
@@ -156,28 +157,29 @@ int ModulePlayer::GetLives() {
 }
 
 void ModulePlayer::VerifyFlyAnimation() {
+	float pos = GetRelativeWorldPosition().x;
 
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5)) {
+	if (pos <= (SCREEN_SEGMENT)-1) {
 		current_animation = &left2;
 		CalculateSpeed();
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2))<= (SCREEN_WIDTH / 5*2)) {
+	if (pos <= (SCREEN_SEGMENT * 2)-1) {
 		current_animation = &left1;
 		CalculateSpeed();
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*3)) {
+	if (pos <= (SCREEN_SEGMENT * 3)-1) {
 		current_animation = &center;
-		speed=0;
+		speedStage=0;
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5*4)) {
+	if (pos <= (SCREEN_SEGMENT * 4)-1) {
 		current_animation = &right1;
 		CalculateSpeed();
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH/2)) <= (SCREEN_WIDTH )) {
+	if (pos <= (SCREEN_SEGMENT * 5)-1) {
 		current_animation = &right2;
 		CalculateSpeed();
 		return;
@@ -185,16 +187,16 @@ void ModulePlayer::VerifyFlyAnimation() {
 }
 
 void ModulePlayer::VerifyFloorSpeed() {
-
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 2)) {
+	float pos = GetRelativeWorldPosition().x;
+	if (pos <= (SCREEN_SEGMENT*2)-1) {
 		CalculateSpeed();
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH / 5 * 3)) {
-		speed=0;
+	if (pos <= (SCREEN_SEGMENT*3)-1) {
+		speedStage=0;
 		return;
 	}
-	if ((position.x + (SCREEN_WIDTH / 2)) <= (SCREEN_WIDTH)) {
+	if (pos <= (SCREEN_SEGMENT * 5)-1) {
 		CalculateSpeed();
 		return;
 	}
@@ -203,7 +205,7 @@ void ModulePlayer::VerifyFloorSpeed() {
 void ModulePlayer::VerifyHorizonX() {
 	
 	//Calculate percentual position from character
-	float temp = (position.x + (SCREEN_WIDTH / 2))/SCREEN_WIDTH;
+	float temp = (position.x + SCREEN_WIDTH / 2) / SCREEN_WIDTH;
 	App->floor->SetBackgroundParametersPercentual(temp);
 
 }
@@ -216,6 +218,14 @@ void ModulePlayer::VerifyHorizonY() {
 }
 
 void ModulePlayer::CalculateSpeed() {
-	float temp = (position.x + (SCREEN_WIDTH / 2)) / SCREEN_WIDTH;
-	speed = MIN_X_SPEED + (temp*(MAX_X_SPEED - MIN_X_SPEED));
+	float temp = (position.x +SCREEN_WIDTH/2) / SCREEN_WIDTH;
+	speedStage = MIN_X_SPEED + (temp*(MAX_X_SPEED - MIN_X_SPEED));
+}
+
+fPoint ModulePlayer::GetRelativeWorldPosition() {
+	fPoint p;
+	p.x= (position.x*2) / SCREEN_WIDTH;
+	p.y = (position.y -(SCREEN_HEIGHT/2)) / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
+	p.z = 0.0f;
+	return p;
 }

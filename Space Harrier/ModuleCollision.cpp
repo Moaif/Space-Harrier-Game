@@ -64,14 +64,14 @@ update_status ModuleCollision::PreUpdate()
 
 update_status ModuleCollision::Update()
 {
-	// TODO 8: Check collisions between all colliders. 
-	// After making it work, review that you are doing the minumum checks possible
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
-			if ((*it)->CheckCollision((*it2)->rect,(*it2)->z,(*it2)->speed)) {
-				if (hits[(*it)->type][(*it2)->type]) {
-					(*it)->callback->OnCollision((*it),(*it2));
-					(*it2)->callback->OnCollision((*it2),(*it));
+			if ( !((*it)->to_delete || (*it2)->to_delete)) {//If one collider is already set to delete, we dont check again, he exist no more
+				if ((*it)->CheckCollision((*it2)->rect, (*it2)->z, (*it2)->speed)) {
+					if (hits[(*it)->type][(*it2)->type]) {
+						(*it)->callback->OnCollision((*it), (*it2));
+						(*it2)->callback->OnCollision((*it2), (*it));
+					}
 				}
 			}
 		}

@@ -20,6 +20,7 @@ struct Particle
 	bool onlyOnce = false;
 	float speed;
 
+	SDL_Texture* texture;
 	Collider* collider;
 	SDL_Rect screenPoint = {0,0,0,0};
 
@@ -47,7 +48,7 @@ public:
 
 private:
 
-	SDL_Texture* graphics = nullptr;
+	SDL_Texture* lasers = nullptr;
 	std::list<Particle*> active;
 
 public:

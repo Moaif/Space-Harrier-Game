@@ -6,6 +6,7 @@
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleTime.h"
+#include "ModulePlayer.h"
 
 #include "SDL/include/SDL_timer.h"
 
@@ -19,19 +20,20 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
-	graphics = App->textures->Load("assets/Shoots.png");
+	lasers = App->textures->Load("assets/Shoots.png");
 
 
 	// Creating shoot particle
-	laser.anim.frames.push_back({ 1, 1, 91, 61 });
-	laser.anim.frames.push_back({ 95, 0, 91, 61 });
-	laser.anim.frames.push_back({ 188, 1, 91, 61 });
-	laser.anim.frames.push_back({ 284, 0, 91, 61 });
+	laser.anim.frames.push_back({ 0, 0, 56, 38 });
+	laser.anim.frames.push_back({ 57, 0, 56, 38 });
+	laser.anim.frames.push_back({ 113, 0, 56, 38 });
+	laser.anim.frames.push_back({ 171, 0, 56, 38 });
 	laser.anim.randFrame = true;
 	laser.anim.speed = 1.0f;
 	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser.speed = Z_SPEED;
+	laser.speed = 40.0f;
 	laser.collider = new Collider({ 0,0,91,61 },1,laser.speed,LASER,this);
+	laser.texture = lasers;
 
 
 	// TODO 12: Create a new "Explosion" particle 
@@ -55,7 +57,7 @@ bool ModuleParticles::Start()
 bool ModuleParticles::CleanUp()
 {
 	LOG("Unloading particles");
-	App->textures->Unload(graphics);
+	App->textures->Unload(lasers);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);
@@ -91,11 +93,12 @@ update_status ModuleParticles::Update()
 
 		p->Update();
 		if (p->screenPoint.h == 0 && p->screenPoint.w == 0) {
-			App->renderer->AddToBlitBuffer(graphics, (int)p->position.x, (int)p->position.y, (int)p->position.z, &(p->anim.GetCurrentFrame()), nullptr);
+			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()), nullptr);
 		}
 		else
 		{
-			App->renderer->AddToBlitBuffer(graphics, (int)p->screenPoint.x, (int)p->screenPoint.y, (int)p->position.z, &(p->anim.GetCurrentFrame()), &(p->screenPoint));
+			resizeStruct resizeInfo = { p->screenPoint.w,p->screenPoint.h };
+			App->renderer->AddToBlitBuffer(p->texture, (float)p->screenPoint.x, (float)p->screenPoint.y, p->position.z, &(p->anim.GetCurrentFrame()), &resizeInfo);
 		}
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
@@ -142,7 +145,7 @@ Particle::Particle()
 {}
 
 // TODO 3: Fill in a copy constructor
-Particle::Particle(const Particle& p) : anim(p.anim), position(p.position),efxIndex(p.efxIndex),speed(p.speed),onlyOnce(p.onlyOnce)
+Particle::Particle(const Particle& p) : anim(p.anim), position(p.position),efxIndex(p.efxIndex),speed(p.speed),onlyOnce(p.onlyOnce),texture(p.texture)
 {
 	if (p.collider == nullptr) {
 		collider = nullptr;
@@ -159,16 +162,32 @@ Particle::~Particle()
 
 void Particle::Update()
 {
-	position.z += Z_SPEED*App->time->GetDeltaTime();
-	if (position.z >= MAX_Z) {
-		collider->to_delete = true;
-		to_delete = true;
-	}
-	screenPoint = App->renderer->ToScreenPointBasic(position.x,position.y,position.z,&(anim.GetCurrentFrame()));
+	//Player Shoots
+	if (collider->type == LASER) {
+		position.z += speed*App->time->GetDeltaTime();
+		if (position.z >= MAX_Z) {
+			collider->to_delete = true;
+			to_delete = true;
+		}
+		float scale = CLIPDISTANCE / (CLIPDISTANCE + position.z);
+		fPoint reduction=App->player->GetRelativeWorldPosition();
 
+		screenPoint.w = anim.GetCurrentFrame().w*scale;
+		screenPoint.h = anim.GetCurrentFrame().h*scale;
+
+		screenPoint.x = (position.x - (screenPoint.w*reduction.x*(1-scale)));
+		screenPoint.y = position.y;//TODO hacer lo mismo que con la x
+	}
+
+	//Explosion
 	if (collider != nullptr) {
 		collider->rect = screenPoint;
 		collider->z = position.z;
+	}
+
+	//Enemy Shoot
+	if (collider->type == ENEMY_SHOOT) {
+
 	}
 }
 

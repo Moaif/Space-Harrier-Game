@@ -7,7 +7,7 @@ struct obstacleInfo;
 
 class Obstacle : public Enemy {
 public:
-	Obstacle(bool destructible = true);
+	Obstacle(SDL_Texture* texture, Enemy* father=nullptr);
 	~Obstacle();
 
 	Enemy* Copy() const override;

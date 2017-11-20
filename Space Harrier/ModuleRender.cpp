@@ -97,35 +97,36 @@ bool ModuleRender::CleanUp()
 	return true;
 }
 
-void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, int x, int y,int z, SDL_Rect* section, SDL_Rect* blitSection) {
+void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo) {
 	SDL_Rect empty = { 0,0,0,0 };
+	resizeStruct noResize= { 0,0 };
 	BlitStruct temp;
-	if (section == nullptr && blitSection == nullptr) {
-		temp = { texture,x,y,z,empty,empty,true,true };
+	if (section == nullptr && resizeInfo == nullptr) {
+		temp = { texture,x,y,z,empty,noResize,true,true };
 	}
 	else if (section == nullptr) {
-		temp = { texture,x,y,z,empty,*blitSection,true,false };
+		temp = { texture,x,y,z,empty,*resizeInfo,true,false };
 	}
 
-	else if (blitSection == nullptr) {
-		temp = { texture,x,y,z,*section,empty,false,true };
+	else if (resizeInfo == nullptr) {
+		temp = { texture,x,y,z,*section,noResize,false,true };
 	}
 	else {
-		temp = { texture,x,y,z,*section,*blitSection,false,false };
+		temp = { texture,x,y,z,*section,*resizeInfo,false,false };
 	}
 	blitQueue.push(temp);
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection)
+bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo)
 {
 	bool ret = true;
 	SDL_Rect rect;
 
-	if(blitSection != NULL)
+	if(resizeInfo != NULL)
 	{
-		rect.w = blitSection->w;
-		rect.h = blitSection->h;
+		rect.w = resizeInfo->w;
+		rect.h = resizeInfo->h;
 	}
 	else if (section !=NULL) {
 		rect.w = section->w;
@@ -144,8 +145,8 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	x = x - (rect.w / 2);
 	y = y - rect.h ;
 
-	rect.x = x * SCREEN_SIZE;
-	rect.y = y * SCREEN_SIZE;
+	rect.x =(int)( x * SCREEN_SIZE);
+	rect.y =(int)( y * SCREEN_SIZE);
 
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
@@ -159,7 +160,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	return ret;
 }
 
-bool ModuleRender::Print(const Font* font, int x, int y, string mesage) {
+bool ModuleRender::Print(const Font* font, float x, float y, string mesage) {
 	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
