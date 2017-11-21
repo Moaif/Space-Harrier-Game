@@ -51,14 +51,19 @@ typedef unsigned int uint;
 
 // Configuration -----------
 #define SCREEN_SIZE 3
-#define SCREEN_WIDTH 384//TODO revisar en algun momento por si se ocurre una mejor manera de manejarlo
-#define SCREEN_HEIGHT 240
+#define SCREEN_WIDTH 320
+#define SCREEN_HEIGHT 224
 #define FULLSCREEN false
 #define VSYNC true
 #define TITLE "Space Harrier-Game"
 
-#define HORIZON_Y_MIN 20
-#define HORIZON_Y_MAX 100
+#define MAX_Z 25
+#define MIN_Z 0
+#define CLIPDISTANCE 3
+
+#define SHADOW_Z MAX_Z+10
+#define PLAYER_Z INT_MIN+1
+#define FONTS_Z INT_MIN
 
 int getPseudoRand();
 int getRand();

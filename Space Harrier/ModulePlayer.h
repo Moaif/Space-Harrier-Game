@@ -5,8 +5,6 @@
 #include "Animation.h"
 #include "Point.h"
 
-#define HORIZON_OFFSET 20
-
 struct SDL_Texture;
 
 class ModulePlayer : public Module
@@ -20,10 +18,16 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider * col,Collider* other);
 
+	void SetLives(int amount);
+	int GetLives();
+	fPoint GetRelativeWorldPosition();
+
 private:
 	void VerifyFlyAnimation();
+	void VerifyFloorSpeed();
 	void VerifyHorizonX();
 	void VerifyHorizonY();
+	void CalculateSpeed();
 
 public:
 
@@ -38,6 +42,14 @@ public:
 	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
+	float speedStage=0.0f;
+
+private:
+	int lives = 0;
+	static const float MIN_X_SPEED;
+	static const float MAX_X_SPEED;
+	static const float MOVEMENT_SPEED;
+	static const float SCREEN_SEGMENT;
 };
 
 #endif

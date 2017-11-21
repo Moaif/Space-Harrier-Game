@@ -4,15 +4,36 @@
 #include "Module.h"
 #include "Globals.h"
 #include "Point.h"
-
-#define ALPHA_DISTANCE_MAX 13.3f*SCREEN_SIZE
-#define ALPHA_DISTANCE_MIN 3.0f*SCREEN_SIZE
-#define ALPHA_SIZE_MAX 16.6f*SCREEN_SIZE
-#define ALPHA_SIZE_MIN 3.0f*SCREEN_SIZE
+#include <queue>
 
 struct SDL_Texture;
 struct SDL_Renderer;
 struct SDL_Rect;
+class Font;
+
+
+struct resizeStruct {
+	int w;
+	int h;
+};
+
+struct BlitStruct
+{
+	SDL_Texture* texture;
+	float x;
+	float y;
+	float z;
+	SDL_Rect section;
+	resizeStruct blitSection;
+	bool sectionNull;
+	bool blitSectionNull;
+};
+
+struct CompareDepth {
+	bool operator()(BlitStruct const & p1, BlitStruct const & p2) {
+		return p1.z < p2.z;
+	}
+};
 
 class ModuleRender : public Module
 {
@@ -26,28 +47,25 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	bool Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection);
-	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
-	void ModuleRender::DrawAlphaLines();
-	SDL_Rect ToScreenPoint(float x,float y,float z, SDL_Rect* section);
-	void SetAlphaLineParametersPercentual(float percent);
+	void AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo);
+	bool Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo);
+	bool Print(const Font* font,float x,float y,std::string message);
+	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	bool DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+	SDL_Rect ToScreenPointBasic(float x, float y, float z, SDL_Rect* section);
 
 private:
 	float DepthScale(float z);
 
+
 public:
 	SDL_Renderer* renderer = nullptr;
-	SDL_Rect camera;
-	iPoint horizon;
 	int nearClippingPlane;
 
 private:
-	float alphaLineDistanceStart;
-	float alphaLineSizeStart;
-	float alphaLineDistance;
-	float alphaLineSize;
-	int alphaLineIteration=0;
-
+	//Depth buffer
+	std::priority_queue<BlitStruct,std::vector<BlitStruct>,CompareDepth> blitQueue;
 };
 
 #endif // __MODULERENDER_H__

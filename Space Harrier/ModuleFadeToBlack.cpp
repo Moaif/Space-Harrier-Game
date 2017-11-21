@@ -73,6 +73,8 @@ void ModuleFadeToBlack::FadeToBlack(Module* module_on, Module* module_off, float
 
 	this->module_on = module_on;
 	this->module_off = module_off;
+	//Can't pause in transitions
+	App->playing = false;
 }
 
 bool ModuleFadeToBlack::isFading() const

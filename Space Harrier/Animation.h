@@ -1,5 +1,7 @@
 #pragma once
 #include <vector>
+#include "Application.h"
+#include "ModuleTime.h"
 
 using namespace std;
 
@@ -45,7 +47,7 @@ public:
 		}
 		else
 		{
-			timer += speed;
+			timer += speed*App->time->GetDeltaTime();
 		}
 
 		if (current_frame >= last_frame)

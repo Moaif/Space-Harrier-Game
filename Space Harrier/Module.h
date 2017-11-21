@@ -1,8 +1,6 @@
 #ifndef __MODULE_H__
 #define __MODULE_H__
 
-#define MAX_Z 25
-
 class Application;
 struct Collider;
 

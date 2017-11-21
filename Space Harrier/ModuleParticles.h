@@ -6,23 +6,25 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Point.h"
-#include "ModuleCollision.h"
 
 struct SDL_Texture;
+struct Collider;
 
 struct Particle
 {
-	// TODO 1: Fill in the structure with all the properties you need for each particle
 	bool to_delete = false;
 	bool firstSound=true;
+	bool firstUpdate = true;
 	fPoint position = { 0, 0 , 1};
 	unsigned int efxIndex;
 	Animation anim;
 	bool onlyOnce = false;
 	float speed;
+	fPoint reduction;
 
-	// TODO 11: Add an optional collider to each particle
+	SDL_Texture* texture;
 	Collider* collider;
+	SDL_Rect screenPoint = {0,0,0,0};
 
 
 	Particle();
@@ -48,7 +50,7 @@ public:
 
 private:
 
-	SDL_Texture* graphics = nullptr;
+	SDL_Texture* lasers = nullptr;
 	std::list<Particle*> active;
 
 public:

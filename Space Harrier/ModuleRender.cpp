@@ -3,17 +3,20 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModulePlayer.h"
 #include "SDL/include/SDL.h"
+#include <iostream>
+#include "Font.h"
+#include <math.h>
+
+using namespace std;
+
+
 
 ModuleRender::ModuleRender()
 {
-	camera.x = camera.y = 0;
-	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
-	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
-	horizon = { 0,HORIZON_Y_MIN };
-	alphaLineDistanceStart = ALPHA_DISTANCE_MIN;
-	alphaLineSizeStart = ALPHA_SIZE_MIN;
-	nearClippingPlane = 3;
+	nearClippingPlane = 2;
+
 }
 
 // Destructor
@@ -53,21 +56,24 @@ update_status ModuleRender::PreUpdate()
 // Called every draw update
 update_status ModuleRender::Update()
 {
-	// debug camera
-	int speed = 1;
-
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
-
+	while (!blitQueue.empty())
+	{
+		BlitStruct temp = blitQueue.top();
+		if (temp.sectionNull && temp.blitSectionNull) {
+			Blit(temp.texture, temp.x, temp.y, nullptr, nullptr);
+		}
+		else if (temp.sectionNull) {
+			Blit(temp.texture, temp.x, temp.y, nullptr, &temp.blitSection);
+		}
+		else if (temp.blitSectionNull)
+		{
+			Blit(temp.texture, temp.x, temp.y, &temp.section, nullptr);
+		}
+		else {
+			Blit(temp.texture, temp.x, temp.y, &temp.section, &temp.blitSection);
+		}
+		blitQueue.pop();
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -91,16 +97,36 @@ bool ModuleRender::CleanUp()
 	return true;
 }
 
+void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo) {
+	SDL_Rect empty = { 0,0,0,0 };
+	resizeStruct noResize= { 0,0 };
+	BlitStruct temp;
+	if (section == nullptr && resizeInfo == nullptr) {
+		temp = { texture,x,y,z,empty,noResize,true,true };
+	}
+	else if (section == nullptr) {
+		temp = { texture,x,y,z,empty,*resizeInfo,true,false };
+	}
+
+	else if (resizeInfo == nullptr) {
+		temp = { texture,x,y,z,*section,noResize,false,true };
+	}
+	else {
+		temp = { texture,x,y,z,*section,*resizeInfo,false,false };
+	}
+	blitQueue.push(temp);
+}
+
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, SDL_Rect* blitSection)
+bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo)
 {
 	bool ret = true;
 	SDL_Rect rect;
 
-	if(blitSection != NULL)
+	if(resizeInfo != NULL)
 	{
-		rect.w = blitSection->w;
-		rect.h = blitSection->h;
+		rect.w = resizeInfo->w;
+		rect.h = resizeInfo->h;
 	}
 	else if (section !=NULL) {
 		rect.w = section->w;
@@ -119,8 +145,8 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	x = x - (rect.w / 2);
 	y = y - rect.h ;
 
-	rect.x = x * SCREEN_SIZE;
-	rect.y = y * SCREEN_SIZE;
+	rect.x =(int)( x * SCREEN_SIZE);
+	rect.y =(int)( y * SCREEN_SIZE);
 
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
@@ -134,23 +160,70 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, SDL_Rect* section, S
 	return ret;
 }
 
-bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera)
+bool ModuleRender::Print(const Font* font, float x, float y, string mesage) {
+	bool ret = true;
+	int xSize = font->GetXSize();
+	int ySize = font->GetYSize();
+
+	SDL_Surface* tempSurface = font->GetImage();
+	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize , ySize, 32, 0, 0, 0, 0);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 0, 0, 0));
+
+	SDL_Rect srcrect;
+	srcrect.h = ySize;
+	srcrect.w = xSize;
+	SDL_Rect dstrect;
+	dstrect.h = ySize;
+	dstrect.w = xSize;
+	if (tempSurface == nullptr)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
+		ret = false;
+	}
+	for (unsigned int i = 0; i < mesage.size(); ++i) {
+		int offset = font->GetCharOffset(mesage[i]);
+		srcrect.x = offset*xSize;
+		srcrect.y = 0;
+		dstrect.x = i*xSize;
+		dstrect.y = 0;
+		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
+	}
+	SDL_Texture* tempTexture= SDL_CreateTextureFromSurface(renderer,surfaceFinal);
+	if (tempTexture == nullptr) {
+		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
+		ret = false;
+	}
+	AddToBlitBuffer(tempTexture, x, y,FONTS_Z, nullptr, nullptr);
+
+	return ret;
+}
+
+bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	bool ret = true;
+	SDL_Rect tempRect;
+
+	//Center (0,0) is in the mid-down of the window
+	tempRect.x = rect.x + (SCREEN_WIDTH / 2);
+	tempRect.y = SCREEN_HEIGHT - rect.y;
+
+	//Now we calculate the left-top point where the image should start
+	tempRect.x = tempRect.x - (rect.w / 2);
+	tempRect.y = tempRect.y - rect.h;
+	tempRect.w = rect.w;
+	tempRect.h = rect.h;
+
 
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 
-	SDL_Rect rec(rect);
-	if (use_camera)
-	{
-		rec.x = (int)(camera.x + rect.x * SCREEN_SIZE);
-		rec.y = (int)(camera.y + rect.y * SCREEN_SIZE);
-		rec.w *= SCREEN_SIZE;
-		rec.h *= SCREEN_SIZE;
-	}
+	tempRect.x = (int)(tempRect.x * SCREEN_SIZE);
+	tempRect.y = (int)(tempRect.y * SCREEN_SIZE);
+	tempRect.w *= SCREEN_SIZE;
+	tempRect.h *= SCREEN_SIZE;
+	
 
-	if (SDL_RenderFillRect(renderer, &rec) != 0)
+	if (SDL_RenderFillRect(renderer, &tempRect) != 0)
 	{
 		LOG("Cannot draw quad to screen. SDL_RenderFillRect error: %s", SDL_GetError());
 		ret = false;
@@ -159,47 +232,35 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-void ModuleRender::DrawAlphaLines()
+bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 50);
-	alphaLineDistance = alphaLineDistanceStart;
-	alphaLineSize = alphaLineSizeStart;
-	float coef = alphaLineIteration / alphaLineDistance;
-	float offsetDif = 0;
+	bool ret = true;
 
-	while (alphaLineDistance <= (horizon.y*SCREEN_SIZE))
+	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(renderer, r, g, b, a);
+
+	if (SDL_RenderFillRects(renderer, rects, count) != 0)
 	{
-		const SDL_Rect test = { 0, SCREEN_HEIGHT*SCREEN_SIZE - (alphaLineDistance-(coef*alphaLineSize)), SCREEN_WIDTH*SCREEN_SIZE, alphaLineSize+(offsetDif*(coef/2)) };
-		SDL_RenderFillRect(renderer, &test);
-
-		offsetDif = alphaLineSize / 4.0f;
-		alphaLineSize -= offsetDif;
-		alphaLineDistance += (alphaLineSize * 2.0f);
+		LOG("Cannot draw quad to screen. SDL_RenderFillRects error: %s", SDL_GetError());
+		ret = false;
 	}
 
-	alphaLineIteration = (alphaLineIteration + 2) % (int)(alphaLineDistanceStart*2);
+	return ret;
 }
 
-SDL_Rect ModuleRender::ToScreenPoint(float x,float y,float z,SDL_Rect* section) {
-
+SDL_Rect ModuleRender::ToScreenPointBasic(float x, float y, float z, SDL_Rect* section) {
 	SDL_Rect rect;
 
 	float scale = DepthScale(z);
-	float inversescale = 1.0f - scale;
 
-	float temp = section->h - (scale*section->h);
-	rect.w = (int)(scale*section->w);
-	rect.h = (int)(scale*section->h);
+	rect.w = section->w*scale;
+	rect.h = section->h*scale;
+	float wDiff = section->w - rect.w;
+	float hDiff = section->h - rect.h;
 
-	rect.x =(int) ((x * scale) + (horizon.x * inversescale));
-	rect.y =(int) ((y * scale) + (horizon.y * inversescale));
-
+	rect.x = x;
+	rect.y = (int)(y + (hDiff/2));
 	return rect;
-}
-
-void ModuleRender::SetAlphaLineParametersPercentual(float percent) {
-	alphaLineDistanceStart = ALPHA_DISTANCE_MIN + (percent*(ALPHA_DISTANCE_MAX - ALPHA_DISTANCE_MIN));
-	alphaLineSizeStart = ALPHA_SIZE_MIN + (percent*(ALPHA_SIZE_MAX - ALPHA_SIZE_MIN));
 }
 
 
