@@ -26,7 +26,7 @@ public:
 
 private:
 
-	SDL_Texture* graphics = nullptr;
+	SDL_Texture* enemiesTexture = nullptr;
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* rocks = nullptr;
 	std::list<Enemy*> active;

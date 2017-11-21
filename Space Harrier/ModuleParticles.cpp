@@ -170,13 +170,16 @@ void Particle::Update()
 			to_delete = true;
 		}
 		float scale = CLIPDISTANCE / (CLIPDISTANCE + position.z);
-		fPoint reduction=App->player->GetRelativeWorldPosition();
-
+		if (firstUpdate) {
+			reduction = App->player->GetRelativeWorldPosition();
+			firstUpdate = false;
+		}
 		screenPoint.w = anim.GetCurrentFrame().w*scale;
 		screenPoint.h = anim.GetCurrentFrame().h*scale;
-
+		float tempY = position.y - anim.GetCurrentFrame().h/2 * (reduction.y - 1)  *0.75;//0.75 is a coeficient to reduce the initial y pos gathered by test
 		screenPoint.x = (position.x - (screenPoint.w*reduction.x*(1-scale)));
-		screenPoint.y = position.y;//TODO hacer lo mismo que con la x
+		screenPoint.y = (tempY + (screenPoint.h*(reduction.y)*pow((1-scale),2)));
+		screenPoint.y += screenPoint.h/2 * (reduction.y -1) ;
 	}
 
 	//Explosion

@@ -224,8 +224,8 @@ void ModulePlayer::CalculateSpeed() {
 
 fPoint ModulePlayer::GetRelativeWorldPosition() {
 	fPoint p;
-	p.x= (position.x*2) / SCREEN_WIDTH;
-	p.y = (position.y -(SCREEN_HEIGHT/2)) / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
+	p.x= (position.x*2) / (SCREEN_WIDTH);
+	p.y = (((position.y) *2) / (SCREEN_HEIGHT- current_animation->GetCurrentFrame().h))-1;
 	p.z = 0.0f;
 	return p;
 }

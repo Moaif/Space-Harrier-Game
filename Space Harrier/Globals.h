@@ -61,7 +61,7 @@ typedef unsigned int uint;
 #define MIN_Z 0
 #define CLIPDISTANCE 3
 
-#define SHADOW_Z 30
+#define SHADOW_Z MAX_Z+10
 #define PLAYER_Z INT_MIN+1
 #define FONTS_Z INT_MIN
 

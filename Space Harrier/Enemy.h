@@ -24,13 +24,32 @@ public:
 	virtual ~Enemy() {}
 
 	virtual Enemy* Copy() const { return nullptr; }
-	virtual void Update() {}
+	virtual void CopyValuesInto(Enemy* temp) const{
+		temp->anim = anim;
+		temp->collider = App->collision->AddCollider(collider->rect, collider->z, collider->speed, collider->type, collider->callback);
+		temp->position = position;
+		temp->speed = speed;
+		temp->hits = hits;
+		temp->destructible = destructible;
+		temp->shadow = shadow;
+		temp->father = father;
+		temp->childs = childs;
+	}
+	virtual void Update() {
+		collider->rect = screenPoint;
+		collider->z = position.z;
+		collider->speed = speed.z;
+		if (position.z <= MIN_Z) {
+			collider->to_delete = true;
+			to_delete = true;
+		}
+	}
 
 public:
 	bool to_delete = false;
 	fPoint position = { 0, 0 , 1 };
 	Animation anim;
-	float speed;
+	fPoint speed = {0,0,0};
 	int hits=1;
 	bool destructible = true;
 	bool shadow = true;

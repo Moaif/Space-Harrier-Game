@@ -14,11 +14,13 @@ struct Particle
 {
 	bool to_delete = false;
 	bool firstSound=true;
+	bool firstUpdate = true;
 	fPoint position = { 0, 0 , 1};
 	unsigned int efxIndex;
 	Animation anim;
 	bool onlyOnce = false;
 	float speed;
+	fPoint reduction;
 
 	SDL_Texture* texture;
 	Collider* collider;

@@ -4,6 +4,7 @@
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "Obstacle.h"
+#include "Jellyfish.h"
 
 
 
@@ -17,10 +18,11 @@ ModuleEnemy::~ModuleEnemy()
 // Load assets
 bool ModuleEnemy::Start()
 {
-	LOG("Loading particles");
-	graphics = App->textures->Load("assets/Shoots.png");
+	LOG("Loading Enemies");
+	enemiesTexture = App->textures->Load("assets/Enemies.png");
 	trees = App->textures->Load("assets/Arboles.png");
 	rocks = App->textures->Load("assets/models.png");
+
 
 	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
@@ -34,6 +36,14 @@ bool ModuleEnemy::Start()
 	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
 	enemies["rock1"] = rock;
 
+	Enemy* jellyfish = new Jellyfish(50.0f,enemiesTexture);
+	jellyfish->anim.frames.push_back({0,43,80,90});
+	jellyfish->anim.frames.push_back({ 83,43,80,90 });
+	jellyfish->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish->speed = { 10.0f, 30.0f, 4.0f };
+	enemies["jelly1"] = jellyfish;
+
 	return true;
 }
 
@@ -41,7 +51,7 @@ bool ModuleEnemy::Start()
 bool ModuleEnemy::CleanUp()
 {
 	LOG("Unloading particles");
-	App->textures->Unload(graphics);
+	App->textures->Unload(enemiesTexture);
 
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);

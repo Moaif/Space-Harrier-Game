@@ -97,6 +97,9 @@
     <ClInclude Include="ModuleTime.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Jellyfish.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -164,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="ModuleTime.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Jellyfish.cpp">
+      <Filter>Enemys</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
