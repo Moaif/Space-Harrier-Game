@@ -5,6 +5,7 @@
 #include "ModuleCollision.h"
 #include "Obstacle.h"
 #include "Jellyfish.h"
+#include "Drone.h"
 
 
 
@@ -36,13 +37,21 @@ bool ModuleEnemy::Start()
 	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
 	enemies["rock1"] = rock;
 
-	Enemy* jellyfish = new Jellyfish(50.0f,enemiesTexture);
+	Enemy* jellyfish = new Jellyfish(200.0f,enemiesTexture);
 	jellyfish->anim.frames.push_back({0,43,80,90});
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	jellyfish->speed = { 10.0f, 30.0f, 4.0f };
+	jellyfish->speed = { 10.0f, 200.0f, 0.0f };
 	enemies["jelly1"] = jellyfish;
+
+	Enemy* drone = new Drone(enemiesTexture);
+	drone->anim.frames.push_back({0,7,80,34});
+	drone->anim.frames.push_back({ 84,7,80,34 });
+	drone->anim.frames.push_back({ 168,7,80,34 });
+	drone->collider = new Collider({0,0,0,0},0,0,ENEMY,this);
+	drone->speed = { 50.0f,50.0f,10.0f };
+	enemies["drone1"] = drone;
 
 	return true;
 }
@@ -100,10 +109,7 @@ update_status ModuleEnemy::Update()
 
 void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z)
 {
-	Enemy* p = enemy.Copy();
-	p->position = { x,y,z };
-	p->collider->rect.x = (int)x;
-	p->collider->rect.y = (int)y;
+	Enemy* p = enemy.Copy(x, y, z);
 	active.push_back(p);
 }
 

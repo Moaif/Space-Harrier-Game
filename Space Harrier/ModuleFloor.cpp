@@ -207,6 +207,11 @@ void ModuleFloor::SetHorizonYPerccentual(float percen) {
 	actualCameraY = (cameraYMin +(percen*(cameraYMax - cameraYMin)));
 }
 
-const obstacleInfo* ModuleFloor::GetQuad(int index) {
-	return &quad2[index];
+const obstacleInfo* ModuleFloor::GetQuad(int index)const  {
+	int innerIndex = (lastQuadIndex + index)%nHorizonQuads;
+	return &quad2[innerIndex];
+}
+
+float ModuleFloor::GetFloorPositionFromZ(const float& z) const{
+	return z*actualCameraY / CLIPDISTANCE;
 }

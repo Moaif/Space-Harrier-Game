@@ -9,6 +9,7 @@
 #include "ModulePlayer.h"
 #include "ModuleCollision.h"
 #include "ModuleRender.h"
+#include "ModuleFloor.h"
 #include "ModuleShadow.h"
 
 
@@ -23,11 +24,11 @@ public:
 	}
 	virtual ~Enemy() {}
 
-	virtual Enemy* Copy() const { return nullptr; }
-	virtual void CopyValuesInto(Enemy* temp) const{
+	virtual Enemy* Copy(const float& x, const float& y, const float& z) const { return nullptr; }
+	virtual void CopyValuesInto(Enemy* temp, const float& x, const float& y, const float& z) const{
 		temp->anim = anim;
-		temp->collider = App->collision->AddCollider(collider->rect, collider->z, collider->speed, collider->type, collider->callback);
-		temp->position = position;
+		temp->collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h}, collider->z, collider->speed, collider->type, collider->callback);
+		temp->position = {x,y,z};
 		temp->speed = speed;
 		temp->hits = hits;
 		temp->destructible = destructible;

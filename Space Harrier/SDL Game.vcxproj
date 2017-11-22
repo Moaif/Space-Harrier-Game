@@ -72,6 +72,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="Drone.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Globals.h" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Drone.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Jellyfish.cpp" />

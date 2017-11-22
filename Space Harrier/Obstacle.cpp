@@ -1,19 +1,18 @@
 #include "Obstacle.h"
-#include "ModuleFloor.h"
 #include <iostream>
 
 
 Obstacle::Obstacle(SDL_Texture* texture, Enemy* father): Enemy(texture,father)
 {
-	quad = App->floor->GetQuad(App->floor->lastQuadIndex);
+	quad = App->floor->GetQuad(App->floor->nHorizonQuads-1);
 	positionQuad = (float)((RAND()%100)/100.0);
 }
 Obstacle::~Obstacle() {
 }
 
-Enemy* Obstacle::Copy() const {
+Enemy* Obstacle::Copy(const float& x, const float& y, const float& z) const {
 	Enemy* temp = new Obstacle(texture,father);
-	CopyValuesInto(temp);
+	CopyValuesInto(temp,x,y,z);
 	return temp;
 }
 void Obstacle::Update() {
