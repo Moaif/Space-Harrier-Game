@@ -36,6 +36,9 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	right2.frames.push_back({ 197,3,20,48 });
 
 	current_animation = &run;
+
+	horizonYSpeed =0.5f;
+	actualHorizonPercentage=0.0f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -53,7 +56,7 @@ bool ModulePlayer::Start()
 	position.y = 0;
 	position.z = 0;
 	//Collider
-	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,25,50 },position.z,0, PLAYER, this);
+	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,25,50 },position.z,1, PLAYER, this);
 
 	return true;
 }
@@ -71,6 +74,8 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	VerifyHorizonY();
+
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 	{
 		if (position.x > ((-SCREEN_WIDTH/2)+current_animation->GetCurrentFrame().w/2)) {
@@ -108,7 +113,6 @@ update_status ModulePlayer::Update()
 			if (position.y <= 0) {
 				current_animation = &run;
 			}
-			VerifyHorizonY();
 		}
 	}
 
@@ -119,15 +123,13 @@ update_status ModulePlayer::Update()
 			if (current_animation == &run) {
 				VerifyFlyAnimation();
 			}
-			VerifyHorizonY();
 		}
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		float x =(float) position.x;
-		float y =(float) position.y + (current_animation->GetCurrentFrame().h/2);
-		App->particles->AddParticle(App->particles->laser, x, y);
+		float y = position.y + (current_animation->GetCurrentFrame().h/2);
+		App->particles->AddParticle(App->particles->laser, position.x, y,position.z);
 	}
 
 	// Draw everything --------------------------------------
@@ -214,7 +216,14 @@ void ModulePlayer::VerifyHorizonY() {
 
 	//Calculate percentual position from character
 	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
-	App->floor->SetHorizonYPerccentual(temp);
+	float offset = horizonYSpeed*App->time->GetDeltaTime();
+	if (actualHorizonPercentage < temp-offset) {
+		actualHorizonPercentage += offset;
+	}
+	else if (actualHorizonPercentage > temp) {
+		actualHorizonPercentage -= offset;
+	}
+	App->floor->SetHorizonYPerccentual(actualHorizonPercentage);
 }
 
 void ModulePlayer::CalculateSpeed() {

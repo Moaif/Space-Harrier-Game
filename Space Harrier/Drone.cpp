@@ -1,4 +1,5 @@
 #include "Drone.h"
+#include "ModuleParticles.h"
 
 Drone::Drone(SDL_Texture* texture,Enemy* father):Enemy(texture,father) {
 	quadIndex = 2;
@@ -16,9 +17,6 @@ Enemy* Drone::Copy(const float& x,const float& y,const float& z)const {
 }
 
 void Drone::Update() {
-
-	float screenY =App->floor->GetFloorPositionFromZ(position.z);
-
 	if (elapsedTime < 2.0f) {
 		position.z += speed.z * App->time->GetDeltaTime();
 		position.x += speed.x * App->time->GetDeltaTime();
@@ -27,6 +25,7 @@ void Drone::Update() {
 	else if (elapsedTime < 4.0f) {
 		position.x -= speed.x * App->time->GetDeltaTime();
 		position.y += speed.y * App->time->GetDeltaTime();
+		
 	}else if(elapsedTime < 6.0f){
 		position.z -= speed.z*3 * App->time->GetDeltaTime();
 		position.x += speed.x/3 * App->time->GetDeltaTime();
@@ -34,9 +33,26 @@ void Drone::Update() {
 	}
 	elapsedTime += App->time->GetDeltaTime();
 
+	float screenY = App->floor->GetFloorPositionFromZ(position.z);
+
 	float scale = 1 - (screenY / App->floor->horizon.y);
 
+	App->shadows->DrawShadow(position.x, screenY, scale);
+
 	screenY += position.y*scale;
+
+	if (elapsedTime >= 4.0f) {
+		if (!shoted) {
+			fPoint unitaryVector = App->player->position - fPoint(position.x,position.y,position.z);
+			float div = (sqrt((pow(unitaryVector.x, 2) + pow(unitaryVector.y, 2) + pow(unitaryVector.z, 2))));
+			unitaryVector.x = unitaryVector.x / div;
+			unitaryVector.y = unitaryVector.y / div;
+			unitaryVector.z = unitaryVector.z / div;
+			App->particles->AddParticle(App->particles->fire, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z, unitaryVector);
+			shoted = true;
+		}
+	}
+
 
 	screenPoint.w = anim.GetCurrentFrame().w *scale;
 	screenPoint.h = anim.GetCurrentFrame().h *scale;

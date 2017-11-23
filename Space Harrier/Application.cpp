@@ -97,8 +97,8 @@ update_status Application::Update()
 		//Hacer copia del renderer actual
 		while (true)
 		{
-			//Ir printeando a intervalos "PAUSE" en el renderer, alternando entre la copia, 
-			//y otra surface con el string pintado
+			time->PreUpdate();//In order to not stack aditional time on deltaTime
+			//Print pause over the render on interval
 			if (input->PreUpdate() == UPDATE_STOP) {
 				return UPDATE_STOP;
 			 }
@@ -106,7 +106,7 @@ update_status Application::Update()
 				break;
 			}
 		}
-		//al salir, volver a colocar la copia al renderer, para que siga como antes
+		//on exit, restablish original render, to continue
 	}
 
 	return ret;

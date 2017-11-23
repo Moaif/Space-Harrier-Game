@@ -22,6 +22,8 @@ struct Particle
 	float speed;
 	fPoint reduction;
 
+	fPoint pathVector;
+
 	SDL_Texture* texture;
 	Collider* collider;
 	SDL_Rect screenPoint = {0,0,0,0};
@@ -46,17 +48,20 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider* col,Collider* other);
 
-	void AddParticle(const Particle& particle, float x, float y); // feel free to expand this call
+	void AddParticle(const Particle& particle, float x, float y,float z);
+	void AddParticle(const Particle& particle, float x, float y,float z,fPoint unitaryVector);
 
 private:
 
 	SDL_Texture* lasers = nullptr;
+	SDL_Texture* shots = nullptr;
 	std::list<Particle*> active;
 
 public:
 
 	// prototype particles go here ...
 	Particle laser;
+	Particle fire;
 	Particle explosion;
 };
 

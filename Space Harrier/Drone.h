@@ -18,6 +18,7 @@ private:
 	float lastFrameZ;
 
 	float elapsedTime;
+	bool shoted = false;
 };
 
 #endif // !_DRONE_

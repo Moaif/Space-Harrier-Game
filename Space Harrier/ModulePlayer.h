@@ -46,6 +46,8 @@ public:
 
 private:
 	int lives = 0;
+	float horizonYSpeed ;
+	float actualHorizonPercentage;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
 	static const float MOVEMENT_SPEED;
