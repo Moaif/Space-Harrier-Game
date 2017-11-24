@@ -42,16 +42,88 @@ bool ModuleEnemy::Start()
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	jellyfish->speed = { 10.0f, 200.0f, 0.0f };
+	jellyfish->speed = { 20.0f, 200.0f, 0.0f };
 	enemies["jelly1"] = jellyfish;
 
-	Enemy* drone = new Drone(enemiesTexture);
+	Enemy* jellyfish2 = new Jellyfish(200.0f, enemiesTexture);
+	jellyfish2->anim.frames.push_back({ 0,43,80,90 });
+	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
+	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish2->speed = { -20.0f, 200.0f, 0.0f };
+	enemies["jelly2"] = jellyfish2;
+
+	Enemy* jellyfish3 = new Jellyfish(200.0f, enemiesTexture);
+	jellyfish3->anim.frames.push_back({ 0,43,80,90 });
+	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
+	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish3->speed = { 20.0f, 100.0f, 0.0f };
+	enemies["jelly3"] = jellyfish3;
+
+	Enemy* jellyfish4 = new Jellyfish(200.0f, enemiesTexture);
+	jellyfish4->anim.frames.push_back({ 0,43,80,90 });
+	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
+	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish4->speed = { -20.0f, 100.0f, 0.0f };
+	enemies["jelly4"] = jellyfish4;
+
+	Enemy* drone = new Drone(0,enemiesTexture);
 	drone->anim.frames.push_back({0,7,80,34});
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
 	drone->collider = new Collider({0,0,0,0},0,0,ENEMY,this);
-	drone->speed = { 50.0f,50.0f,10.0f };
+	drone->speed = { 100.0f,200.0f,10.0f };
 	enemies["drone1"] = drone;
+
+	Enemy* drone2 = new Drone(1, enemiesTexture);
+	drone2->anim.frames.push_back({ 0,7,80,34 });
+	drone2->anim.frames.push_back({ 84,7,80,34 });
+	drone2->anim.frames.push_back({ 168,7,80,34 });
+	drone2->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone2->speed = { 120.0f,0.0f,10.0f };
+	enemies["drone2"] = drone2;
+
+	Enemy* drone3 = new Drone(1, enemiesTexture);
+	drone3->anim.frames.push_back({ 0,7,80,34 });
+	drone3->anim.frames.push_back({ 84,7,80,34 });
+	drone3->anim.frames.push_back({ 168,7,80,34 });
+	drone3->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone3->speed = { -120.0f,0.0f,10.0f };
+	enemies["drone3"] = drone3;
+
+	Enemy* drone4 = new Drone(2, enemiesTexture);
+	drone4->anim.frames.push_back({ 0,7,80,34 });
+	drone4->anim.frames.push_back({ 84,7,80,34 });
+	drone4->anim.frames.push_back({ 168,7,80,34 });
+	drone4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	drone4->speed = { -50.0f,120.0f,-5.0f };
+	enemies["drone4"] = drone4;
+
+	Enemy* drone5 = new Drone(2, enemiesTexture);
+	drone5->anim.frames.push_back({ 0,7,80,34 });
+	drone5->anim.frames.push_back({ 84,7,80,34 });
+	drone5->anim.frames.push_back({ 168,7,80,34 });
+	drone5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	drone5->speed = { 50.0f,120.0f,-5.0f };
+	enemies["drone5"] = drone5;
+
+	Enemy* drone6 = new Drone(3, enemiesTexture);
+	drone6->anim.frames.push_back({ 0,7,80,34 });
+	drone6->anim.frames.push_back({ 84,7,80,34 });
+	drone6->anim.frames.push_back({ 168,7,80,34 });
+	drone6->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone6->speed = { 100.0f,200.0f,10.0f };
+	enemies["drone6"] = drone6;
+
+	Enemy* drone7 = new Drone(3, enemiesTexture);
+	drone7->anim.frames.push_back({ 0,7,80,34 });
+	drone7->anim.frames.push_back({ 84,7,80,34 });
+	drone7->anim.frames.push_back({ 168,7,80,34 });
+	drone7->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone7->speed = { -100.0f,200.0f,10.0f };
+	enemies["drone7"] = drone7;
 
 	return true;
 }

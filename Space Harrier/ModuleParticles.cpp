@@ -239,8 +239,8 @@ void Particle::Update()
 
 		screenY += position.y*scale;
 
-		screenPoint.w = anim.GetCurrentFrame().w*scale;
-		screenPoint.h = anim.GetCurrentFrame().h*scale;
+		screenPoint.w = 1 + (int)(anim.GetCurrentFrame().w *scale);
+		screenPoint.h = 1 + (int)(anim.GetCurrentFrame().h *scale);
 		screenPoint.x = position.x;
 		screenPoint.y = screenY;
 	}

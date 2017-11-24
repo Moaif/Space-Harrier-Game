@@ -39,9 +39,9 @@ void Jellyfish::Update() {
 		speed.y = -speed.y;
 	}
 
-	int h = (int)(1 + anim.GetCurrentFrame().h*scale);
-	int w = (int)(1 + anim.GetCurrentFrame().w*scale);
-	screenPoint = { (int)(position.x*scale),(int)(yScreen),(int)(w),(int)(h) };
+	int w = 1 + (int)(anim.GetCurrentFrame().w *scale);
+	int h = 1 + (int)(anim.GetCurrentFrame().h *scale);
+	screenPoint = { (int)(position.x*scale),(int)(yScreen),w,h };
 	Enemy::Update();
 
 }

@@ -247,29 +247,3 @@ bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g
 
 	return ret;
 }
-
-SDL_Rect ModuleRender::ToScreenPointBasic(float x, float y, float z, SDL_Rect* section) {
-	SDL_Rect rect;
-
-	float scale = DepthScale(z);
-
-	rect.w = section->w*scale;
-	rect.h = section->h*scale;
-	float wDiff = section->w - rect.w;
-	float hDiff = section->h - rect.h;
-
-	rect.x = x;
-	rect.y = (int)(y + (hDiff/2));
-	return rect;
-}
-
-
-float ModuleRender::DepthScale(float z) {
-	float dist = nearClippingPlane + z;
-
-	if (dist == 0)
-		return 0;
-
-
-	return nearClippingPlane / dist;
-}

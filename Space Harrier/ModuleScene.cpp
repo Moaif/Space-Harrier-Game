@@ -72,9 +72,11 @@ update_status ModuleScene::Update()
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("tree1")), x2, 0, MAX_Z);
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
-		//App->enemies->AddEnemy(*(App->enemies->GetById("jelly1")), x2, 0, MAX_Z);
+		App->enemies->AddEnemy(*(App->enemies->GetById("jelly1")), x2, 0, MAX_Z);
+		App->enemies->AddEnemy(*(App->enemies->GetById("jelly2")), x2, 0, MAX_Z);
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
-		App->enemies->AddEnemy(*(App->enemies->GetById("drone1")), x2, 50, 0);
+		//App->enemies->AddEnemy(*(App->enemies->GetById("drone2")), -150, 50, 0);
+		//App->enemies->AddEnemy(*(App->enemies->GetById("drone3")), 150, 50, 0);
 		x = 0;
 	}
 	App->renderer->Print(blue,-120,210,"Stage 3");

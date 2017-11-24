@@ -68,6 +68,29 @@ public:
 		return (x != v.x || y != v.y || z !=v.z);
 	}
 
+	void operator =(const Point& v)
+	{
+		x = v.x;
+		y = v.y;
+		z = v.z;
+	}
+
+	const Point& operator /(TYPE value)
+	{
+		x = x/value;
+		y = y/value;
+		z = z/value;
+		return (*this);
+	}
+
+	const Point& operator *(TYPE value)
+	{
+		x = x * value;
+		y = y * value;
+		z = z * value;
+		return (*this);
+	}
+
 	// Utils ------------------------------------------------
 	bool IsZero() const
 	{

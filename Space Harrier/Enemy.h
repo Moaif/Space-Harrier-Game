@@ -40,7 +40,7 @@ public:
 		collider->rect = screenPoint;
 		collider->z = position.z;
 		collider->speed = speed.z;
-		if (position.z <= MIN_Z) {
+		if (position.z <= MIN_Z || position.z >= MAX_Z) {
 			collider->to_delete = true;
 			to_delete = true;
 		}
