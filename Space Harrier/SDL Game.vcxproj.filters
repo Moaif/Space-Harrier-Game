@@ -103,6 +103,9 @@
     <ClInclude Include="Drone.h">
       <Filter>Enemys</Filter>
     </ClInclude>
+    <ClInclude Include="Fly.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -175,6 +178,9 @@
       <Filter>Enemys</Filter>
     </ClCompile>
     <ClCompile Include="Drone.cpp">
+      <Filter>Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="Fly.cpp">
       <Filter>Enemys</Filter>
     </ClCompile>
   </ItemGroup>

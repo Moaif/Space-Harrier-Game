@@ -6,6 +6,7 @@
 #include "Obstacle.h"
 #include "Jellyfish.h"
 #include "Drone.h"
+#include "Fly.h"
 
 
 
@@ -124,6 +125,37 @@ bool ModuleEnemy::Start()
 	drone7->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
 	drone7->speed = { -100.0f,200.0f,10.0f };
 	enemies["drone7"] = drone7;
+
+
+	Enemy* fly = new Fly(0,enemiesTexture);
+	fly->anim.frames.push_back({8,144,78,32});
+	fly->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
+	fly->speed = {25.0f, -70.0f, -2.5f};
+	enemies["fly1"] = fly;
+
+	Enemy* fly2 = new Fly(0, enemiesTexture);
+	fly2->anim.frames.push_back({ 8,144,78,32 });
+	fly2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly2->speed = { 0.0f, -70.0f, -2.5f };
+	enemies["fly2"] = fly2;
+
+	Enemy* fly3 = new Fly(0, enemiesTexture);
+	fly3->anim.frames.push_back({ 8,144,78,32 });
+	fly3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly3->speed = { -25.0f, -70.0f, -2.5f };
+	enemies["fly3"] = fly3;
+
+	Enemy* fly4 = new Fly(1, enemiesTexture);
+	fly4->anim.frames.push_back({ 8,144,78,32 });
+	fly4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly4->speed = { 35.0f, -60.0f, -2.5f };
+	enemies["fly4"] = fly4;
+
+	Enemy* fly5 = new Fly(1, enemiesTexture);
+	fly5->anim.frames.push_back({ 8,144,78,32 });
+	fly5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly5->speed = { -35.0f, -60.0f, -2.5f };
+	enemies["fly5"] = fly5;
 
 	return true;
 }
