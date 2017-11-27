@@ -10,7 +10,7 @@ Jellyfish::~Jellyfish() {
 
 }
 
-Enemy* Jellyfish::Copy(const float& x, const float& y, const float& z) const{
+Enemy* Jellyfish::Copy(const float& x, const float& y, const float& z, Enemy* father) const{
 	Enemy* temp = new Jellyfish(bounceYMax,texture, father);
 	CopyValuesInto(temp,x,y,z);
 

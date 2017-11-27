@@ -9,7 +9,7 @@ public:
 	Fly(int flyMode, fPoint speed, SDL_Texture* texture, Enemy* father = nullptr);
 	~Fly();
 
-	Enemy* Copy(const float& x, const float& y, const float& z) const override;
+	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr) const override;
 	void Update() override;
 
 private:

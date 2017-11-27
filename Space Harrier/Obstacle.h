@@ -10,7 +10,7 @@ public:
 	Obstacle(SDL_Texture* texture, Enemy* father=nullptr);
 	~Obstacle();
 
-	Enemy* Copy(const float& x, const float& y, const float& z) const override;
+	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr) const override;
 	void Update() override;
 private:
 	const obstacleInfo* quad;

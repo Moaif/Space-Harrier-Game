@@ -24,7 +24,7 @@ public:
 	}
 	virtual ~Enemy() {}
 
-	virtual Enemy* Copy(const float& x, const float& y, const float& z) const { return nullptr; }
+	virtual Enemy* Copy(const float& x, const float& y, const float& z,Enemy* father=nullptr) const { return nullptr; }
 	virtual void CopyValuesInto(Enemy* temp, const float& x, const float& y, const float& z) const{
 		temp->anim = anim;
 		temp->collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h}, collider->z, collider->speed, collider->type, collider->callback);
@@ -33,8 +33,6 @@ public:
 		temp->hits = hits;
 		temp->destructible = destructible;
 		temp->shadow = shadow;
-		temp->father = father;
-		temp->childs = childs;
 	}
 	virtual void Update() {
 		collider->rect = screenPoint;

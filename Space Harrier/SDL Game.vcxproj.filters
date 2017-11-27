@@ -106,6 +106,12 @@
     <ClInclude Include="Fly.h">
       <Filter>Enemys</Filter>
     </ClInclude>
+    <ClInclude Include="BodyPart.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon3.h">
+      <Filter>Enemys</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -181,6 +187,12 @@
       <Filter>Enemys</Filter>
     </ClCompile>
     <ClCompile Include="Fly.cpp">
+      <Filter>Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="BodyPart.cpp">
+      <Filter>Enemys</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon3.cpp">
       <Filter>Enemys</Filter>
     </ClCompile>
   </ItemGroup>

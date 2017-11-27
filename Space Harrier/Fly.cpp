@@ -12,7 +12,7 @@ Fly::Fly(int flyMode, fPoint speed, SDL_Texture* texture, Enemy* father): Enemy(
 Fly::~Fly() {
 }
 
-Enemy* Fly::Copy(const float& x, const float& y, const float& z) const {
+Enemy* Fly::Copy(const float& x, const float& y, const float& z, Enemy* father) const {
 	Enemy* temp = new Fly(flyMode, speed, texture, father);
 	Enemy::CopyValuesInto(temp, x, y, z);
 	return temp;

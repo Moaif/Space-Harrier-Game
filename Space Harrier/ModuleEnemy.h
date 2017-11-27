@@ -21,7 +21,7 @@ public:
 	bool CleanUp();
 	void OnCollision(Collider* col, Collider* other);
 
-	void AddEnemy(const Enemy& particle, float x, float y,float z);
+	void AddEnemy(const Enemy& particle, float x, float y,float z,Enemy* father=nullptr);
 	Enemy* GetById(string id);
 
 private:
@@ -29,6 +29,7 @@ private:
 	SDL_Texture* enemiesTexture = nullptr;
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* rocks = nullptr;
+	SDL_Texture* dragonTexture = nullptr;
 	std::list<Enemy*> active;
 	std::map<string, Enemy*> enemies;
 };

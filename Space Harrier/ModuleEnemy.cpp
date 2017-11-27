@@ -7,6 +7,8 @@
 #include "Jellyfish.h"
 #include "Drone.h"
 #include "Fly.h"
+#include "Dragon3.h"
+#include "BodyPart.h"
 
 
 
@@ -24,6 +26,7 @@ bool ModuleEnemy::Start()
 	enemiesTexture = App->textures->Load("assets/Enemies.png");
 	trees = App->textures->Load("assets/Arboles.png");
 	rocks = App->textures->Load("assets/models.png");
+	dragonTexture = App->textures->Load("assets/Dragon3.png");
 
 
 	Enemy* tree = new Obstacle(trees);
@@ -157,6 +160,67 @@ bool ModuleEnemy::Start()
 	fly5->speed = { -35.0f, -60.0f, -2.5f };
 	enemies["fly5"] = fly5;
 
+
+	Enemy* dragon3_1 = new Dragon3(nullptr);
+	dragon3_1->speed = {20,30,5};
+	dragon3_1->hits = 5;
+	Enemy* tail3_1 = new BodyPart(dragonTexture, dragon3_1);
+	tail3_1->anim.frames.push_back({ 207,14,96,91 });
+	tail3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	tail3_1->destructible = false;
+	Enemy* body3_1_1 = new BodyPart(dragonTexture, dragon3_1);
+	body3_1_1->anim.frames.push_back({102,10,93,67});
+	body3_1_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_1->destructible = false;
+	Enemy* body3_1_2 = new BodyPart(dragonTexture, dragon3_1);
+	body3_1_2->anim.frames.push_back({ 102,10,93,67 });
+	body3_1_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_2->destructible = false;
+	Enemy* body3_1_3 = new BodyPart(dragonTexture, dragon3_1);
+	body3_1_3->anim.frames.push_back({ 102,10,93,67 });
+	body3_1_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_3->destructible = false;
+	Enemy* body3_1_4 = new BodyPart(dragonTexture, dragon3_1);
+	body3_1_4->anim.frames.push_back({ 102,10,93,67 });
+	body3_1_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_4->destructible = false;
+	Enemy* body3_1_5 = new BodyPart(dragonTexture, dragon3_1);
+	body3_1_5->anim.frames.push_back({ 102,10,93,67 });
+	body3_1_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_5->destructible = false;
+	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
+	head3_1->anim.frames.push_back({ 1,5,91,115 });
+	head3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	enemies["dragon3_1"] = dragon3_1;
+
+	Enemy* dragon3_2 = new Dragon3(nullptr);
+	dragon3_2->speed = { 20,30,5 };
+	dragon3_2->hits = 5;
+	dragon3_2->destructible = false;
+	Enemy* tail3_2 = new BodyPart(dragonTexture, dragon3_2);
+	tail3_2->anim.frames.push_back({ 207,14,96,91 });
+	tail3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* body3_2_1 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_1->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* body3_2_2 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_2->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* body3_2_3 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_3->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* body3_2_4 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_4->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* body3_2_5 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_5->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	Enemy* head3_2 = new BodyPart(dragonTexture, dragon3_2);
+	head3_2->anim.frames.push_back({ 1,5,91,115 });
+	head3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	enemies["dragon3_2"] = dragon3_2;
+
+
 	return true;
 }
 
@@ -191,7 +255,7 @@ update_status ModuleEnemy::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-// Update all particle logic and draw them
+// Update all enemies logic and draw them
 update_status ModuleEnemy::Update()
 {
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it)
@@ -199,7 +263,10 @@ update_status ModuleEnemy::Update()
 		Enemy* p = *it;
 
 		p->Update();
-		if (p->screenPoint.h ==0 && p->screenPoint.w ==0) {
+		if (p->texture == nullptr) {
+			continue;
+		}
+		else if (p->screenPoint.h ==0 && p->screenPoint.w ==0) {
 			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()),nullptr);
 		}
 		else {
@@ -207,13 +274,12 @@ update_status ModuleEnemy::Update()
 			App->renderer->AddToBlitBuffer(p->texture, (float)p->screenPoint.x, (float)p->screenPoint.y, p->position.z, &(p->anim.GetCurrentFrame()), &resizeInfo);
 		}
 	}
-
 	return UPDATE_CONTINUE;
 }
 
-void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z)
+void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z,Enemy* father)
 {
-	Enemy* p = enemy.Copy(x, y, z);
+	Enemy* p = enemy.Copy(x, y, z,father);
 	active.push_back(p);
 }
 
@@ -233,7 +299,7 @@ void ModuleEnemy::OnCollision(Collider* col, Collider* other) {
 				if ((*it)->father->hits <= 0) {
 					for (list<Enemy*>::iterator cIt = (*it)->father->childs.begin(); cIt != (*it)->father->childs.end(); ++cIt) {
 						(*cIt)->collider->to_delete = true;
-						(*cIt)->to_delete = true;
+						(*cIt)->to_delete = true;//TODO hacer OnDestroy() para enemies
 					}
 					(*it)->father->to_delete = true;
 				}

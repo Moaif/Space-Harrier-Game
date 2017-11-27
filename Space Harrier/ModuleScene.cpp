@@ -66,7 +66,7 @@ update_status ModuleScene::Update()
 	App->floor->DrawBackground(background);
 	App->floor->DrawStage(stage);
 	App->floor->DrawFloor(floor);
-	if (x++ >= 100) {
+	if (x++ >= 100000) {
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("rock1")), x2,150,MAX_Z);
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
@@ -81,6 +81,8 @@ update_status ModuleScene::Update()
 		//App->enemies->AddEnemy(*(App->enemies->GetById("fly4")), -150, 340, MAX_Z);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("fly2")), 0, 340, MAX_Z);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("fly5")), 150, 340, MAX_Z);
+		App->enemies->AddEnemy(*(App->enemies->GetById("dragon3_1")), 0, 200, 20);
+		App->enemies->AddEnemy(*(App->enemies->GetById("dragon3_2")), 0, 200, 20);
 		x = 0;
 	}
 	App->renderer->Print(blue,-120,210,"Stage 3");

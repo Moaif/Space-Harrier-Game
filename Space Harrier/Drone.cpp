@@ -13,7 +13,7 @@ droneMode(droneMode),tempSpeed(speed) {
 Drone::~Drone() {
 }
 
-Enemy* Drone::Copy(const float& x,const float& y,const float& z)const {
+Enemy* Drone::Copy(const float& x,const float& y,const float& z, Enemy* father)const {
 	Enemy* temp = new Drone(droneMode,speed,texture,father);
 	Enemy::CopyValuesInto(temp,x,y,z);
 	return temp;
