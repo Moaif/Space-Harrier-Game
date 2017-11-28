@@ -64,7 +64,7 @@ public:
 	bool shadow = true;
 
 	Enemy* father=nullptr;//Only used by enemies with more than 1 collider, they have "parts" which have colliders, and the enemie is part's father
-	list<Enemy*> childs;//Used to delete all components of a part made enemy
+	vector<Enemy*> childs;//Used to delete all components of a part made enemy
 
 	Collider* collider;
 	SDL_Texture* texture;

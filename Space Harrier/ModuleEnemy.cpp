@@ -161,8 +161,8 @@ bool ModuleEnemy::Start()
 	enemies["fly5"] = fly5;
 
 
-	Enemy* dragon3_1 = new Dragon3(nullptr);
-	dragon3_1->speed = {-10,10,-2};
+	Enemy* dragon3_1 = new Dragon3(0,nullptr);
+	dragon3_1->speed = {-20,25,-4};
 	dragon3_1->hits = 5;
 	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
 	head3_1->anim.frames.push_back({ 1,5,91,115 });
@@ -193,8 +193,8 @@ bool ModuleEnemy::Start()
 	body3_1_5->destructible = false;
 	enemies["dragon3_1"] = dragon3_1;
 
-	Enemy* dragon3_2 = new Dragon3(nullptr);
-	dragon3_2->speed = { 20,30,5 };
+	Enemy* dragon3_2 = new Dragon3(1,nullptr);
+	dragon3_2->speed = { 20,-25,-4 };
 	dragon3_2->hits = 5;
 	Enemy* head3_2 = new BodyPart(dragonTexture, dragon3_2);
 	head3_2->anim.frames.push_back({ 1,5,91,115 });
@@ -232,13 +232,22 @@ bool ModuleEnemy::Start()
 // Unload assets
 bool ModuleEnemy::CleanUp()
 {
-	LOG("Unloading particles");
+	LOG("Unloading enemies");
 	App->textures->Unload(enemiesTexture);
+	App->textures->Unload(trees);
+	App->textures->Unload(rocks);
+	App->textures->Unload(dragonTexture);
 
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);
 
 	active.clear();
+
+	for (map<string, Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+		//RELEASE((*it).second->collider); TODO porque no funciona?
+		RELEASE((*it).second);
+	}
+	enemies.clear();
 
 	return true;
 }
@@ -269,9 +278,8 @@ update_status ModuleEnemy::Update()
 
 		p->Update();
 		if (p->texture == nullptr) {
-			for (list<Enemy*>::iterator it2 = p->childs.begin(); it2 != p->childs.end(); ++it2) {
+			for (vector<Enemy*>::iterator it2 = p->childs.begin(); it2 != p->childs.end(); ++it2) {
 				resizeStruct resizeInfo = { (*it2)->screenPoint.w,(*it2)->screenPoint.h };
-				LOG("x: %d y: %d w: %d w: %d", (*it2)->screenPoint.x, (*it2)->screenPoint.y, (*it2)->screenPoint.w, (*it2)->screenPoint.h);
 				App->renderer->AddToBlitBuffer((*it2)->texture,(*it2)->screenPoint.x,(*it2)->screenPoint.y,(*it2)->position.z,&((*it2)->anim.GetCurrentFrame()),&resizeInfo);
 			}
 		}

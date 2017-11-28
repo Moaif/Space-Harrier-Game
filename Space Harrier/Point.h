@@ -77,18 +77,20 @@ public:
 
 	const Point& operator /(TYPE value)
 	{
-		x = x/value;
-		y = y/value;
-		z = z/value;
-		return (*this);
+		Point* temp = new Point(x, y, z);
+		temp->x = temp->x/value;
+		temp->y = temp->y/value;
+		temp->z = temp->z/value;
+		return (*temp);
 	}
 
 	const Point& operator *(TYPE value)
 	{
-		x = x * value;
-		y = y * value;
-		z = z * value;
-		return (*this);
+		Point* temp = new Point(x,y,z);
+		temp->x = temp->x * value;
+		temp->y = temp->y * value;
+		temp->z = temp->z * value;
+		return (*temp);
 	}
 
 	// Utils ------------------------------------------------

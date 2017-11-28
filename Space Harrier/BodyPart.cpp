@@ -43,9 +43,9 @@ void BodyPart::OnCollision(Collider* other) {
 	if (destructible) {
 		--(father->hits);
 		if (father->hits <= 0) {
-			for (list<Enemy*>::iterator cIt = father->childs.begin(); cIt != father->childs.end(); ++cIt) {
-				(*cIt)->collider->to_delete = true;
-				(*cIt)->to_delete = true;//TODO hacer OnDestroy() para enemies
+			for (int i = 0; i < childs.size();++i) {
+				childs[i]->collider->to_delete = true;
+				childs[i]->to_delete = true;//TODO hacer OnDestroy() para enemies
 			}
 			father->to_delete = true;
 		}
