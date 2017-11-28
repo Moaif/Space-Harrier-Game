@@ -4,10 +4,11 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Point.h"
+#include "GameObject.h"
 
 struct SDL_Texture;
 
-class ModulePlayer : public Module
+class ModulePlayer : public Module,public GameObject
 {
 public:
 	ModulePlayer(bool active = true);

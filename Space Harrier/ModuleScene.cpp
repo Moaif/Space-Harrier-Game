@@ -82,7 +82,7 @@ update_status ModuleScene::Update()
 		//App->enemies->AddEnemy(*(App->enemies->GetById("fly2")), 0, 340, MAX_Z);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("fly5")), 150, 340, MAX_Z);
 		App->enemies->AddEnemy(*(App->enemies->GetById("dragon3_1")), 0, 200, 20);
-		App->enemies->AddEnemy(*(App->enemies->GetById("dragon3_2")), 0, 200, 20);
+		//App->enemies->AddEnemy(*(App->enemies->GetById("dragon3_2")), 0, 200, 20);
 		x = 0;
 	}
 	App->renderer->Print(blue,-120,210,"Stage 3");

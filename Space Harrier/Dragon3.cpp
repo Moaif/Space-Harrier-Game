@@ -18,7 +18,7 @@ Enemy* Dragon3::Copy(const float& x, const float& y, const float& z, Enemy* fath
 	temp->hits = hits;
 	int i = 0;
 	for (Enemy* e:childs) {
-		App->enemies->AddEnemy(*(e),x+(i*10),y,z-(i/5),temp);
+		e->Copy(x+(i*10),y,z-(i/5),temp);
 		if (destructible) {
 			--i;
 		}
@@ -31,19 +31,22 @@ Enemy* Dragon3::Copy(const float& x, const float& y, const float& z, Enemy* fath
 }
 
 void Dragon3::Update() {
-	Movement();
-
-	for (list<Enemy*>::iterator it = childs.begin(); it != childs.end(); ++it) {
+	list<Enemy*>::iterator it = childs.begin();
+	for (int i = 0; i < 2; ++i) {
+		(*it)->speed = speed;
 		(*it)->Update();
+		++it;
 	}
+	
+	//Now i've already moved head and tail, its time to move the body
+
+	while (it != childs.end()) {
+		(*it)->Update();
+		++it;
+	}
+
 }
 
 void Dragon3::Shoot() {
 	((BodyPart*)childs.front())->Shoot(App->particles->fire);
-}
-
-void Dragon3::Movement() {
-	for (Enemy* e : childs) {
-	//	e->speed = speed;
-	}
 }

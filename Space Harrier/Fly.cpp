@@ -14,7 +14,7 @@ Fly::~Fly() {
 
 Enemy* Fly::Copy(const float& x, const float& y, const float& z, Enemy* father) const {
 	Enemy* temp = new Fly(flyMode, speed, texture, father);
-	Enemy::CopyValuesInto(temp, x, y, z);
+	CopyValuesInto(*(temp), x, y, z);
 	return temp;
 }
 

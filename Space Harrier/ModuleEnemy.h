@@ -19,7 +19,6 @@ public:
 	update_status PreUpdate(); 
 	update_status Update(); 
 	bool CleanUp();
-	void OnCollision(Collider* col, Collider* other);
 
 	void AddEnemy(const Enemy& particle, float x, float y,float z,Enemy* father=nullptr);
 	Enemy* GetById(string id);

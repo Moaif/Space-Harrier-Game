@@ -4,6 +4,7 @@
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleTime.h"
+#include "GameObject.h"
 
 using namespace std;
 
@@ -69,8 +70,9 @@ update_status ModuleCollision::Update()
 			if ( !((*it)->to_delete || (*it2)->to_delete)) {//If one collider is already set to delete, we dont check again, he exist no more
 				if ((*it)->CheckCollision((*it2)->rect, (*it2)->z, (*it2)->speed)) {
 					if (hits[(*it)->type][(*it2)->type]) {
-						(*it)->callback->OnCollision((*it), (*it2));
-						(*it2)->callback->OnCollision((*it2), (*it));
+						LOG("Col");
+						(*it)->callback->OnCollision((*it2));
+						(*it2)->callback->OnCollision((*it));
 					}
 				}
 			}
@@ -105,7 +107,7 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,Module* callback)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,GameObject* callback)
 {
 	Collider* ret = new Collider(rect,z,speed,type,callback);
 

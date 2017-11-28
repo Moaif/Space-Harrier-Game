@@ -13,7 +13,6 @@ public:
 
 private:
 	void Shoot();
-	void Movement();
 
 private:
 	float elapsedTime;

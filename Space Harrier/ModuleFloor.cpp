@@ -62,7 +62,7 @@ bool ModuleFloor::DrawFloor(SDL_Texture* texture)
 	{
 		increasePixelIteration = 2.0f;
 	}
-	increasePixelIteration += App->player->speedStage;
+	increasePixelIteration += App->player->speedStage*App->time->GetDeltaTime();
 
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;

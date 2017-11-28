@@ -31,21 +31,21 @@ bool ModuleEnemy::Start()
 
 	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
-	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z,0, ENEMY, this);
+	tree->collider = new Collider({ 0,0,0,0 }, MAX_Z,0, ENEMY, tree);
 	tree->shadow = false;
 	enemies["tree1"] = tree;
 	
 
 	Enemy* rock = new Obstacle(rocks);
 	rock->anim.frames.push_back({191,71,61,39});
-	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
+	rock->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,rock);
 	enemies["rock1"] = rock;
 
 	Enemy* jellyfish = new Jellyfish(200.0f,enemiesTexture);
 	jellyfish->anim.frames.push_back({0,43,80,90});
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, jellyfish);
 	jellyfish->speed = { 20.0f, 200.0f, 0.0f };
 	enemies["jelly1"] = jellyfish;
 
@@ -53,7 +53,7 @@ bool ModuleEnemy::Start()
 	jellyfish2->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, jellyfish2);
 	jellyfish2->speed = { -20.0f, 200.0f, 0.0f };
 	enemies["jelly2"] = jellyfish2;
 
@@ -61,7 +61,7 @@ bool ModuleEnemy::Start()
 	jellyfish3->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, jellyfish3);
 	jellyfish3->speed = { 20.0f, 100.0f, 0.0f };
 	enemies["jelly3"] = jellyfish3;
 
@@ -69,7 +69,7 @@ bool ModuleEnemy::Start()
 	jellyfish4->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	jellyfish4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, jellyfish4);
 	jellyfish4->speed = { -20.0f, 100.0f, 0.0f };
 	enemies["jelly4"] = jellyfish4;
 
@@ -77,7 +77,7 @@ bool ModuleEnemy::Start()
 	drone->anim.frames.push_back({0,7,80,34});
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
-	drone->collider = new Collider({0,0,0,0},0,0,ENEMY,this);
+	drone->collider = new Collider({0,0,0,0},0,0,ENEMY,drone);
 	drone->speed = { 100.0f,200.0f,10.0f };
 	enemies["drone1"] = drone;
 
@@ -85,7 +85,7 @@ bool ModuleEnemy::Start()
 	drone2->anim.frames.push_back({ 0,7,80,34 });
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
-	drone2->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone2->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, drone2);
 	drone2->speed = { 120.0f,0.0f,10.0f };
 	enemies["drone2"] = drone2;
 
@@ -93,7 +93,7 @@ bool ModuleEnemy::Start()
 	drone3->anim.frames.push_back({ 0,7,80,34 });
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
-	drone3->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone3->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, drone3);
 	drone3->speed = { -120.0f,0.0f,10.0f };
 	enemies["drone3"] = drone3;
 
@@ -101,7 +101,7 @@ bool ModuleEnemy::Start()
 	drone4->anim.frames.push_back({ 0,7,80,34 });
 	drone4->anim.frames.push_back({ 84,7,80,34 });
 	drone4->anim.frames.push_back({ 168,7,80,34 });
-	drone4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	drone4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, drone4);
 	drone4->speed = { -50.0f,120.0f,-5.0f };
 	enemies["drone4"] = drone4;
 
@@ -109,7 +109,7 @@ bool ModuleEnemy::Start()
 	drone5->anim.frames.push_back({ 0,7,80,34 });
 	drone5->anim.frames.push_back({ 84,7,80,34 });
 	drone5->anim.frames.push_back({ 168,7,80,34 });
-	drone5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	drone5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, drone5);
 	drone5->speed = { 50.0f,120.0f,-5.0f };
 	enemies["drone5"] = drone5;
 
@@ -117,7 +117,7 @@ bool ModuleEnemy::Start()
 	drone6->anim.frames.push_back({ 0,7,80,34 });
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
-	drone6->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone6->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, drone6);
 	drone6->speed = { 100.0f,200.0f,10.0f };
 	enemies["drone6"] = drone6;
 
@@ -125,99 +125,104 @@ bool ModuleEnemy::Start()
 	drone7->anim.frames.push_back({ 0,7,80,34 });
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
-	drone7->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, this);
+	drone7->collider = new Collider({ 0,0,0,0 }, 0, 0, ENEMY, drone7);
 	drone7->speed = { -100.0f,200.0f,10.0f };
 	enemies["drone7"] = drone7;
 
 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({8,144,78,32});
-	fly->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,this);
+	fly->collider = new Collider({0,0,0,0},MAX_Z,0,ENEMY,fly);
 	fly->speed = {25.0f, -70.0f, -2.5f};
 	enemies["fly1"] = fly;
 
 	Enemy* fly2 = new Fly(0, enemiesTexture);
 	fly2->anim.frames.push_back({ 8,144,78,32 });
-	fly2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, fly2);
 	fly2->speed = { 0.0f, -70.0f, -2.5f };
 	enemies["fly2"] = fly2;
 
 	Enemy* fly3 = new Fly(0, enemiesTexture);
 	fly3->anim.frames.push_back({ 8,144,78,32 });
-	fly3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, fly3);
 	fly3->speed = { -25.0f, -70.0f, -2.5f };
 	enemies["fly3"] = fly3;
 
 	Enemy* fly4 = new Fly(1, enemiesTexture);
 	fly4->anim.frames.push_back({ 8,144,78,32 });
-	fly4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, fly4);
 	fly4->speed = { 35.0f, -60.0f, -2.5f };
 	enemies["fly4"] = fly4;
 
 	Enemy* fly5 = new Fly(1, enemiesTexture);
 	fly5->anim.frames.push_back({ 8,144,78,32 });
-	fly5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	fly5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, fly5);
 	fly5->speed = { -35.0f, -60.0f, -2.5f };
 	enemies["fly5"] = fly5;
 
 
 	Enemy* dragon3_1 = new Dragon3(nullptr);
-	dragon3_1->speed = {20,30,5};
+	dragon3_1->speed = {-10,10,-2};
 	dragon3_1->hits = 5;
+	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
+	head3_1->anim.frames.push_back({ 1,5,91,115 });
+	head3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, head3_1);
 	Enemy* tail3_1 = new BodyPart(dragonTexture, dragon3_1);
 	tail3_1->anim.frames.push_back({ 207,14,96,91 });
-	tail3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	tail3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, tail3_1);
 	tail3_1->destructible = false;
 	Enemy* body3_1_1 = new BodyPart(dragonTexture, dragon3_1);
 	body3_1_1->anim.frames.push_back({102,10,93,67});
-	body3_1_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_1_1);
 	body3_1_1->destructible = false;
 	Enemy* body3_1_2 = new BodyPart(dragonTexture, dragon3_1);
 	body3_1_2->anim.frames.push_back({ 102,10,93,67 });
-	body3_1_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_1_2);
 	body3_1_2->destructible = false;
 	Enemy* body3_1_3 = new BodyPart(dragonTexture, dragon3_1);
 	body3_1_3->anim.frames.push_back({ 102,10,93,67 });
-	body3_1_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_1_3);
 	body3_1_3->destructible = false;
 	Enemy* body3_1_4 = new BodyPart(dragonTexture, dragon3_1);
 	body3_1_4->anim.frames.push_back({ 102,10,93,67 });
-	body3_1_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_1_4);
 	body3_1_4->destructible = false;
 	Enemy* body3_1_5 = new BodyPart(dragonTexture, dragon3_1);
 	body3_1_5->anim.frames.push_back({ 102,10,93,67 });
-	body3_1_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	body3_1_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_1_5);
 	body3_1_5->destructible = false;
-	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
-	head3_1->anim.frames.push_back({ 1,5,91,115 });
-	head3_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
 	enemies["dragon3_1"] = dragon3_1;
 
 	Enemy* dragon3_2 = new Dragon3(nullptr);
 	dragon3_2->speed = { 20,30,5 };
 	dragon3_2->hits = 5;
-	dragon3_2->destructible = false;
-	Enemy* tail3_2 = new BodyPart(dragonTexture, dragon3_2);
-	tail3_2->anim.frames.push_back({ 207,14,96,91 });
-	tail3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	Enemy* body3_2_1 = new BodyPart(dragonTexture, dragon3_2);
-	body3_2_1->anim.frames.push_back({ 102,10,93,67 });
-	body3_2_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	Enemy* body3_2_2 = new BodyPart(dragonTexture, dragon3_2);
-	body3_2_2->anim.frames.push_back({ 102,10,93,67 });
-	body3_2_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	Enemy* body3_2_3 = new BodyPart(dragonTexture, dragon3_2);
-	body3_2_3->anim.frames.push_back({ 102,10,93,67 });
-	body3_2_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	Enemy* body3_2_4 = new BodyPart(dragonTexture, dragon3_2);
-	body3_2_4->anim.frames.push_back({ 102,10,93,67 });
-	body3_2_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
-	Enemy* body3_2_5 = new BodyPart(dragonTexture, dragon3_2);
-	body3_2_5->anim.frames.push_back({ 102,10,93,67 });
-	body3_2_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
 	Enemy* head3_2 = new BodyPart(dragonTexture, dragon3_2);
 	head3_2->anim.frames.push_back({ 1,5,91,115 });
-	head3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, this);
+	head3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, head3_2);
+	Enemy* tail3_2 = new BodyPart(dragonTexture, dragon3_2);
+	tail3_2->anim.frames.push_back({ 207,14,96,91 });
+	tail3_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, tail3_2);
+	tail3_2->destructible = false;
+	Enemy* body3_2_1 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_1->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_1->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_2_1);
+	body3_2_1->destructible = false;
+	Enemy* body3_2_2 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_2->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_2->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_2_2);
+	body3_2_2->destructible = false;
+	Enemy* body3_2_3 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_3->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_3->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_2_3);
+	body3_2_3->destructible = false;
+	Enemy* body3_2_4 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_4->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_4->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_2_4);
+	body3_2_4->destructible = false;
+	Enemy* body3_2_5 = new BodyPart(dragonTexture, dragon3_2);
+	body3_2_5->anim.frames.push_back({ 102,10,93,67 });
+	body3_2_5->collider = new Collider({ 0,0,0,0 }, MAX_Z, 0, ENEMY, body3_2_5);
+	body3_2_5->destructible = false;
 	enemies["dragon3_2"] = dragon3_2;
 
 
@@ -264,7 +269,11 @@ update_status ModuleEnemy::Update()
 
 		p->Update();
 		if (p->texture == nullptr) {
-			continue;
+			for (list<Enemy*>::iterator it2 = p->childs.begin(); it2 != p->childs.end(); ++it2) {
+				resizeStruct resizeInfo = { (*it2)->screenPoint.w,(*it2)->screenPoint.h };
+				LOG("x: %d y: %d w: %d w: %d", (*it2)->screenPoint.x, (*it2)->screenPoint.y, (*it2)->screenPoint.w, (*it2)->screenPoint.h);
+				App->renderer->AddToBlitBuffer((*it2)->texture,(*it2)->screenPoint.x,(*it2)->screenPoint.y,(*it2)->position.z,&((*it2)->anim.GetCurrentFrame()),&resizeInfo);
+			}
 		}
 		else if (p->screenPoint.h ==0 && p->screenPoint.w ==0) {
 			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()),nullptr);
@@ -283,30 +292,6 @@ void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z,Enemy* 
 	active.push_back(p);
 }
 
-void ModuleEnemy::OnCollision(Collider* col, Collider* other) {
-	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it) {
-		if ((*it)->collider == col && (*it)->destructible) {
-			if ((*it)->father == nullptr) {
-				--((*it)->hits);
-				if ((*it)->hits <= 0) {
-					(*it)->collider->to_delete = true;
-					(*it)->to_delete = true;
-				}
-			}
-			else
-			{
-				--((*it)->father->hits);
-				if ((*it)->father->hits <= 0) {
-					for (list<Enemy*>::iterator cIt = (*it)->father->childs.begin(); cIt != (*it)->father->childs.end(); ++cIt) {
-						(*cIt)->collider->to_delete = true;
-						(*cIt)->to_delete = true;//TODO hacer OnDestroy() para enemies
-					}
-					(*it)->father->to_delete = true;
-				}
-			}
-		}
-	}
-}
 
 Enemy* ModuleEnemy::GetById(string id) {
 	map<string, Enemy*>::iterator it = enemies.find(id);

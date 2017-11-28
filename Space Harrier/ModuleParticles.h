@@ -7,34 +7,9 @@
 #include "Animation.h"
 #include "Point.h"
 
+class Particle;
 struct SDL_Texture;
 struct Collider;
-
-struct Particle
-{
-	bool to_delete = false;
-	bool firstSound=true;
-	bool firstUpdate = true;
-	fPoint position = { 0, 0 , 1};
-	unsigned int efxIndex;
-	Animation anim;
-	bool onlyOnce = false;
-	float speed;
-	fPoint reduction;
-
-	fPoint pathVector;
-
-	SDL_Texture* texture;
-	Collider* collider;
-	SDL_Rect screenPoint = {0,0,0,0};
-
-
-	Particle();
-	Particle(const Particle& p);
-	~Particle();
-
-	void Update();
-};
 
 class ModuleParticles : public Module
 {
@@ -43,13 +18,12 @@ public:
 	~ModuleParticles();
 
 	bool Start();
-	update_status PreUpdate(); // clear dirty particles
-	update_status Update(); // draw
+	update_status PreUpdate(); 
+	update_status Update(); 
 	bool CleanUp();
-	void OnCollision(Collider* col,Collider* other);
 
-	void AddParticle(const Particle& particle, float x, float y,float z);
-	void AddParticle(const Particle& particle, float x, float y,float z,fPoint unitaryVector);
+	void AddParticle(const Particle* particle, float x, float y,float z);
+	void AddParticle(const Particle* particle, float x, float y,float z,fPoint unitaryVector);
 
 private:
 
@@ -60,9 +34,9 @@ private:
 public:
 
 	// prototype particles go here ...
-	Particle laser;
-	Particle fire;
-	Particle explosion;
+	Particle* laser;
+	Particle* fire;
+	Particle* explosion;
 };
 
 #endif // __MODULEPARTICLES_H__

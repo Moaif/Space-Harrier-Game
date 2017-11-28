@@ -65,8 +65,6 @@ public:
 		return true; 
 	}
 
-	// Callbacks ---
-	virtual void OnCollision(Collider* col,Collider* other) {}
 
 private:
 	bool active = true;

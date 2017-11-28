@@ -12,10 +12,10 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 
-const float ModulePlayer::MIN_X_SPEED = -15;
-const float ModulePlayer::MAX_X_SPEED = 15;
+const float ModulePlayer::MIN_X_SPEED = -300;
+const float ModulePlayer::MAX_X_SPEED = 300;
 const float ModulePlayer::MOVEMENT_SPEED = 300;
-const float ModulePlayer::SCREEN_SEGMENT = 0.4;//5 screen zones
+const float ModulePlayer::SCREEN_SEGMENT = 0.4f;//5 screen zones
 
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {

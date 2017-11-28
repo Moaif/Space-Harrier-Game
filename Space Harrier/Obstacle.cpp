@@ -12,7 +12,7 @@ Obstacle::~Obstacle() {
 
 Enemy* Obstacle::Copy(const float& x, const float& y, const float& z, Enemy* father) const {
 	Enemy* temp = new Obstacle(texture,father);
-	CopyValuesInto(temp,x,y,z);
+	CopyValuesInto(*(temp),x,y,z);
 	return temp;
 }
 void Obstacle::Update() {
@@ -24,7 +24,7 @@ void Obstacle::Update() {
 	speed.z = lastFrameZ - position.z;
 	lastFrameZ = position.z;
 
-	float xOffset = App->player->speedStage;
+	float xOffset = App->player->speedStage*App->time->GetDeltaTime();
 	position.x -= xOffset;
 	
 	float scale = 1-(yScreen / App->floor->horizon.y);

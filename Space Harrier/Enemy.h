@@ -1,7 +1,7 @@
 #ifndef _ENEMY_
 #define _ENEMY_
 
-
+#include "GameObject.h"
 #include "Globals.h"
 #include "Point.h"
 #include "Animation.h"
@@ -15,7 +15,7 @@
 
 struct SDL_Texture;
 
-class Enemy {
+class Enemy:public GameObject {
 public:
 	Enemy(SDL_Texture* texture,Enemy* father=nullptr) :texture(texture),father(father) { 
 		if (father != nullptr) {
@@ -25,14 +25,14 @@ public:
 	virtual ~Enemy() {}
 
 	virtual Enemy* Copy(const float& x, const float& y, const float& z,Enemy* father=nullptr) const { return nullptr; }
-	virtual void CopyValuesInto(Enemy* temp, const float& x, const float& y, const float& z) const{
-		temp->anim = anim;
-		temp->collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h}, collider->z, collider->speed, collider->type, collider->callback);
-		temp->position = {x,y,z};
-		temp->speed = speed;
-		temp->hits = hits;
-		temp->destructible = destructible;
-		temp->shadow = shadow;
+	virtual void CopyValuesInto(Enemy& temp, const float& x, const float& y, const float& z) const{
+		temp.anim = anim;
+		temp.collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h}, collider->z, collider->speed, collider->type, &temp);
+		temp.position = {x,y,z};
+		temp.speed = speed;
+		temp.hits = hits;
+		temp.destructible = destructible;
+		temp.shadow = shadow;
 	}
 	virtual void Update() {
 		collider->rect = screenPoint;
@@ -41,6 +41,16 @@ public:
 		if (position.z <= MIN_Z || position.z >= MAX_Z) {
 			collider->to_delete = true;
 			to_delete = true;
+		}
+	}
+
+	void OnCollision(Collider* other) override {
+		if (destructible) {
+			--hits;
+			if (hits <= 0) {
+				collider->to_delete = true;
+				to_delete = true;
+			}
 		}
 	}
 

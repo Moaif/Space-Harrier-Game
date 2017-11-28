@@ -3,7 +3,7 @@
 
 #include "Enemy.h"
 
-struct Particle;
+class Particle;
 
 class BodyPart :public Enemy {
 public:
@@ -12,7 +12,8 @@ public:
 
 	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr) const override;
 	void Update() override;
-	void Shoot(Particle p);
+	void OnCollision(Collider* other)override;
+	void Shoot(Particle* p);
 
 };
 

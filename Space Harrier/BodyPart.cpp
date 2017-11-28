@@ -11,7 +11,7 @@ BodyPart::~BodyPart() {
 
 Enemy* BodyPart::Copy(const float& x, const float& y, const float& z,Enemy* father) const {
 	Enemy* temp = new BodyPart(texture, father);
-	Enemy::CopyValuesInto(temp, x, y, z);
+	CopyValuesInto(*(temp), x, y, z);
 	return temp;
 }
 
@@ -39,8 +39,21 @@ void BodyPart::Update() {
 	collider->speed = speed.z;
 }
 
+void BodyPart::OnCollision(Collider* other) {
+	if (destructible) {
+		--(father->hits);
+		if (father->hits <= 0) {
+			for (list<Enemy*>::iterator cIt = father->childs.begin(); cIt != father->childs.end(); ++cIt) {
+				(*cIt)->collider->to_delete = true;
+				(*cIt)->to_delete = true;//TODO hacer OnDestroy() para enemies
+			}
+			father->to_delete = true;
+		}
+	}
+}
 
-void BodyPart::Shoot(Particle p) {
+
+void BodyPart::Shoot(Particle* p) {
 	fPoint unitaryVector = App->player->position - position;
 	float div = (sqrt((pow(unitaryVector.x, 2) + pow(unitaryVector.y, 2) + pow(unitaryVector.z, 2))));
 	unitaryVector = unitaryVector / div;
