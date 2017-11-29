@@ -24,10 +24,10 @@ public:
 	}
 	virtual ~Enemy() {}
 
-	virtual Enemy* Copy(const float& x, const float& y, const float& z,Enemy* father=nullptr) const { return nullptr; }
-	virtual void CopyValuesInto(Enemy& temp, const float& x, const float& y, const float& z) const{
+	virtual Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr)const = 0;
+	virtual void CopyValuesInto(Enemy& temp, const float& x, const float& y, const float& z)const {
 		temp.anim = anim;
-		temp.collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h}, collider->z, collider->speed, collider->type, &temp);
+		temp.collider = App->collision->AddCollider({(int)x,(int)y,anim.GetCurrentFrameConst().w,anim.GetCurrentFrameConst().h}, z, speed.z, ENEMY, &temp);
 		temp.position = {x,y,z};
 		temp.speed = speed;
 		temp.hits = hits;

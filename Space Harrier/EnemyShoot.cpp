@@ -10,7 +10,7 @@ EnemyShoot::~EnemyShoot() {
 
 Particle* EnemyShoot::Copy(const float & x, const float & y, const float & z)const {
 	Particle* temp = new EnemyShoot(texture);
-	CopyValuesInto(*(temp),x,y,z);
+	CopyValuesInto(*(temp),x,y,z,ENEMY_SHOOT);
 	return temp;
 }
 

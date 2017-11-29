@@ -1,7 +1,9 @@
+#ifdef _DEBUG
+#include "Brofiler.h"
+#endif // _DEBUG
 #include <stdlib.h>
 #include "Application.h"
 #include "Globals.h"
-
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
@@ -53,6 +55,9 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
+			#ifdef _DEBUG
+				BROFILER_FRAME("YourThreadName")
+			#endif // _DEBUG
 			int update_return = App->Update();
 
 			if (update_return == UPDATE_ERROR)

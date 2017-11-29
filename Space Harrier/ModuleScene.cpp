@@ -66,7 +66,7 @@ update_status ModuleScene::Update()
 	App->floor->DrawBackground(background);
 	App->floor->DrawStage(stage);
 	App->floor->DrawFloor(floor);
-	if (x++ >= 100000) {
+	if (x++ >= 10000) {
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
 		//App->enemies->AddEnemy(*(App->enemies->GetById("rock1")), x2,150,MAX_Z);
 		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);

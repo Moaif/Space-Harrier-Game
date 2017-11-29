@@ -30,6 +30,7 @@ Application::Application()
 	modules.push_back(floor = new ModuleFloor());
 	modules.push_back(shadows = new ModuleShadow());
 	modules.push_back(time = new ModuleTime());
+	modules.push_back(fonts = new ModuleFont());
 
 	// Game Modules
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
@@ -39,7 +40,6 @@ Application::Application()
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
-	modules.push_back(fonts = new ModuleFont());
 	modules.push_back(enemies = new ModuleEnemy());
 
 	//Renderer must be here to draw from buffer after all other modules had request to blit

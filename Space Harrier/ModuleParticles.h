@@ -32,7 +32,7 @@ private:
 	std::list<Particle*> active;
 
 public:
-
+	list<Particle*> prototipeClearList;
 	// prototype particles go here ...
 	Particle* laser;
 	Particle* fire;

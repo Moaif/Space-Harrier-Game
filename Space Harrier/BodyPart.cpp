@@ -9,7 +9,7 @@ BodyPart::~BodyPart() {
 
 }
 
-Enemy* BodyPart::Copy(const float& x, const float& y, const float& z,Enemy* father) const {
+Enemy* BodyPart::Copy(const float& x, const float& y, const float& z, Enemy* father)const {
 	Enemy* temp = new BodyPart(texture, father);
 	CopyValuesInto(*(temp), x, y, z);
 	return temp;
@@ -41,14 +41,7 @@ void BodyPart::Update() {
 
 void BodyPart::OnCollision(Collider* other) {
 	if (destructible) {
-		--(father->hits);
-		if (father->hits <= 0) {
-			for (int i = 0; i < childs.size();++i) {
-				childs[i]->collider->to_delete = true;
-				childs[i]->to_delete = true;//TODO hacer OnDestroy() para enemies
-			}
-			father->to_delete = true;
-		}
+		father->OnCollision(other);
 	}
 }
 

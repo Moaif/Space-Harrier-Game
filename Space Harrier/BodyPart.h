@@ -10,7 +10,7 @@ public:
 	BodyPart(SDL_Texture* texture, Enemy* father = nullptr);
 	~BodyPart();
 
-	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr) const override;
+	Enemy* Copy(const float& x, const float& y, const float& z,  Enemy* father = nullptr)const override;
 	void Update() override;
 	void OnCollision(Collider* other)override;
 	void Shoot(Particle* p);

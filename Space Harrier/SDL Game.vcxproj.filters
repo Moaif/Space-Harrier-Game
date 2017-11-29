@@ -127,6 +127,9 @@
     <ClInclude Include="EnemyShoot.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Brofiler.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">

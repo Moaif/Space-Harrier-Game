@@ -10,7 +10,7 @@ Obstacle::Obstacle(SDL_Texture* texture, Enemy* father): Enemy(texture,father)
 Obstacle::~Obstacle() {
 }
 
-Enemy* Obstacle::Copy(const float& x, const float& y, const float& z, Enemy* father) const {
+Enemy* Obstacle::Copy(const float& x, const float& y, const float& z, Enemy* father)const  {
 	Enemy* temp = new Obstacle(texture,father);
 	CopyValuesInto(*(temp),x,y,z);
 	return temp;

@@ -39,15 +39,15 @@ bool ModuleParticles::Start()
 	laser->anim.speed = 1.0f;
 	laser->efxIndex = App->audio->LoadFx("assets/laser.wav");
 	laser->speed = 40.0f;
-	laser->collider = new Collider({ 0,0,0,0 },1,laser->speed,LASER,laser);
+	prototipeClearList.push_back(laser);
 
 	fire = new EnemyShoot(shots);
 	fire->anim.frames.push_back({1,1,51,47});
 	fire->anim.frames.push_back({ 56,2,48,44 });
 	fire->anim.frames.push_back({ 110,0,50,48 });
 	fire->anim.speed = 5.0f;
-	fire->speed = 40.0f;
-	fire->collider = new Collider({0,0,0,0},1,fire->speed,ENEMY_SHOOT,fire);
+	fire->speed = 80.0f;
+	prototipeClearList.push_back(fire);
 
 	return true;
 }
@@ -62,6 +62,12 @@ bool ModuleParticles::CleanUp()
 		RELEASE(*it);
 
 	active.clear();
+
+	for (list<Particle*>::iterator it = prototipeClearList.begin(); it != prototipeClearList.end(); ++it) {
+		RELEASE(*it);
+	}
+
+	prototipeClearList.clear();
 
 	return true;
 }

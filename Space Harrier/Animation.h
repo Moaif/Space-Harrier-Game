@@ -68,4 +68,12 @@ public:
 	{
 		current_frame = 0;
 	}
+
+	const SDL_Rect& GetCurrentFrameConst() const{
+		return frames[current_frame];
+	}
+
+	void SetNextFrame() {
+		current_frame=(current_frame+1) %frames.size();
+	}
 };

@@ -18,13 +18,13 @@ public:
 	~Particle(){}
 
 	virtual Particle* Copy(const float & x, const float & y, const float & z)const { return nullptr; }
-	virtual void CopyValuesInto(Particle& temp,const float & x,const float & y, const float & z)const {
+	virtual void CopyValuesInto(Particle& temp,const float & x,const float & y, const float & z,CollisionType colType)const {
 		temp.position = { x,y,z };
 		temp.efxIndex = efxIndex;
 		temp.anim = anim;
 		temp.onlyOnce = onlyOnce;
 		temp.speed = speed;
-		temp.collider = App->collision->AddCollider({(int)x,(int)y,collider->rect.w,collider->rect.h },collider->z, collider->speed, collider->type, &temp);
+		temp.collider = App->collision->AddCollider({(int)x,(int)y,anim.GetCurrentFrameConst().w,anim.GetCurrentFrameConst().h },z, speed, colType, &temp);
 	}
 	virtual void Update() {
 		collider->rect = screenPoint;
@@ -33,7 +33,6 @@ public:
 	}
 
 	void OnCollision(Collider* other) override{
-		LOG("Aqui llega");
 		collider->to_delete = true;
 		to_delete = true;
 		//AddParticle(explosion,(*it)->position.x,(*it)->position.y);

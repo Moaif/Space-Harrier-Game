@@ -29,8 +29,10 @@ private:
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* rocks = nullptr;
 	SDL_Texture* dragonTexture = nullptr;
-	std::list<Enemy*> active;
-	std::map<string, Enemy*> enemies;
+	list<Enemy*> active;
+	list<Enemy*> prototypePartsClearList;
+	list<Enemy*> activeBodyParts;
+	map<string, Enemy*> enemies;
 };
 
 #endif // !_MODULEENEMY_H_

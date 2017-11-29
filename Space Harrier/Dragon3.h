@@ -9,8 +9,9 @@ public:
 	Dragon3(int dragonMode,float startingY,fPoint speed,SDL_Texture* texture, Enemy* father = nullptr);
 	~Dragon3();
 
-	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr) const override;
+	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr)const override;
 	void Update() override;
+	void OnCollision(Collider* other) override;
 
 private:
 	void Shoot();
@@ -26,11 +27,15 @@ private:
 	static const float BOUNCEMAX;
 	static const float TAILMOVEMENT;
 	static const float TIMEOFFSET;
+	static const float NUMBEROFSHOOTS;
 	float elapsedTime;
 	fPoint headSpeed;
 	fPoint tailSpeed;
 	float startingY;
-	bool shoted = false;
+
+	float shotTimer;
+	float timerBetweenShoots;
+	int actualShot;
 };
 
 #endif // !_DRAGON3_

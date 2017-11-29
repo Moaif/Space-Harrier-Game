@@ -39,6 +39,7 @@ bool ModuleFont::Init() {
 }
 
 bool ModuleFont::CleanUp() {
+	LOG("Unloading all fonts");
 	if(!VerifyLinks()){
 		return false;
 	}
@@ -77,7 +78,8 @@ bool ModuleFont::VerifyLinks() {
 		for (map<string, map<int, bool>>::iterator it2 = links[it->first].begin(); it2 != links[it->first].end(); ++it2) {
 			for (map<int, bool>::iterator it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
 				if (it3->second) {
-					cerr << "\nLa font " << it->first << "no se pudo liberar por el fichero " << it2->first << " linea " << it3->first << "\n";
+					string err= "La font " + it->first + "no se pudo liberar por el fichero " + it2->first + " linea %d";
+					LOG(err.c_str(),it3->first);
 					ret = false;
 				}
 			}

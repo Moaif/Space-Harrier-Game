@@ -8,20 +8,23 @@ const float Dragon3::TURNAMPLITUDE = 4.0f;
 const float Dragon3::BOUNCEMAX = 50.0f;
 const float Dragon3::TAILMOVEMENT = 3.0f;
 const float Dragon3::TIMEOFFSET = 1.0f / 2.0f;
+const float Dragon3::NUMBEROFSHOOTS = 4;
 
 Dragon3::Dragon3(int dragonMode,SDL_Texture* texture,Enemy* father):Enemy(texture,father),dragonMode(dragonMode) {
 	elapsedTime = 0.0f;
+	timerBetweenShoots = 0;
+	shotTimer = 0.0f; 
+	actualShot = 0;
 }
 
 Dragon3::Dragon3(int dragonMode,float startingY,fPoint speed, SDL_Texture* texture, Enemy* father):Enemy(texture,father),
 dragonMode(dragonMode),startingY(startingY) {
 	elapsedTime = 0.0f;
-	this->headSpeed.x = 0;
-	this->headSpeed.y = speed.y;
-	this->headSpeed.z = speed.z;
-	this->tailSpeed.z = speed.z;
-	this->tailSpeed.x = 0;
-	this->tailSpeed.y = 0;
+	timerBetweenShoots = 0;
+	shotTimer = 0.0f;
+	actualShot = 0;
+	this->headSpeed = { 0,speed.y,speed.z };
+	this->tailSpeed = { 0,0,speed.z};
 }
 
 Dragon3::~Dragon3() {
@@ -86,11 +89,24 @@ void Dragon3::Update() {
 
 	for (int i = 2; i < childs.size(); ++i) {
 		childs[i]->position = position - vec*(i - 1);
-		fPoint temp =vec*(i - 1);
 		childs[i]->Update();
 	}
 
 
+}
+
+void Dragon3::OnCollision(Collider* other) {
+	--hits;
+	for (int i = 0; i < childs.size(); ++i) {
+		childs[i]->anim.SetNextFrame();
+	}
+	if (hits <= 0) {
+		for (int i = 0; i < childs.size(); ++i) {
+			childs[i]->collider->to_delete = true;
+			childs[i]->to_delete = true;//TODO hacer OnDestroy() para enemies
+		}
+		to_delete = true;
+	}
 }
 
 
@@ -104,6 +120,23 @@ void Dragon3::Head1(){
 
 	}
 	else if (elapsedTime < ARRIVALTIME+TIMEOFFSET*4) {
+		if (timerBetweenShoots >= TIMEOFFSET) {
+			if (shotTimer >= TIMEOFFSET / NUMBEROFSHOOTS) {
+				Shoot();
+				++actualShot;
+				if (actualShot >= NUMBEROFSHOOTS) {
+					timerBetweenShoots = 0;
+					actualShot = 0;
+				}
+				shotTimer = 0;
+			}
+			else {
+				shotTimer += App->time->GetDeltaTime();
+			}
+		}
+		else {
+			timerBetweenShoots += App->time->GetDeltaTime();
+		}
 		headSpeed.x = 0;
 		tailSpeed.x = 0;
 	}
@@ -150,6 +183,23 @@ void Dragon3::Head2() {
 
 	}
 	else if (elapsedTime < ARRIVALTIME+TIMEOFFSET*4) {
+		if (timerBetweenShoots >= TIMEOFFSET) {
+			if (shotTimer >= TIMEOFFSET / NUMBEROFSHOOTS) {
+				Shoot();
+				++actualShot;
+				if (actualShot >= NUMBEROFSHOOTS) {
+					timerBetweenShoots = 0;
+					actualShot = 0;
+				}
+				shotTimer = 0;
+			}
+			else {
+				shotTimer += App->time->GetDeltaTime();
+			}
+		}
+		else {
+			timerBetweenShoots += App->time->GetDeltaTime();
+		}
 		headSpeed.z = speed.z;
 		headSpeed.x = 0;
 		tailSpeed.x = 0;

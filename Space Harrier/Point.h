@@ -68,29 +68,39 @@ public:
 		return (x != v.x || y != v.y || z !=v.z);
 	}
 
-	void operator =(const Point& v)
+	Point& operator =(const Point& v)
 	{
+		
 		x = v.x;
 		y = v.y;
 		z = v.z;
+		return (*this);
 	}
 
-	const Point& operator /(TYPE value)
+	Point& operator =(const Point* v)
 	{
-		Point* temp = new Point(x, y, z);
-		temp->x = temp->x/value;
-		temp->y = temp->y/value;
-		temp->z = temp->z/value;
-		return (*temp);
+		x = v->x;
+		y = v->y;
+		z = v->z;
+		return (*this);
 	}
 
-	const Point& operator *(TYPE value)
+	Point operator /(const TYPE& value)
 	{
-		Point* temp = new Point(x,y,z);
-		temp->x = temp->x * value;
-		temp->y = temp->y * value;
-		temp->z = temp->z * value;
-		return (*temp);
+		Point temp;
+		temp.x = x/value;
+		temp.y = y/value;
+		temp.z = z/value;
+		return temp;
+	}
+
+	Point operator *(const TYPE& value)
+	{
+		Point temp;
+		temp.x = x * value;
+		temp.y = y * value;
+		temp.z = z * value;
+		return temp;
 	}
 
 	// Utils ------------------------------------------------

@@ -8,6 +8,9 @@
 #include <iostream>
 #include "Font.h"
 #include <math.h>
+#ifdef _DEBUG
+#include "Brofiler.h"
+#endif // _DEBUG
 
 using namespace std;
 
@@ -79,6 +82,9 @@ update_status ModuleRender::Update()
 
 update_status ModuleRender::PostUpdate()
 {
+	#ifdef _DEBUG
+		BROFILER_CATEGORY("Render", Profiler::Color::Orchid)
+	#endif // _DEBUG
 	SDL_RenderPresent(renderer);
 	return UPDATE_CONTINUE;
 }

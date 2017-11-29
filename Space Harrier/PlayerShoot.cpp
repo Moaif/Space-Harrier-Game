@@ -10,7 +10,7 @@ PlayerShoot::~PlayerShoot() {
 
 Particle* PlayerShoot::Copy(const float & x, const float & y, const float & z)const {
 	Particle* temp = new PlayerShoot(texture);
-	CopyValuesInto(*(temp),x,y,z);
+	CopyValuesInto(*(temp),x,y,z,LASER);
 	return temp;
 }
 
