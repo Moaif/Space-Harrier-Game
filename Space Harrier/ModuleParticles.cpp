@@ -12,6 +12,7 @@
 #include "Particle.h"
 #include "PlayerShoot.h"
 #include "EnemyShoot.h"
+#include "Explosion.h"
 
 #include "SDL/include/SDL_timer.h"
 
@@ -27,6 +28,7 @@ bool ModuleParticles::Start()
 	LOG("Loading particles");
 	lasers = App->textures->Load("assets/Shoots.png");
 	shots = App->textures->Load("assets/Shoots2.png");
+	exp = App->textures->Load("assets/Explosion.png");
 
 
 	// Creating shoot particle
@@ -48,6 +50,21 @@ bool ModuleParticles::Start()
 	fire->anim.speed = 5.0f;
 	fire->speed = 80.0f;
 	prototipeClearList.push_back(fire);
+
+	explosion = new Explosion(200.0f,exp);
+	explosion->anim.frames.push_back({2,0,93,67});
+	explosion->anim.frames.push_back({ 99,1,92,67 });
+	explosion->anim.frames.push_back({ 197,1,94,72 });
+	explosion->anim.frames.push_back({ 293,0,98,77 });
+	explosion->anim.frames.push_back({ 397,5,95,70 });
+	explosion->anim.frames.push_back({ 498,8,96,67 });
+	explosion->anim.frames.push_back({ 2,79,98,87 });
+	explosion->anim.frames.push_back({ 106,80,94,85 });
+	explosion->anim.frames.push_back({ 202,87,97,79 });
+	explosion->anim.speed=5.0f;
+	explosion->speed = 10.0f;
+	explosion->onlyOnce = true;
+	prototipeClearList.push_back(explosion);
 
 	return true;
 }
@@ -107,7 +124,9 @@ update_status ModuleParticles::Update()
 		}
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
-				p->collider->to_delete = true;
+				if (p->collider != nullptr) {
+					p->collider->to_delete = true;
+				}
 				p->to_delete = true;
 			}
 		}
@@ -122,14 +141,14 @@ update_status ModuleParticles::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, float x, float y,float z)
+void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z)
 {
 	Particle* p = particle->Copy(x,y,z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, float x, float y, float z, fPoint unitaryVector) {
+void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
 	Particle* p = particle->Copy(x, y, z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	p->pathVector = unitaryVector;

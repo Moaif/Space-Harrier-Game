@@ -19,12 +19,26 @@ public:
 
 	virtual Particle* Copy(const float & x, const float & y, const float & z)const { return nullptr; }
 	virtual void CopyValuesInto(Particle& temp,const float & x,const float & y, const float & z,CollisionType colType)const {
+		if (colType != MAXIMO) {
+			float screenY = App->floor->GetFloorPositionFromZ(z);
+
+			float scale = 1 - (screenY / App->floor->horizon.y);
+			screenY += y*scale;
+
+			int w = anim.GetCurrentFrameConst().w*scale;
+			int h = anim.GetCurrentFrameConst().h*scale;
+
+			temp.collider = App->collision->AddCollider({ (int)x,(int)screenY,w,h }, z, speed, colType, &temp);
+		}
+		else
+		{
+			temp.collider = nullptr;
+		}
 		temp.position = { x,y,z };
 		temp.efxIndex = efxIndex;
 		temp.anim = anim;
 		temp.onlyOnce = onlyOnce;
 		temp.speed = speed;
-		temp.collider = App->collision->AddCollider({(int)x,(int)y,anim.GetCurrentFrameConst().w,anim.GetCurrentFrameConst().h },z, speed, colType, &temp);
 	}
 	virtual void Update() {
 		collider->rect = screenPoint;

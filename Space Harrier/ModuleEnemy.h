@@ -20,7 +20,7 @@ public:
 	update_status Update(); 
 	bool CleanUp();
 
-	void AddEnemy(const Enemy& particle, float x, float y,float z,Enemy* father=nullptr);
+	void AddEnemy(const Enemy& particle, const float& x, const float& y, const float& z,Enemy* father=nullptr);
 	Enemy* GetById(string id);
 
 private:

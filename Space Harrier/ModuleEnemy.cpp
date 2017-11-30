@@ -379,7 +379,7 @@ update_status ModuleEnemy::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleEnemy::AddEnemy(const Enemy& enemy, float x, float y, float z,Enemy* father)
+void ModuleEnemy::AddEnemy(const Enemy& enemy, const float& x, const float& y, const float& z,Enemy* father)
 {
 	Enemy* p = enemy.Copy(x, y, z,father);
 	active.push_back(p);

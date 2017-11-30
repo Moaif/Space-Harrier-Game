@@ -22,14 +22,15 @@ public:
 	update_status Update(); 
 	bool CleanUp();
 
-	void AddParticle(const Particle* particle, float x, float y,float z);
-	void AddParticle(const Particle* particle, float x, float y,float z,fPoint unitaryVector);
+	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z);
+	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z,const fPoint& unitaryVector);
 
 private:
 
 	SDL_Texture* lasers = nullptr;
 	SDL_Texture* shots = nullptr;
-	std::list<Particle*> active;
+	SDL_Texture* exp = nullptr;
+	list<Particle*> active;
 
 public:
 	list<Particle*> prototipeClearList;

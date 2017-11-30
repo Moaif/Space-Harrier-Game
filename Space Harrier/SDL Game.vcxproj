@@ -79,6 +79,7 @@
     <ClInclude Include="Drone.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyShoot.h" />
+    <ClInclude Include="Explosion.h" />
     <ClInclude Include="Fly.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameObject.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="Dragon3.cpp" />
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="EnemyShoot.cpp" />
+    <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Fly.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Globals.cpp" />
