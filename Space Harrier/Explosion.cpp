@@ -24,8 +24,6 @@ void Explosion::Update() {
 	position.y -= fallSpeed*App->time->GetDeltaTime();
 	position.x -= App->player->speedStage*App->time->GetDeltaTime();
 
-	LOG("s: %f", speed);
-
 	float screenY = App->floor->GetFloorPositionFromZ(position.z);
 
 	float scale = 1 - (screenY / App->floor->horizon.y);

@@ -47,9 +47,11 @@ public:
 	}
 
 	void OnCollision(Collider* other) override{
+		if (other->type == PLAYER) {
+			return;
+		}
 		collider->to_delete = true;
 		to_delete = true;
-		//AddParticle(explosion,(*it)->position.x,(*it)->position.y);
 	}
 
 public:

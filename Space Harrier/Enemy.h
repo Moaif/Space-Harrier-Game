@@ -36,10 +36,16 @@ public:
 		int h = anim.GetCurrentFrameConst().h*scale;
 
 		temp.anim = anim;
-		temp.collider = App->collision->AddCollider({(int)x,(int)screenY,w,h}, z, speed.z, ENEMY, &temp);
+		if (noDmg) {
+			temp.collider = App->collision->AddCollider({ (int)x,(int)screenY,w,h }, z, speed.z, NO_DMG_ENEMY, &temp);
+		}
+		else {
+			temp.collider = App->collision->AddCollider({ (int)x,(int)screenY,w,h }, z, speed.z, ENEMY, &temp);
+		}
 		temp.position = {x,y,z};
 		temp.speed = speed;
 		temp.hits = hits;
+		temp.noDmg = noDmg;
 		temp.destructible = destructible;
 		temp.shadow = shadow;
 	}
@@ -54,11 +60,15 @@ public:
 	}
 
 	void OnCollision(Collider* other) override {
+		if (other->type == PLAYER) {
+			return;
+		}
 		if (destructible) {
 			--hits;
 			if (hits <= 0) {
 				collider->to_delete = true;
 				to_delete = true;
+				App->particles->AddParticle(App->particles->explosion, position.x, position.y, position.z);
 			}
 		}
 	}
@@ -71,6 +81,7 @@ public:
 	int hits=1;
 	bool destructible = true;
 	bool shadow = true;
+	bool noDmg = false;
 
 	Enemy* father=nullptr;//Only used by enemies with more than 1 collider, they have "parts" which have colliders, and the enemie is part's father
 	vector<Enemy*> childs;//Used to delete all components of a part made enemy

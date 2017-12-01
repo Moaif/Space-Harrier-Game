@@ -61,13 +61,10 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
-		if (App->fade->isFading() == false && App->player->GetLives() > 0) {
+		if (App->fade->isFading() == false) {
+			App->player->SetLives(3);
 			App->fade->FadeToBlack((Module*)App->scene_space, this);
 			App->audio->PlayFx(fx);
-		}
-		else
-		{
-			App->player->SetLives(3);
 		}
 	}
 

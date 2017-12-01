@@ -1,6 +1,5 @@
 #include "Dragon3.h"
 #include "BodyPart.h"
-#include "ModuleParticles.h"
 #include "ModuleEnemy.h"
 
 const float Dragon3::ARRIVALTIME = 1.0f;
@@ -102,9 +101,9 @@ void Dragon3::OnCollision(Collider* other) {
 	}
 	if (hits <= 0) {
 		for (int i = 0; i < childs.size(); ++i) {
-			App->particles->AddParticle(App->particles->explosion,childs[i]->position.x,childs[i]->position.y,childs[i]->position.z);
 			childs[i]->collider->to_delete = true;
-			childs[i]->to_delete = true;//TODO hacer OnDestroy() para enemies
+			childs[i]->to_delete = true;
+			App->particles->AddParticle(App->particles->explosion, childs[i]->position.x, childs[i]->position.y, childs[i]->position.z);
 		}
 		to_delete = true;
 	}

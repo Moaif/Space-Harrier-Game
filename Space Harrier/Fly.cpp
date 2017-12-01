@@ -1,5 +1,4 @@
 #include "Fly.h"
-#include "ModuleParticles.h"
 
 Fly::Fly(int flyMode, SDL_Texture* texture, Enemy* father):Enemy(texture,father),flyMode(flyMode) {
 	elapsedTime = 0.0f;

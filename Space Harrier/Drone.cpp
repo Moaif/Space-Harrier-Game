@@ -1,5 +1,4 @@
 #include "Drone.h"
-#include "ModuleParticles.h"
 
 Drone::Drone(int droneMode,SDL_Texture* texture,Enemy* father):Enemy(texture,father),droneMode(droneMode) {
 	elapsedTime = 0.0f;

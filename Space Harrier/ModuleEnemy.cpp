@@ -39,6 +39,12 @@ bool ModuleEnemy::Start()
 	rock->anim.frames.push_back({191,71,61,39});
 	enemies["rock1"] = rock;
 
+	Enemy* bush = new Obstacle(rocks);
+	bush->anim.frames.push_back({192,7,61,43});
+	bush->noDmg = true;
+	bush->shadow = false;
+	enemies["bush1"] = bush;
+
 	Enemy* jellyfish = new Jellyfish(200.0f,enemiesTexture);
 	jellyfish->anim.frames.push_back({0,43,80,90});
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });

@@ -21,7 +21,7 @@ void Obstacle::Update() {
 	yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
 
 	position.z = yScreen*CLIPDISTANCE/App->floor->actualCameraY;
-	speed.z = lastFrameZ - position.z;
+	speed.z = (lastFrameZ - position.z)/App->time->GetDeltaTime();
 	lastFrameZ = position.z;
 
 	float xOffset = App->player->speedStage*App->time->GetDeltaTime();
@@ -37,4 +37,22 @@ void Obstacle::Update() {
 	int h = 1 + (int)(anim.GetCurrentFrame().h *scale);
 	screenPoint = {(int) (position.x*scale),(int)(yScreen),w,h };
 	Enemy::Update();
+}
+
+void Obstacle::OnCollision(Collider* other) {
+	if (other->type == PLAYER) {
+		return;
+	}
+	if (destructible) {
+		--hits;
+		if (hits <= 0) {
+			collider->to_delete = true;
+			to_delete = true;
+
+			float yScreen = quad->y + quad->h*positionQuad;
+			yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
+			float scale = 1 - (yScreen / App->floor->horizon.y);
+			App->particles->AddParticle(App->particles->explosion, position.x*scale, position.y, position.z);
+		}
+	}
 }

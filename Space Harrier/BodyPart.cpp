@@ -1,5 +1,4 @@
 #include "BodyPart.h"
-#include "ModuleParticles.h"
 
 BodyPart::BodyPart(SDL_Texture* texture,Enemy* father):Enemy(texture,father) {
 

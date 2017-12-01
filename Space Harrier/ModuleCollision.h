@@ -24,6 +24,7 @@ struct Collider
 	CollisionType type;
 	GameObject* callback;
 	bool to_delete = false;
+	bool active = true;
 
 
 	Collider(SDL_Rect rectangle,float z,float speed,CollisionType type,GameObject* callback) : 
