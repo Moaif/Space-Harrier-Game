@@ -42,7 +42,18 @@ void Jellyfish::Update() {
 	int w = 1 + (int)(anim.GetCurrentFrame().w *scale);
 	int h = 1 + (int)(anim.GetCurrentFrame().h *scale);
 	screenPoint = { (int)(position.x*scale),(int)(yScreen),w,h };
-	Enemy::Update();
+	collider->rect = screenPoint;
+	collider->z = position.z;
+	collider->speed = speed.z;
+
+	//Verify that this object wont return and made more than 1 loop from horizon to screen
+	if (App->floor->nextFrameItChange) {
+		++counter;
+		if (counter == App->floor->nHorizonQuads - 1) {
+			collider->to_delete = true;
+			to_delete = true;
+		}
+	}
 
 }
 

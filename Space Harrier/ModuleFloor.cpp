@@ -121,7 +121,13 @@ void ModuleFloor::DrawAlphaLines()
 	float nextfirstSegmentPositionPercentage = fmod(firstSegmentPositionPercentage + (ALPHA_LINES_SPEED*App->time->GetDeltaTime()), 1.0f);
 	if (nextfirstSegmentPositionPercentage < firstSegmentPositionPercentage) {
 		lastQuadIndex = (lastQuadIndex + 1) % nHorizonQuads;
+		nextFrameItChange = true;
 	}
+	else
+	{
+		nextFrameItChange = false;
+	}
+
 	firstSegmentPositionPercentage = nextfirstSegmentPositionPercentage;
 }
 

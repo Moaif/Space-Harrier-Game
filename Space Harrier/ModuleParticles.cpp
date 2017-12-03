@@ -29,6 +29,7 @@ bool ModuleParticles::Start()
 	lasers = App->textures->Load("assets/Shoots.png");
 	shots = App->textures->Load("assets/Shoots2.png");
 	exp = App->textures->Load("assets/Explosion.png");
+	enemLaser = App->textures->Load("assets/EnemyShot.png");
 
 
 	// Creating shoot particle
@@ -50,6 +51,19 @@ bool ModuleParticles::Start()
 	fire->anim.speed = 5.0f;
 	fire->speed = 80.0f;
 	prototipeClearList.push_back(fire);
+
+	enemyLaser = new EnemyShoot(enemLaser);
+	enemyLaser->anim.frames.push_back({ 10,10,68,68});
+	enemyLaser->anim.frames.push_back({ 90,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 170,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 250,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 10,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 90,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 170,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 250,90,68,68 });
+	enemyLaser->anim.speed = 5.0f;
+	enemyLaser->speed = 80.0f;
+	prototipeClearList.push_back(enemyLaser);
 
 	explosion = new Explosion(200.0f,exp);
 	explosion->anim.frames.push_back({2,0,93,67});

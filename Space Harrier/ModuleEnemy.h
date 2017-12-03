@@ -20,13 +20,14 @@ public:
 	update_status Update(); 
 	bool CleanUp();
 
-	void AddEnemy(const Enemy& particle, const float& x, const float& y, const float& z,Enemy* father=nullptr);
+	void AddEnemy(const Enemy& enemy, const float& x, const float& y, const float& z,Enemy* father=nullptr);
 	Enemy* GetById(string id);
 
 private:
 
 	SDL_Texture* enemiesTexture = nullptr;
 	SDL_Texture* trees = nullptr;
+	SDL_Texture* trees3 = nullptr;
 	SDL_Texture* rocks = nullptr;
 	SDL_Texture* dragonTexture = nullptr;
 	list<Enemy*> active;

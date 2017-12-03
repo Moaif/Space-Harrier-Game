@@ -34,6 +34,7 @@ public:
 	fPoint horizon;
 	float actualCameraY;
 	static const int nHorizonQuads = 11;
+	bool nextFrameItChange = false;//Bool to know if the alpha lines quads indexes are going to change in next frame
 
 
 private:

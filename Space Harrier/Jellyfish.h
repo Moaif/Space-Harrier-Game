@@ -18,6 +18,7 @@ private:
 	const obstacleInfo* quad;
 	float positionQuad;
 	float lastFrameZ;
+	int counter = 0;
 };
 #endif // !_JELLYFISH_
 

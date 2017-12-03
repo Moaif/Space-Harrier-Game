@@ -30,6 +30,7 @@ private:
 	SDL_Texture* lasers = nullptr;
 	SDL_Texture* shots = nullptr;
 	SDL_Texture* exp = nullptr;
+	SDL_Texture* enemLaser = nullptr;
 	list<Particle*> active;
 
 public:
@@ -37,6 +38,7 @@ public:
 	// prototype particles go here ...
 	Particle* laser;
 	Particle* fire;
+	Particle* enemyLaser;
 	Particle* explosion;
 };
 

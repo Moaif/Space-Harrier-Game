@@ -25,15 +25,38 @@ bool ModuleEnemy::Start()
 	LOG("Loading Enemies");
 	enemiesTexture = App->textures->Load("assets/Enemies.png");
 	trees = App->textures->Load("assets/Arboles.png");
+	trees3 = App->textures->Load("assets/Trees3.png");
 	rocks = App->textures->Load("assets/models.png");
 	dragonTexture = App->textures->Load("assets/Dragon3.png");
-
 
 	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
 	tree->shadow = false;
 	enemies["tree1"] = tree;
+
+	Enemy* tree3 = new Obstacle(trees3);
+	tree3->anim.frames.push_back({ 0,0,79,184 });
+	tree3->anim.frames.push_back({80,0,79,184});
+	tree3->anim.frames.push_back({ 162,0,79,184 });
+	tree3->anim.randFrame = true;
+	tree3->anim.speed = 0;
+	tree3->shadow = false;
+	enemies["tree3"] = tree3;
 	
+	Enemy* tree3_2 = new Obstacle(trees3);
+	tree3_2->anim.frames.push_back({ 242,104,108,82 });
+	tree3_2->anim.frames.push_back({ 352,104,108,82 });
+	tree3_2->anim.frames.push_back({ 463,104,108,82 });
+	tree3_2->anim.randFrame = true;
+	tree3_2->anim.speed = 0;
+	tree3_2->shadow = false;
+	enemies["tree3_2"] = tree3_2;
+
+	Enemy* tree3_3 = new Obstacle(trees3);
+	tree3_3->anim.frames.push_back({6,197,119,72});
+	tree3_3->shadow = false;
+	enemies["tree3_3"] = tree3_3;
+
 
 	Enemy* rock = new Obstacle(rocks);
 	rock->anim.frames.push_back({191,71,61,39});
@@ -73,56 +96,64 @@ bool ModuleEnemy::Start()
 	jellyfish4->speed = { -20.0f, 100.0f, 0.0f };
 	enemies["jelly4"] = jellyfish4;
 
-	Enemy* drone = new Drone(0,enemiesTexture);
-	drone->anim.frames.push_back({0,7,80,34});
+	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
+	Enemy* drone = new Drone(0, enemiesTexture);
+	drone->anim.frames.push_back({ 0,7,80,34 });
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
-	drone->speed = { 100.0f,200.0f,10.0f };
-	enemies["drone1"] = drone;
+	drone->speed = { 200.0f,200.0f,10.0f };
+	enemies["drone0"] = drone;
+
+	Enemy* drone1 = new Drone(0,enemiesTexture);
+	drone1->anim.frames.push_back({0,7,80,34});
+	drone1->anim.frames.push_back({ 84,7,80,34 });
+	drone1->anim.frames.push_back({ 168,7,80,34 });
+	drone1->speed = { -200.0f,200.0f,10.0f };
+	enemies["drone1"] = drone1;
 
 	Enemy* drone2 = new Drone(1, enemiesTexture);
 	drone2->anim.frames.push_back({ 0,7,80,34 });
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
-	drone2->speed = { 120.0f,0.0f,10.0f };
+	drone2->speed = { 200.0f,0.0f,10.0f };
 	enemies["drone2"] = drone2;
 
 	Enemy* drone3 = new Drone(1, enemiesTexture);
 	drone3->anim.frames.push_back({ 0,7,80,34 });
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
-	drone3->speed = { -120.0f,0.0f,10.0f };
+	drone3->speed = { -200.0f,0.0f,10.0f };
 	enemies["drone3"] = drone3;
 
 	Enemy* drone4 = new Drone(2, enemiesTexture);
 	drone4->anim.frames.push_back({ 0,7,80,34 });
 	drone4->anim.frames.push_back({ 84,7,80,34 });
 	drone4->anim.frames.push_back({ 168,7,80,34 });
-	drone4->speed = { -50.0f,120.0f,-5.0f };
+	drone4->speed = { 50.0f,120.0f,-5.0f };
 	enemies["drone4"] = drone4;
 
 	Enemy* drone5 = new Drone(2, enemiesTexture);
 	drone5->anim.frames.push_back({ 0,7,80,34 });
 	drone5->anim.frames.push_back({ 84,7,80,34 });
 	drone5->anim.frames.push_back({ 168,7,80,34 });
-	drone5->speed = { 50.0f,120.0f,-5.0f };
+	drone5->speed = { -50.0f,120.0f,-5.0f };
 	enemies["drone5"] = drone5;
 
 	Enemy* drone6 = new Drone(3, enemiesTexture);
 	drone6->anim.frames.push_back({ 0,7,80,34 });
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
-	drone6->speed = { 100.0f,200.0f,10.0f };
+	drone6->speed = { 200.0f,200.0f,10.0f };
 	enemies["drone6"] = drone6;
 
 	Enemy* drone7 = new Drone(3, enemiesTexture);
 	drone7->anim.frames.push_back({ 0,7,80,34 });
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
-	drone7->speed = { -100.0f,200.0f,10.0f };
+	drone7->speed = { -200.0f,200.0f,10.0f };
 	enemies["drone7"] = drone7;
 
-
+	//Fly needs x=150 or x=0 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({8,144,78,32});
 	fly->speed = {25.0f, -70.0f, -2.5f};
