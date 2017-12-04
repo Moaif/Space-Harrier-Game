@@ -63,8 +63,14 @@ update_status ModuleCollision::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
+//This is used by the colliders list to sort it in base of collide's z 
+bool CompareColiders(const Collider* first, const Collider* second) {
+	return (first->z < second->z);
+}
+
 update_status ModuleCollision::Update()
 {
+	colliders.sort(CompareColiders);
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		if((*it)->active){
 			for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {

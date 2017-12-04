@@ -52,7 +52,14 @@ void Drone::Update() {
 	screenPoint.h = 1+(int)(anim.GetCurrentFrame().h *scale);
 	screenPoint.x = (int)position.x;
 	screenPoint.y = (int)(screenY);
-	Enemy::Update();
+
+	collider->rect = screenPoint;
+	collider->z = position.z;
+	collider->speed = tempSpeed.z;
+	if (position.z <= MIN_Z || position.z >= MAX_Z) {
+		collider->to_delete = true;
+		to_delete = true;
+	}
 }
 
 void Drone::Shoot() {

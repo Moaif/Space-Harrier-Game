@@ -186,7 +186,7 @@ update_status ModulePlayer::Update()
 }
 
 void ModulePlayer::OnCollision(Collider* other) {
-	/**if (other->type == NO_DMG_ENEMY) {
+	if (other->type == NO_DMG_ENEMY) {
 		fall.Reset();
 		current_animation = &fall;
 	}
@@ -200,7 +200,7 @@ void ModulePlayer::OnCollision(Collider* other) {
 			collider->to_delete = true;
 			destroyed = true;
 		}
-	}*/
+	}
 }
 
 void ModulePlayer::SetLives(int amount) {

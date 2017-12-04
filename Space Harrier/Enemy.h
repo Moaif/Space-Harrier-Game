@@ -49,15 +49,7 @@ public:
 		temp.destructible = destructible;
 		temp.shadow = shadow;
 	}
-	virtual void Update() {
-		collider->rect = screenPoint;
-		collider->z = position.z;
-		collider->speed = speed.z;
-		if (position.z <= MIN_Z || position.z >= MAX_Z) {
-			collider->to_delete = true;
-			to_delete = true;
-		}
-	}
+	virtual void Update() {}
 
 	void OnCollision(Collider* other) override {
 		if (other->type == PLAYER) {
