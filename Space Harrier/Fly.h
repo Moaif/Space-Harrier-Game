@@ -20,6 +20,7 @@ private:
 public:
 	int flyMode;
 private:
+	static const float TIMEOFFSET;
 	float elapsedTime;
 	fPoint tempSpeed;
 	bool shoted = false;

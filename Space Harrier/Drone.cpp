@@ -1,5 +1,7 @@
 #include "Drone.h"
 
+const float Drone::TIMEOFFSET = 1.0f*2;
+
 Drone::Drone(int droneMode,SDL_Texture* texture,Enemy* father):Enemy(texture,father),droneMode(droneMode) {
 	elapsedTime = 0.0f;
 }
@@ -70,10 +72,10 @@ void Drone::Mode0() {
 		tempSpeed.y = -tempSpeed.y;
 	}
 
-	if (elapsedTime < 1.0f) {
+	if (elapsedTime < TIMEOFFSET) {
 
 	}
-	else if (elapsedTime < 2.0f) {
+	else if (elapsedTime < TIMEOFFSET*2) {
 		tempSpeed.x = 0;
 		if (!shoted) {
 			Shoot();
@@ -96,10 +98,10 @@ void Drone::Mode1() {
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
 
 
-	if (elapsedTime < 1.0) {
+	if (elapsedTime < TIMEOFFSET) {
 		
 	}
-	else if (elapsedTime < 2.0f) {
+	else if (elapsedTime < TIMEOFFSET*2) {
 		if (!shoted) {
 			Shoot();
 			shoted = true;
@@ -125,16 +127,16 @@ void Drone::Mode2() {
 		tempSpeed.y = -tempSpeed.y;
 	}
 
-	if (elapsedTime < 1.0f) {
+	if (elapsedTime < TIMEOFFSET*0.5) {
 		tempSpeed.y = 0.0f;
 	}
-	else if (elapsedTime < 2.0f) {
+	else if (elapsedTime < TIMEOFFSET) {
 		if (!bouncing) {
 			tempSpeed.y = speed.y;
 		}
 		bouncing = true;
 	}
-	else if (elapsedTime < 2.5f) {
+	else if (elapsedTime < TIMEOFFSET*1.5f) {
 		bouncing = false;
 
 		tempSpeed.x = 0;
@@ -157,10 +159,10 @@ void Drone::Mode3() {
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
 
 
-	if (elapsedTime < 1.5f) {
+	if (elapsedTime < TIMEOFFSET*1.5f) {
 
 	}
-	else if (elapsedTime < 2.5f){
+	else if (elapsedTime < TIMEOFFSET*2.5f){
 		if (!shoted) {
 			Shoot();
 			shoted = true;
@@ -169,7 +171,7 @@ void Drone::Mode3() {
 		tempSpeed.y = -speed.y*1.5f;
 		tempSpeed.z = speed.z / 2;
 	}
-	else if(elapsedTime < 2.8f)
+	else if(elapsedTime < TIMEOFFSET*2.8f)
 	{
 		tempSpeed.x = speed.x*2;
 		tempSpeed.y = speed.y/3;

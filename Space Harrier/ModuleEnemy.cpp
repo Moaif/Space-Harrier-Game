@@ -40,6 +40,7 @@ bool ModuleEnemy::Start()
 	tree3->anim.frames.push_back({ 162,0,79,184 });
 	tree3->anim.randFrame = true;
 	tree3->anim.speed = 0;
+	tree3->destructible = false;
 	tree3->shadow = false;
 	enemies["tree3"] = tree3;
 	
@@ -49,7 +50,6 @@ bool ModuleEnemy::Start()
 	tree3_2->anim.frames.push_back({ 463,104,108,82 });
 	tree3_2->anim.randFrame = true;
 	tree3_2->anim.speed = 0;
-	tree3_2->shadow = false;
 	enemies["tree3_2"] = tree3_2;
 
 	Enemy* tree3_3 = new Obstacle(trees3);
@@ -72,28 +72,28 @@ bool ModuleEnemy::Start()
 	jellyfish->anim.frames.push_back({0,43,80,90});
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish->speed = { 20.0f, 200.0f, 0.0f };
+	jellyfish->speed = { 30.0f, 200.0f, 0.0f };
 	enemies["jelly1"] = jellyfish;
 
 	Enemy* jellyfish2 = new Jellyfish(200.0f, enemiesTexture);
 	jellyfish2->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish2->speed = { -20.0f, 200.0f, 0.0f };
+	jellyfish2->speed = { -30.0f, 200.0f, 0.0f };
 	enemies["jelly2"] = jellyfish2;
 
 	Enemy* jellyfish3 = new Jellyfish(200.0f, enemiesTexture);
 	jellyfish3->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish3->speed = { 20.0f, 100.0f, 0.0f };
+	jellyfish3->speed = { 30.0f, 100.0f, 0.0f };
 	enemies["jelly3"] = jellyfish3;
 
 	Enemy* jellyfish4 = new Jellyfish(200.0f, enemiesTexture);
 	jellyfish4->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
-	jellyfish4->speed = { -20.0f, 100.0f, 0.0f };
+	jellyfish4->speed = { -30.0f, 100.0f, 0.0f };
 	enemies["jelly4"] = jellyfish4;
 
 	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
@@ -101,28 +101,28 @@ bool ModuleEnemy::Start()
 	drone->anim.frames.push_back({ 0,7,80,34 });
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
-	drone->speed = { 200.0f,200.0f,10.0f };
+	drone->speed = {100.0f,100.0f,5.0f };
 	enemies["drone0"] = drone;
 
 	Enemy* drone1 = new Drone(0,enemiesTexture);
 	drone1->anim.frames.push_back({0,7,80,34});
 	drone1->anim.frames.push_back({ 84,7,80,34 });
 	drone1->anim.frames.push_back({ 168,7,80,34 });
-	drone1->speed = { -200.0f,200.0f,10.0f };
+	drone1->speed = { -100.0f,100.0f,5.0f };
 	enemies["drone1"] = drone1;
 
 	Enemy* drone2 = new Drone(1, enemiesTexture);
 	drone2->anim.frames.push_back({ 0,7,80,34 });
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
-	drone2->speed = { 200.0f,0.0f,10.0f };
+	drone2->speed = { 100.0f,0.0f,5.0f };
 	enemies["drone2"] = drone2;
 
 	Enemy* drone3 = new Drone(1, enemiesTexture);
 	drone3->anim.frames.push_back({ 0,7,80,34 });
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
-	drone3->speed = { -200.0f,0.0f,10.0f };
+	drone3->speed = { -100.0f,0.0f,5.0f };
 	enemies["drone3"] = drone3;
 
 	Enemy* drone4 = new Drone(2, enemiesTexture);
@@ -143,46 +143,46 @@ bool ModuleEnemy::Start()
 	drone6->anim.frames.push_back({ 0,7,80,34 });
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
-	drone6->speed = { 200.0f,200.0f,10.0f };
+	drone6->speed = { 100.0f,100.0f,5.0f };
 	enemies["drone6"] = drone6;
 
 	Enemy* drone7 = new Drone(3, enemiesTexture);
 	drone7->anim.frames.push_back({ 0,7,80,34 });
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
-	drone7->speed = { -200.0f,200.0f,10.0f };
+	drone7->speed = { -100.0f,100.0f,5.0f };
 	enemies["drone7"] = drone7;
 
 	//Fly needs x=150 or x=0 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({8,144,78,32});
-	fly->speed = {25.0f, -70.0f, -2.5f};
+	fly->speed = {50.0f, -140.0f, -5.0f};
 	enemies["fly1"] = fly;
 
 	Enemy* fly2 = new Fly(0, enemiesTexture);
 	fly2->anim.frames.push_back({ 8,144,78,32 });
-	fly2->speed = { 0.0f, -70.0f, -2.5f };
+	fly2->speed = { 0.0f, -140.0f, -5.0f };
 	enemies["fly2"] = fly2;
 
 	Enemy* fly3 = new Fly(0, enemiesTexture);
 	fly3->anim.frames.push_back({ 8,144,78,32 });
-	fly3->speed = { -25.0f, -70.0f, -2.5f };
+	fly3->speed = { -50.0f, -140.0f, -5.0f };
 	enemies["fly3"] = fly3;
 
 	Enemy* fly4 = new Fly(1, enemiesTexture);
 	fly4->anim.frames.push_back({ 8,144,78,32 });
-	fly4->speed = { 35.0f, -60.0f, -2.5f };
+	fly4->speed = { 70.0f, -120.0f, -5.0f };
 	enemies["fly4"] = fly4;
 
 	Enemy* fly5 = new Fly(1, enemiesTexture);
 	fly5->anim.frames.push_back({ 8,144,78,32 });
-	fly5->speed = { -35.0f, -60.0f, -2.5f };
+	fly5->speed = { -70.0f, -120.0f, -5.0f };
 	enemies["fly5"] = fly5;
 
 
 	Enemy* dragon3_1 = new Dragon3(0,nullptr);
 	dragon3_1->speed = {-20,25,-4};
-	dragon3_1->hits = 6;
+	dragon3_1->hits = 7;
 	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
 	head3_1->anim.frames.push_back({ 1,5,91,115 });
 	head3_1->anim.frames.push_back({ 1,127,91,115 });
@@ -256,7 +256,7 @@ bool ModuleEnemy::Start()
 
 	Enemy* dragon3_2 = new Dragon3(1,nullptr);
 	dragon3_2->speed = { 20,-25,-4 };
-	dragon3_2->hits = 6;
+	dragon3_2->hits = 7;
 	Enemy* head3_2 = new BodyPart(dragonTexture, dragon3_2);
 	head3_2->anim.frames.push_back({ 1,5,91,115 });
 	head3_2->anim.frames.push_back({1,127,91,115});

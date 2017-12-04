@@ -1,5 +1,7 @@
 #include "Fly.h"
 
+const float Fly::TIMEOFFSET = 1.0f / 2.0f;
+
 Fly::Fly(int flyMode, SDL_Texture* texture, Enemy* father):Enemy(texture,father),flyMode(flyMode) {
 	elapsedTime = 0.0f;
 }
@@ -58,7 +60,7 @@ void Fly::Mode0() {
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
 
-	if (elapsedTime < 4.5f) {
+	if (elapsedTime < TIMEOFFSET*4.5f) {
 		if (position.y <= 50) {
 			tempSpeed.y = 0;
 		}
@@ -78,7 +80,7 @@ void Fly::Mode1() {
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
 
-	if (elapsedTime < 4.5f) {
+	if (elapsedTime < TIMEOFFSET*4.5f) {
 		if (position.y <= 50) {
 			tempSpeed.y = 0;
 		}
