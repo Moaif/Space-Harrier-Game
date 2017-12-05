@@ -4,10 +4,11 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Point.h"
+#include "GameObject.h"
 
 struct SDL_Texture;
 
-class ModulePlayer : public Module
+class ModulePlayer : public Module,public GameObject
 {
 public:
 	ModulePlayer(bool active = true);
@@ -16,7 +17,7 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
-	void OnCollision(Collider * col,Collider* other);
+	void OnCollision(Collider* other)override;
 
 	void SetLives(int amount);
 	int GetLives();
@@ -28,6 +29,7 @@ private:
 	void VerifyHorizonX();
 	void VerifyHorizonY();
 	void CalculateSpeed();
+	void Death();
 
 public:
 
@@ -39,6 +41,8 @@ public:
 	Animation right1;
 	Animation left2;
 	Animation right2;
+	Animation fall;
+	Animation death;
 	fPoint position;
 	Collider* collider;
 	bool destroyed = false;
@@ -46,10 +50,22 @@ public:
 
 private:
 	int lives = 0;
+	//Horizon manage
+	float actualHorizonPercentage;
+	//Death anim
+	bool hit = false;
+	bool deathBounced = false;
+	float deathStartingPosY=0.0f;
+	//Death recover
+	float recoverTimer = 0.0f;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
+	static const float HORIZON_Y_SPEED;
 	static const float MOVEMENT_SPEED;
 	static const float SCREEN_SEGMENT;
+	static const float FALL_SPEED;
+	static const float FALL_BOUNCE;
+	static const float RECOVER_TIME;
 };
 
 #endif

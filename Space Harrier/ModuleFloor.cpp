@@ -62,7 +62,7 @@ bool ModuleFloor::DrawFloor(SDL_Texture* texture)
 	{
 		increasePixelIteration = 2.0f;
 	}
-	increasePixelIteration += App->player->speedStage;
+	increasePixelIteration += App->player->speedStage*App->time->GetDeltaTime();
 
 	float pixelsPerRow = (float)textH / rect.h;
 	float pixelsPerRowOffset = 0.0f;
@@ -121,7 +121,13 @@ void ModuleFloor::DrawAlphaLines()
 	float nextfirstSegmentPositionPercentage = fmod(firstSegmentPositionPercentage + (ALPHA_LINES_SPEED*App->time->GetDeltaTime()), 1.0f);
 	if (nextfirstSegmentPositionPercentage < firstSegmentPositionPercentage) {
 		lastQuadIndex = (lastQuadIndex + 1) % nHorizonQuads;
+		nextFrameItChange = true;
 	}
+	else
+	{
+		nextFrameItChange = false;
+	}
+
 	firstSegmentPositionPercentage = nextfirstSegmentPositionPercentage;
 }
 
@@ -207,6 +213,11 @@ void ModuleFloor::SetHorizonYPerccentual(float percen) {
 	actualCameraY = (cameraYMin +(percen*(cameraYMax - cameraYMin)));
 }
 
-const obstacleInfo* ModuleFloor::GetQuad(int index) {
-	return &quad2[index];
+const obstacleInfo* ModuleFloor::GetQuad(int index)const  {
+	int innerIndex = (lastQuadIndex + index)%nHorizonQuads;
+	return &quad2[innerIndex];
+}
+
+float ModuleFloor::GetFloorPositionFromZ(const float& z) const{
+	return z*actualCameraY / CLIPDISTANCE;
 }

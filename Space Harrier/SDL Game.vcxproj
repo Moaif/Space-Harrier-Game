@@ -51,6 +51,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>$(ProjectDir)Brofiler\ProfilerCore32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -72,8 +73,16 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Application.h" />
+    <ClInclude Include="BodyPart.h" />
+    <ClInclude Include="Brofiler.h" />
+    <ClInclude Include="Dragon3.h" />
+    <ClInclude Include="Drone.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyShoot.h" />
+    <ClInclude Include="Explosion.h" />
+    <ClInclude Include="Fly.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Jellyfish.h" />
     <ClInclude Include="json.hpp" />
@@ -94,12 +103,21 @@
     <ClInclude Include="ModuleShadow.h" />
     <ClInclude Include="ModuleTextures.h" />
     <ClInclude Include="ModuleTime.h" />
+    <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="PlayerShoot.h" />
     <ClInclude Include="Point.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BodyPart.cpp" />
+    <ClCompile Include="Dragon3.cpp" />
+    <ClCompile Include="Drone.cpp" />
+    <ClCompile Include="EnemyShoot.cpp" />
+    <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="Fly.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Jellyfish.cpp" />
@@ -120,8 +138,10 @@
     <ClCompile Include="ModuleShadow.cpp" />
     <ClCompile Include="ModuleTextures.cpp" />
     <ClCompile Include="ModuleTime.cpp" />
+    <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="PlayerShoot.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

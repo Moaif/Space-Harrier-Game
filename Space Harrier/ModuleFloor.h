@@ -24,14 +24,18 @@ public:
 	bool DrawStage(SDL_Texture* texture);
 	void SetBackgroundParametersPercentual(float percent);
 	void SetHorizonYPerccentual(float percen);
-	const obstacleInfo* GetQuad(int index);
+	const obstacleInfo* GetQuad(int index)const ;
+	float GetFloorPositionFromZ(const float& z)const;
+
 private:
 	void DrawAlphaLines();
 
 public:
 	fPoint horizon;
 	float actualCameraY;
-	int lastQuadIndex;
+	static const int nHorizonQuads = 11;
+	bool nextFrameItChange = false;//Bool to know if the alpha lines quads indexes are going to change in next frame
+
 
 private:
 	//Horizon
@@ -44,9 +48,9 @@ private:
 	float firstSegmentPositionPercentage;
 	static const float SEGMENT_REDUCTION;
 	static const float ALPHA_LINES_SPEED;
-	static const int nHorizonQuads = 11;
 	SDL_Rect quads[nHorizonQuads];
 	obstacleInfo quad2[nHorizonQuads];
+	int lastQuadIndex;
 
 
 	//Background

@@ -11,9 +11,16 @@ class Enemy;
 
 struct EnemyInstantiate
 {
-	int x;
-	int y;
+	float x;
+	float y;
+	float z;
 	Enemy* enemy;
+};
+
+struct DelayList 
+{
+	float delay;
+	list<EnemyInstantiate> list;
 };
 
 class ModuleScene : public Module
@@ -28,19 +35,21 @@ public:
 	bool ModuleScene::LoadJson(string path);
 
 public:
-	
-
-	Animation tree;
-	float x,x2;
+	//For UI module
+	string  stageName;
+	int currentStage;
 private:
-	const Font* blue;
 	string backgroundPath;
 	string stagePath;
 	string floorPath;
 	SDL_Texture* background = nullptr;
 	SDL_Texture* stage = nullptr;
 	SDL_Texture* floor = nullptr;
-	std::list<std::list<EnemyInstantiate>> elements;
+	static const float STARTING_DELAY;
+	static const float INTERVAL_DELAY;
+	float timeElapsed;
+	list<DelayList> elements;
+
 };
 
 #endif // __MODULESCENE_H__

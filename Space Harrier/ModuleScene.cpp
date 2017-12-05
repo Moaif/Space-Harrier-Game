@@ -10,15 +10,19 @@
 #include "ModuleEnemy.h"
 #include "ModuleFont.h"
 #include "ModuleFloor.h"
+#include "ModuleUI.h"
 #include "json.hpp"
 #include <fstream>
 
 using json = nlohmann::json;
 
+const float ModuleScene::STARTING_DELAY = 2.0f;
+const float ModuleScene::INTERVAL_DELAY = 0.1f;
+
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
-	x = 100000.0f;
-	x2 = 0.0f;
+	timeElapsed = 0;
+	currentStage = 0;
 }
 
 ModuleScene::~ModuleScene()
@@ -28,15 +32,18 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Start()
 {
 	LOG("Loading space scene");
+
+	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
+	LoadJson("assets/json/Stage3.json");
 	
-	background = App->textures->Load("assets/Background3.png");
-	stage = App->textures->Load("assets/Stage3.png");
-	floor = App->textures->Load("assets/Floor.bmp");
-	blue = App->fonts->GetFont("Blue",__FILE__,__LINE__);
+	background = App->textures->Load(backgroundPath.c_str());
+	stage = App->textures->Load(stagePath.c_str());
+	floor = App->textures->Load(floorPath.c_str());
 
 	App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
+	App->ui->Enable();
 	App->playing = true;
 
 	App->audio->PlayMusic("assets/stage1.ogg", 1.0f);
@@ -55,27 +62,34 @@ bool ModuleScene::CleanUp()
 	App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
+	App->ui->Disable();
 	
 	return true;
 }
 
-// Update: draw background
 update_status ModuleScene::Update()
 {
 	// Draw everything --------------------------------------
 	App->floor->DrawBackground(background);
 	App->floor->DrawStage(stage);
 	App->floor->DrawFloor(floor);
-	if (x++ >= 100) {
-		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
-		//App->enemies->AddEnemy(*(App->enemies->GetById("rock1")), x2,150,MAX_Z);
-		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
-		//App->enemies->AddEnemy(*(App->enemies->GetById("tree1")), x2, 0, MAX_Z);
-		x2 = (RAND() % (SCREEN_WIDTH + 100)) - ((SCREEN_WIDTH / 2) + 50);
-		App->enemies->AddEnemy(*(App->enemies->GetById("jelly1")), x2, 0, MAX_Z);
-		x = 0;
+
+	if (elements.size() > 0) {
+		DelayList tempList = elements.front();
+		if (timeElapsed >= STARTING_DELAY + INTERVAL_DELAY + tempList.delay) {
+			for (list<EnemyInstantiate>::iterator it = tempList.list.begin(); it != tempList.list.end(); ++it) {
+				EnemyInstantiate e = (*it);
+				App->enemies->AddEnemy(*(e.enemy), e.x, e.y, e.z);
+			}
+			elements.pop_front();
+			timeElapsed = STARTING_DELAY;
+		}
+		else
+		{
+			timeElapsed += App->time->GetDeltaTime();
+		}
 	}
-	App->renderer->Print(blue,-120,210,"Stage 3");
+
 	return UPDATE_CONTINUE;
 }
 
@@ -87,7 +101,9 @@ bool ModuleScene::LoadJson(string path) {
 		return false;
 	}
 	ifs >> input;
-
+	//Stage name
+	string tempName = input["name"];
+	stageName = tempName;
 
 	//Background
 	string tempBPath = input["background"];
@@ -103,14 +119,19 @@ bool ModuleScene::LoadJson(string path) {
 
 	//Enemies
 	for (unsigned int i = 0; i < input["enemies"].size(); ++i) {
-		list<EnemyInstantiate> tempList;
-		for (unsigned j = 0; j < input["enemies"][i].size(); ++j) {
-			int x = input["enemies"][i][j]["x"];
-			int y = input["enemies"][i][j]["y"];
-			string id = input["enemies"][i][j]["id"];
+		DelayList tempList;
+		tempList.delay= input["enemies"][i]["delay"];
+		for (unsigned j = 0; j < input["enemies"][i]["list"].size(); ++j) {
+			float x = input["enemies"][i]["list"][j]["x"];
+			float y = input["enemies"][i]["list"][j]["y"];
+			float z = input["enemies"][i]["list"][j]["z"];
+			if (z > 0) {
+				z = MAX_Z;
+			}
+			string id = input["enemies"][i]["list"][j]["id"];
 			Enemy* enemy = App->enemies->GetById(id);
-			EnemyInstantiate temp = { x,y,enemy };
-			tempList.push_back(temp);
+			EnemyInstantiate temp = { x,y,z,enemy };
+			tempList.list.push_back(temp);
 		}
 		elements.push_back(tempList);
 	}

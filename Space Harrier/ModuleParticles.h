@@ -7,32 +7,9 @@
 #include "Animation.h"
 #include "Point.h"
 
+class Particle;
 struct SDL_Texture;
 struct Collider;
-
-struct Particle
-{
-	bool to_delete = false;
-	bool firstSound=true;
-	bool firstUpdate = true;
-	fPoint position = { 0, 0 , 1};
-	unsigned int efxIndex;
-	Animation anim;
-	bool onlyOnce = false;
-	float speed;
-	fPoint reduction;
-
-	SDL_Texture* texture;
-	Collider* collider;
-	SDL_Rect screenPoint = {0,0,0,0};
-
-
-	Particle();
-	Particle(const Particle& p);
-	~Particle();
-
-	void Update();
-};
 
 class ModuleParticles : public Module
 {
@@ -41,23 +18,28 @@ public:
 	~ModuleParticles();
 
 	bool Start();
-	update_status PreUpdate(); // clear dirty particles
-	update_status Update(); // draw
+	update_status PreUpdate(); 
+	update_status Update(); 
 	bool CleanUp();
-	void OnCollision(Collider* col,Collider* other);
 
-	void AddParticle(const Particle& particle, float x, float y); // feel free to expand this call
+	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z);
+	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z,const fPoint& unitaryVector);
 
 private:
 
 	SDL_Texture* lasers = nullptr;
-	std::list<Particle*> active;
+	SDL_Texture* shots = nullptr;
+	SDL_Texture* exp = nullptr;
+	SDL_Texture* enemLaser = nullptr;
+	list<Particle*> active;
 
 public:
-
+	list<Particle*> prototipeClearList;
 	// prototype particles go here ...
-	Particle laser;
-	Particle explosion;
+	Particle* laser;
+	Particle* fire;
+	Particle* enemyLaser;
+	Particle* explosion;
 };
 
 #endif // __MODULEPARTICLES_H__

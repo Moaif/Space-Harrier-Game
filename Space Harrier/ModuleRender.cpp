@@ -8,6 +8,9 @@
 #include <iostream>
 #include "Font.h"
 #include <math.h>
+#ifdef _DEBUG
+#include "Brofiler.h"
+#endif // _DEBUG
 
 using namespace std;
 
@@ -79,6 +82,9 @@ update_status ModuleRender::Update()
 
 update_status ModuleRender::PostUpdate()
 {
+	#ifdef _DEBUG
+		BROFILER_CATEGORY("Render", Profiler::Color::Orchid)
+	#endif // _DEBUG
 	SDL_RenderPresent(renderer);
 	return UPDATE_CONTINUE;
 }
@@ -160,13 +166,13 @@ bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* sectio
 	return ret;
 }
 
-bool ModuleRender::Print(const Font* font, float x, float y, string mesage) {
+bool ModuleRender::Print(const Font* font, float x, float y, string mesage, float fontSize) {
 	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
 
 	SDL_Surface* tempSurface = font->GetImage();
-	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize , ySize, 32, 0, 0, 0, 0);
+	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
 	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 0, 0, 0));
 
 	SDL_Rect srcrect;
@@ -188,12 +194,17 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage) {
 		dstrect.y = 0;
 		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
 	}
-	SDL_Texture* tempTexture= SDL_CreateTextureFromSurface(renderer,surfaceFinal);
+	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(renderer, surfaceFinal);
 	if (tempTexture == nullptr) {
 		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-	AddToBlitBuffer(tempTexture, x, y,FONTS_Z, nullptr, nullptr);
+
+	SDL_Rect rect;
+	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
+	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
+
+	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
 
 	return ret;
 }
@@ -246,30 +257,4 @@ bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g
 	}
 
 	return ret;
-}
-
-SDL_Rect ModuleRender::ToScreenPointBasic(float x, float y, float z, SDL_Rect* section) {
-	SDL_Rect rect;
-
-	float scale = DepthScale(z);
-
-	rect.w = section->w*scale;
-	rect.h = section->h*scale;
-	float wDiff = section->w - rect.w;
-	float hDiff = section->h - rect.h;
-
-	rect.x = x;
-	rect.y = (int)(y + (hDiff/2));
-	return rect;
-}
-
-
-float ModuleRender::DepthScale(float z) {
-	float dist = nearClippingPlane + z;
-
-	if (dist == 0)
-		return 0;
-
-
-	return nearClippingPlane / dist;
 }

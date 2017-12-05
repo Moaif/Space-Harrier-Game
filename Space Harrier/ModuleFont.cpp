@@ -39,6 +39,7 @@ bool ModuleFont::Init() {
 }
 
 bool ModuleFont::CleanUp() {
+	LOG("Unloading all fonts");
 	if(!VerifyLinks()){
 		return false;
 	}
@@ -50,20 +51,21 @@ bool ModuleFont::CleanUp() {
 
 const Font* ModuleFont::GetFont(string fontName, string file, int line) {
 	if (fontMap.count(fontName)) {
-		links[fontName][file][line] = true;
+		links[fontMap[fontName]][file][line] = true;
 		return fontMap[fontName];
 	}
 	printf("Error, there is no %s in our database", fontName.c_str());
 	return nullptr;
 }
 
-void ModuleFont::FreeFont(string fontName, string file, int line) {
-	if (links.count(fontName)) {
-		if (links[fontName].count(file)) {
-			if (links[fontName][file].count(line)) {
-				links[fontName][file][line] = false;
+void ModuleFont::FreeFont(const Font ** p, string file, int line) {
+	if (links.count(*p)) {
+		if (links[*p].count(file)) {
+			if (links[*p][file].count(line)) {
+				links[*p][file][line] = false;
 			}
 		}
+		*p = nullptr;
 	}
 }
 
@@ -74,10 +76,11 @@ bool ModuleFont::VerifyLinks() {
 	for (map<string, Font*>::iterator it = fontMap.begin(); it != fontMap.end(); ++it) {
 
 
-		for (map<string, map<int, bool>>::iterator it2 = links[it->first].begin(); it2 != links[it->first].end(); ++it2) {
+		for (map<string, map<int, bool>>::iterator it2 = links[it->second].begin(); it2 != links[it->second].end(); ++it2) {
 			for (map<int, bool>::iterator it3 = it2->second.begin(); it3 != it2->second.end(); ++it3) {
 				if (it3->second) {
-					cerr << "\nLa font " << it->first << "no se pudo liberar por el fichero " << it2->first << " linea " << it3->first << "\n";
+					string err= "La font " + it->first + " no se pudo liberar por el fichero " + it2->first + " linea %d";
+					LOG(err.c_str(),it3->first);
 					ret = false;
 				}
 			}

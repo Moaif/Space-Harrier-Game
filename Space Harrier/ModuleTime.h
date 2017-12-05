@@ -11,9 +11,13 @@ public:
 
 	update_status PreUpdate();
 
+	void SetTimeScale(float value);
+
 	float GetDeltaTime();
+	float GetTimeSinceStart();
 private:
 	float previousTicks;
 	float deltaTime;
+	float scale;
 };
 #endif // !_MODULETIME_H_

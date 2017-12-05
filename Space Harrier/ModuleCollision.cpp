@@ -4,6 +4,7 @@
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleTime.h"
+#include "GameObject.h"
 
 using namespace std;
 
@@ -62,15 +63,25 @@ update_status ModuleCollision::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
+//This is used by the colliders list to sort it in base of collide's z 
+bool CompareColiders(const Collider* first, const Collider* second) {
+	return (first->z < second->z);
+}
+
 update_status ModuleCollision::Update()
 {
+	colliders.sort(CompareColiders);
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
-		for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
-			if ( !((*it)->to_delete || (*it2)->to_delete)) {//If one collider is already set to delete, we dont check again, he exist no more
-				if ((*it)->CheckCollision((*it2)->rect, (*it2)->z, (*it2)->speed)) {
-					if (hits[(*it)->type][(*it2)->type]) {
-						(*it)->callback->OnCollision((*it), (*it2));
-						(*it2)->callback->OnCollision((*it2), (*it));
+		if((*it)->active){
+			for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
+				if ((*it2)->active) {
+					if (!((*it)->to_delete || (*it2)->to_delete)) {//If one collider is already set to delete, we dont check again, he exist no more
+						if ((*it)->CheckCollision((*it2)->rect, (*it2)->z, (*it2)->speed)) {
+							if (hits[(*it)->type][(*it2)->type]) {
+								(*it)->callback->OnCollision((*it2));
+								(*it2)->callback->OnCollision((*it));
+							}
+						}
 					}
 				}
 			}
@@ -89,7 +100,9 @@ update_status ModuleCollision::Update()
 void ModuleCollision::DebugDraw()
 {
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it)
-		App->renderer->DrawQuad((*it)->rect, 255, 0, 0, 80);
+		if ((*it)->active) {
+			App->renderer->DrawQuad((*it)->rect, 255, 0, 0, 80);
+		}
 }
 
 // Called before quitting
@@ -105,7 +118,7 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,Module* callback)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,GameObject* callback)
 {
 	Collider* ret = new Collider(rect,z,speed,type,callback);
 

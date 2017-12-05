@@ -20,7 +20,7 @@ public:
 	// Operators ------------------------------------------------
 	Point operator -(const Point &v) const
 	{
-		p3Vector3 r;
+		Point r;
 
 		r.x = x - v.x;
 		r.y = y - v.y;
@@ -31,7 +31,7 @@ public:
 
 	Point operator + (const Point &v) const
 	{
-		p3Vector3 r;
+		Point r;
 
 		r.x = x + v.x;
 		r.y = y + v.y;
@@ -66,6 +66,41 @@ public:
 	bool operator !=(const Point& v) const
 	{
 		return (x != v.x || y != v.y || z !=v.z);
+	}
+
+	Point& operator =(const Point& v)
+	{
+		
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		return (*this);
+	}
+
+	Point& operator =(const Point* v)
+	{
+		x = v->x;
+		y = v->y;
+		z = v->z;
+		return (*this);
+	}
+
+	Point operator /(const TYPE& value)
+	{
+		Point temp;
+		temp.x = x/value;
+		temp.y = y/value;
+		temp.z = z/value;
+		return temp;
+	}
+
+	Point operator *(const TYPE& value)
+	{
+		Point temp;
+		temp.x = x * value;
+		temp.y = y * value;
+		temp.z = z * value;
+		return temp;
 	}
 
 	// Utils ------------------------------------------------

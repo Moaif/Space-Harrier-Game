@@ -7,6 +7,12 @@
 #include "ModuleCollision.h"
 #include "ModuleTime.h"
 #include "ModulePlayer.h"
+#include "ModuleFloor.h"
+#include "ModuleShadow.h"
+#include "Particle.h"
+#include "PlayerShoot.h"
+#include "EnemyShoot.h"
+#include "Explosion.h"
 
 #include "SDL/include/SDL_timer.h"
 
@@ -21,34 +27,58 @@ bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
 	lasers = App->textures->Load("assets/Shoots.png");
+	shots = App->textures->Load("assets/Shoots2.png");
+	exp = App->textures->Load("assets/Explosion.png");
+	enemLaser = App->textures->Load("assets/EnemyShot.png");
 
 
 	// Creating shoot particle
-	laser.anim.frames.push_back({ 0, 0, 56, 38 });
-	laser.anim.frames.push_back({ 57, 0, 56, 38 });
-	laser.anim.frames.push_back({ 113, 0, 56, 38 });
-	laser.anim.frames.push_back({ 171, 0, 56, 38 });
-	laser.anim.randFrame = true;
-	laser.anim.speed = 1.0f;
-	laser.efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser.speed = 40.0f;
-	laser.collider = new Collider({ 0,0,91,61 },1,laser.speed,LASER,this);
-	laser.texture = lasers;
+	laser = new PlayerShoot(lasers);
+	laser->anim.frames.push_back({ 0, 0, 56, 38 });
+	laser->anim.frames.push_back({ 57, 0, 56, 38 });
+	laser->anim.frames.push_back({ 113, 0, 56, 38 });
+	laser->anim.frames.push_back({ 171, 0, 56, 38 });
+	laser->anim.randFrame = true;
+	laser->anim.speed = 1.0f;
+	laser->efxIndex = App->audio->LoadFx("assets/laser.wav");
+	laser->speed = 40.0f;
+	prototipeClearList.push_back(laser);
 
+	fire = new EnemyShoot(shots);
+	fire->anim.frames.push_back({1,1,51,47});
+	fire->anim.frames.push_back({ 56,2,48,44 });
+	fire->anim.frames.push_back({ 110,0,50,48 });
+	fire->anim.speed = 5.0f;
+	fire->speed = 80.0f;
+	prototipeClearList.push_back(fire);
 
-	// TODO 12: Create a new "Explosion" particle 
-	// audio: rtype/explosion.wav
-	// coords: {274, 296, 33, 30}; {313, 296, 33, 30}; {346, 296, 33, 30}; {382, 296, 33, 30}; {419, 296, 33, 30}; {457, 296, 33, 30};
-	explosion.anim.frames.push_back({ 274, 296, 33, 30 });
-	explosion.anim.frames.push_back({ 313, 296, 33, 30 });
-	explosion.anim.frames.push_back({ 346, 296, 33, 30 });
-	explosion.anim.frames.push_back({ 382, 296, 33, 30 });
-	explosion.anim.frames.push_back({ 419, 296, 33, 30 });
-	explosion.anim.frames.push_back({ 457, 296, 33, 30 });
-	explosion.efxIndex = App->audio->LoadFx("assets/explosion.wav");
-	explosion.speed = 0;
-	explosion.collider = nullptr;
-	explosion.onlyOnce = true;
+	enemyLaser = new EnemyShoot(enemLaser);
+	enemyLaser->anim.frames.push_back({ 10,10,68,68});
+	enemyLaser->anim.frames.push_back({ 90,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 170,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 250,10,68,68 });
+	enemyLaser->anim.frames.push_back({ 10,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 90,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 170,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 250,90,68,68 });
+	enemyLaser->anim.speed = 5.0f;
+	enemyLaser->speed = 80.0f;
+	prototipeClearList.push_back(enemyLaser);
+
+	explosion = new Explosion(200.0f,exp);
+	explosion->anim.frames.push_back({2,0,93,67});
+	explosion->anim.frames.push_back({ 99,1,92,67 });
+	explosion->anim.frames.push_back({ 197,1,94,72 });
+	explosion->anim.frames.push_back({ 293,0,98,77 });
+	explosion->anim.frames.push_back({ 397,5,95,70 });
+	explosion->anim.frames.push_back({ 498,8,96,67 });
+	explosion->anim.frames.push_back({ 2,79,98,87 });
+	explosion->anim.frames.push_back({ 106,80,94,85 });
+	explosion->anim.frames.push_back({ 202,87,97,79 });
+	explosion->anim.speed=5.0f;
+	explosion->speed = 10.0f;
+	explosion->onlyOnce = true;
+	prototipeClearList.push_back(explosion);
 
 	return true;
 }
@@ -63,6 +93,12 @@ bool ModuleParticles::CleanUp()
 		RELEASE(*it);
 
 	active.clear();
+
+	for (list<Particle*>::iterator it = prototipeClearList.begin(); it != prototipeClearList.end(); ++it) {
+		RELEASE(*it);
+	}
+
+	prototipeClearList.clear();
 
 	return true;
 }
@@ -102,7 +138,9 @@ update_status ModuleParticles::Update()
 		}
 		if (p->onlyOnce) {
 			if (p->anim.Finished()) {
-				p->collider->to_delete = true;
+				if (p->collider != nullptr) {
+					p->collider->to_delete = true;
+				}
 				p->to_delete = true;
 			}
 		}
@@ -117,80 +155,17 @@ update_status ModuleParticles::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleParticles::AddParticle(const Particle& particle, float x, float y)
+void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z)
 {
-	Particle* p = new Particle(particle);
-	p->position = { x,(y - (p->anim.GetCurrentFrame().h / 2)) };
-	if (p->collider != nullptr) {
-		p->collider->rect.x =(int) x;
-		p->collider->rect.y =(int) y;
-	}
+	Particle* p = particle->Copy(x,y,z);
+	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
 }
 
-void ModuleParticles::OnCollision(Collider* col,Collider* other) {
-	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it) {
-		if ((*it)->collider == col) {
-			(*it)->collider->to_delete = true;
-			(*it)->to_delete = true;
-			//AddParticle(explosion,(*it)->position.x,(*it)->position.y);
-		}
-	}
-}
-
-// -------------------------------------------------------------
-// -------------------------------------------------------------
-
-Particle::Particle()
-{}
-
-// TODO 3: Fill in a copy constructor
-Particle::Particle(const Particle& p) : anim(p.anim), position(p.position),efxIndex(p.efxIndex),speed(p.speed),onlyOnce(p.onlyOnce),texture(p.texture)
-{
-	if (p.collider == nullptr) {
-		collider = nullptr;
-	}
-	else
-	{
-		collider = App->collision->AddCollider(p.collider->rect,p.collider->z,p.collider->speed, p.collider->type, p.collider->callback);
-	}
-}
-
-Particle::~Particle()
-{
-}
-
-void Particle::Update()
-{
-	//Player Shoots
-	if (collider->type == LASER) {
-		position.z += speed*App->time->GetDeltaTime();
-		if (position.z >= MAX_Z) {
-			collider->to_delete = true;
-			to_delete = true;
-		}
-		float scale = CLIPDISTANCE / (CLIPDISTANCE + position.z);
-		if (firstUpdate) {
-			reduction = App->player->GetRelativeWorldPosition();
-			firstUpdate = false;
-		}
-		screenPoint.w = anim.GetCurrentFrame().w*scale;
-		screenPoint.h = anim.GetCurrentFrame().h*scale;
-		float tempY = position.y - anim.GetCurrentFrame().h/2 * (reduction.y - 1)  *0.75;//0.75 is a coeficient to reduce the initial y pos gathered by test
-		screenPoint.x = (position.x - (screenPoint.w*reduction.x*(1-scale)));
-		screenPoint.y = (tempY + (screenPoint.h*(reduction.y)*pow((1-scale),2)));
-		screenPoint.y += screenPoint.h/2 * (reduction.y -1) ;
-	}
-
-	//Explosion
-	if (collider != nullptr) {
-		collider->rect = screenPoint;
-		collider->z = position.z;
-	}
-
-	//Enemy Shoot
-	if (collider->type == ENEMY_SHOOT) {
-
-	}
+void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
+	Particle* p = particle->Copy(x, y, z);
+	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
+	p->pathVector = unitaryVector;
+	active.push_back(p);
 }
 

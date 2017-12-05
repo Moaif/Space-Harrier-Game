@@ -19,18 +19,21 @@ public:
 	update_status PreUpdate(); 
 	update_status Update(); 
 	bool CleanUp();
-	void OnCollision(Collider* col, Collider* other);
 
-	void AddEnemy(const Enemy& particle, float x, float y,float z);
+	void AddEnemy(const Enemy& enemy, const float& x, const float& y, const float& z,Enemy* father=nullptr);
 	Enemy* GetById(string id);
 
 private:
 
 	SDL_Texture* enemiesTexture = nullptr;
 	SDL_Texture* trees = nullptr;
+	SDL_Texture* trees3 = nullptr;
 	SDL_Texture* rocks = nullptr;
-	std::list<Enemy*> active;
-	std::map<string, Enemy*> enemies;
+	SDL_Texture* dragonTexture = nullptr;
+	list<Enemy*> active;
+	list<Enemy*> prototypePartsClearList;
+	list<Enemy*> activeBodyParts;
+	map<string, Enemy*> enemies;
 };
 
 #endif // !_MODULEENEMY_H_

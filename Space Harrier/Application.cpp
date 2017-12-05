@@ -12,6 +12,7 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 #include "ModuleTime.h"
+#include "ModuleUI.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleScene.h"
@@ -30,17 +31,18 @@ Application::Application()
 	modules.push_back(floor = new ModuleFloor());
 	modules.push_back(shadows = new ModuleShadow());
 	modules.push_back(time = new ModuleTime());
+	modules.push_back(fonts = new ModuleFont());
 
 	// Game Modules
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(player = new ModulePlayer(false));
-	modules.push_back(scene_space = new ModuleScene(false));
+	modules.push_back(scene = new ModuleScene(false));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
-	modules.push_back(fonts = new ModuleFont());
 	modules.push_back(enemies = new ModuleEnemy());
+	modules.push_back(ui = new ModuleUI(false));
 
 	//Renderer must be here to draw from buffer after all other modules had request to blit
 	modules.push_back(renderer = new ModuleRender());
@@ -97,8 +99,8 @@ update_status Application::Update()
 		//Hacer copia del renderer actual
 		while (true)
 		{
-			//Ir printeando a intervalos "PAUSE" en el renderer, alternando entre la copia, 
-			//y otra surface con el string pintado
+			time->PreUpdate();//In order to not stack aditional time on deltaTime
+			//Print pause over the render on interval
 			if (input->PreUpdate() == UPDATE_STOP) {
 				return UPDATE_STOP;
 			 }
@@ -106,7 +108,7 @@ update_status Application::Update()
 				break;
 			}
 		}
-		//al salir, volver a colocar la copia al renderer, para que siga como antes
+		//on exit, restablish original render, to continue
 	}
 
 	return ret;

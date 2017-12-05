@@ -4,6 +4,8 @@
 #include<list>
 #include "Module.h"
 
+class GameObject;
+
 enum CollisionType
 {
 	PLAYER,
@@ -20,11 +22,12 @@ struct Collider
 	float z;
 	float speed;
 	CollisionType type;
-	Module* callback;
+	GameObject* callback;
 	bool to_delete = false;
+	bool active = true;
 
 
-	Collider(SDL_Rect rectangle,float z,float speed,CollisionType type,Module* callback) : 
+	Collider(SDL_Rect rectangle,float z,float speed,CollisionType type,GameObject* callback) : 
 		rect(rectangle),z(z),speed(speed),type(type),callback(callback)
 	{}
 
@@ -43,7 +46,7 @@ public:
 
 	bool CleanUp();
 
-	Collider* AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,Module* callback);
+	Collider* AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,GameObject* callback);
 	void DebugDraw();
 
 private:

@@ -14,7 +14,10 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{ad89cf24-f35e-4d0c-90e5-820c054c274d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Enemys">
+    <Filter Include="Particles">
+      <UniqueIdentifier>{9eb6729a-d6b4-40a3-9581-58c61e84c6f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Enemies">
       <UniqueIdentifier>{a72247da-5fe9-4f77-9361-1b005d461055}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -77,10 +80,10 @@
       <Filter>Core Modules</Filter>
     </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Enemys</Filter>
+      <Filter>Enemies</Filter>
     </ClInclude>
     <ClInclude Include="Obstacle.h">
-      <Filter>Enemys</Filter>
+      <Filter>Enemies</Filter>
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Utils</Filter>
@@ -98,7 +101,40 @@
       <Filter>Core Modules</Filter>
     </ClInclude>
     <ClInclude Include="Jellyfish.h">
-      <Filter>Enemys</Filter>
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Drone.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Fly.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="BodyPart.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon3.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerShoot.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyShoot.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Brofiler.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleUI.h">
+      <Filter>Core Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -154,7 +190,7 @@
       <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
-      <Filter>Enemys</Filter>
+      <Filter>Enemies</Filter>
     </ClCompile>
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Game Modules</Filter>
@@ -169,7 +205,31 @@
       <Filter>Core Modules</Filter>
     </ClCompile>
     <ClCompile Include="Jellyfish.cpp">
-      <Filter>Enemys</Filter>
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Drone.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Fly.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="BodyPart.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon3.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerShoot.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyShoot.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUI.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
