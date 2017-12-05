@@ -10,6 +10,7 @@
 #include "ModuleEnemy.h"
 #include "ModuleFont.h"
 #include "ModuleFloor.h"
+#include "ModuleUI.h"
 #include "json.hpp"
 #include <fstream>
 
@@ -20,9 +21,8 @@ const float ModuleScene::INTERVAL_DELAY = 0.1f;
 
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
-	x = 0;
-	x2 = 100000;
 	timeElapsed = 0;
+	currentStage = 0;
 }
 
 ModuleScene::~ModuleScene()
@@ -33,16 +33,17 @@ bool ModuleScene::Start()
 {
 	LOG("Loading space scene");
 
+	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
 	LoadJson("assets/json/Stage3.json");
 	
 	background = App->textures->Load(backgroundPath.c_str());
 	stage = App->textures->Load(stagePath.c_str());
 	floor = App->textures->Load(floorPath.c_str());
-	blue = App->fonts->GetFont("Blue",__FILE__,__LINE__);
 
 	App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
+	App->ui->Enable();
 	App->playing = true;
 
 	App->audio->PlayMusic("assets/stage1.ogg", 1.0f);
@@ -61,6 +62,7 @@ bool ModuleScene::CleanUp()
 	App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
+	App->ui->Disable();
 	
 	return true;
 }
@@ -88,7 +90,6 @@ update_status ModuleScene::Update()
 		}
 	}
 
-	App->renderer->Print(blue, -120, 210, "Stage 3");
 	return UPDATE_CONTINUE;
 }
 
@@ -100,6 +101,9 @@ bool ModuleScene::LoadJson(string path) {
 		return false;
 	}
 	ifs >> input;
+	//Stage name
+	string tempName = input["name"];
+	stageName = tempName;
 
 	//Background
 	string tempBPath = input["background"];

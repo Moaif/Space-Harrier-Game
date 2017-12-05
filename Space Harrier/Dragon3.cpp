@@ -24,6 +24,7 @@ dragonMode(dragonMode),startingY(startingY) {
 	actualShot = 0;
 	this->headSpeed = { 0,speed.y,speed.z };
 	this->tailSpeed = { 0,0,speed.z};
+	points = classPoints;
 }
 
 Dragon3::~Dragon3() {
@@ -100,6 +101,7 @@ void Dragon3::OnCollision(Collider* other) {
 		childs[i]->anim.SetNextFrame();
 	}
 	if (hits <= 0) {
+		App->ui->AddPoints(points);
 		for (int i = 0; i < childs.size(); ++i) {
 			childs[i]->collider->to_delete = true;
 			childs[i]->to_delete = true;

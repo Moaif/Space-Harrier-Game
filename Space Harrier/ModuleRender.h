@@ -49,7 +49,7 @@ public:
 
 	void AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo);
 	bool Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo);
-	bool Print(const Font* font,float x,float y,std::string message);
+	bool Print(const Font* font,float x,float y,std::string message,float fontSize = 1);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	bool DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 

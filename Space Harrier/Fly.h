@@ -24,6 +24,8 @@ private:
 	float elapsedTime;
 	fPoint tempSpeed;
 	bool shoted = false;
+
+	static const int classPoints = 20000;
 };
 
 #endif // !_FLY_

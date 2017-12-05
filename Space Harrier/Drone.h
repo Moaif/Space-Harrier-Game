@@ -27,6 +27,8 @@ private:
 	fPoint tempSpeed;
 	bool shoted = false;
 	bool bouncing = false;
+
+	static const int classPoints = 10000;
 };
 
 #endif // !_DRONE_

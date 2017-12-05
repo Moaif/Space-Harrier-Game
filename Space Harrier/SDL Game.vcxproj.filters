@@ -133,6 +133,9 @@
     <ClInclude Include="Explosion.h">
       <Filter>Particles</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleUI.h">
+      <Filter>Core Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="Explosion.cpp">
       <Filter>Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUI.cpp">
+      <Filter>Core Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

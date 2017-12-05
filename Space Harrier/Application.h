@@ -18,6 +18,7 @@ class ModuleEnemy;
 class ModuleFloor;
 class ModuleShadow;
 class ModuleTime;
+class ModuleUI;
 
 // Game modules ---
 class ModulePlayer;
@@ -49,11 +50,12 @@ public:
 	ModuleFloor* floor;
 	ModuleShadow* shadows;
 	ModuleTime* time;
+	ModuleUI* ui;
 
 	// Game modules ---
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
-	ModuleScene* scene_space;
+	ModuleScene* scene;
 
 	bool playing;
 

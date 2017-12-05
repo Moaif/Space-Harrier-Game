@@ -12,6 +12,7 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 #include "ModuleParticles.h"
+#include "ModuleUI.h"
 
 
 struct SDL_Texture;
@@ -48,6 +49,7 @@ public:
 		temp.noDmg = noDmg;
 		temp.destructible = destructible;
 		temp.shadow = shadow;
+		temp.points = points;
 	}
 	virtual void Update() {}
 
@@ -58,6 +60,7 @@ public:
 		if (destructible) {
 			--hits;
 			if (hits <= 0) {
+				App->ui->AddPoints(points);
 				collider->to_delete = true;
 				to_delete = true;
 				App->particles->AddParticle(App->particles->explosion, position.x, position.y, position.z);
@@ -74,6 +77,7 @@ public:
 	bool destructible = true;
 	bool shadow = true;
 	bool noDmg = false;
+	int points=0;
 
 	Enemy* father=nullptr;//Only used by enemies with more than 1 collider, they have "parts" which have colliders, and the enemie is part's father
 	vector<Enemy*> childs;//Used to delete all components of a part made enemy

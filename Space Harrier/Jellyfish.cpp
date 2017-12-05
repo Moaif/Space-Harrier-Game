@@ -4,6 +4,7 @@
 Jellyfish::Jellyfish(float bounceYMax,SDL_Texture* texture,Enemy* father):Enemy(texture,father),bounceYMax(bounceYMax) {
 	quad = App->floor->GetQuad(App->floor->nHorizonQuads-1);
 	positionQuad = (float)((RAND() % 100) / 100.0);
+	points = classPoints;
 }
 
 Jellyfish::~Jellyfish() {
@@ -13,7 +14,6 @@ Jellyfish::~Jellyfish() {
 Enemy* Jellyfish::Copy(const float& x, const float& y, const float& z, Enemy* father) const{
 	Enemy* temp = new Jellyfish(bounceYMax,texture, father);
 	CopyValuesInto(*(temp),x,y,z);
-
 	return temp;
 }
 
@@ -64,6 +64,7 @@ void Jellyfish::OnCollision(Collider* other) {
 	if (destructible) {
 		--hits;
 		if (hits <= 0) {
+			App->ui->AddPoints(points);
 			collider->to_delete = true;
 			to_delete = true;
 

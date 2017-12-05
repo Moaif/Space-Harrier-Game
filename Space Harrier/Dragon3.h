@@ -20,7 +20,6 @@ private:
 
 public:
 	int dragonMode=0;
-
 private:
 	static const float ARRIVALTIME;
 	static const float TURNAMPLITUDE;
@@ -36,6 +35,8 @@ private:
 	float shotTimer;
 	float timerBetweenShoots;
 	int actualShot;
+
+	static const int classPoints = 250000;
 };
 
 #endif // !_DRAGON3_

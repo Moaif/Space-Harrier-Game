@@ -19,6 +19,8 @@ private:
 	float positionQuad;
 	float lastFrameZ;
 	int counter = 0;
+
+	static const int classPoints = 5000;
 };
 #endif // !_JELLYFISH_
 

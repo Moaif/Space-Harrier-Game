@@ -12,6 +12,7 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 #include "ModuleTime.h"
+#include "ModuleUI.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleScene.h"
@@ -35,12 +36,13 @@ Application::Application()
 	// Game Modules
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(player = new ModulePlayer(false));
-	modules.push_back(scene_space = new ModuleScene(false));
+	modules.push_back(scene = new ModuleScene(false));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(enemies = new ModuleEnemy());
+	modules.push_back(ui = new ModuleUI(false));
 
 	//Renderer must be here to draw from buffer after all other modules had request to blit
 	modules.push_back(renderer = new ModuleRender());

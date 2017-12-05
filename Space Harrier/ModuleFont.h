@@ -18,7 +18,7 @@ public:
 	bool CleanUp();
 
 	const Font* GetFont(std::string fontName, std::string file, int line);
-	void FreeFont(std::string, std::string file, int line);
+	void FreeFont(const Font ** p, std::string file, int line);
 	bool VerifyLinks();
 
 private:
@@ -29,7 +29,7 @@ private:
 
 private:
 	std::map<std::string, Font*> fontMap;
-	std::map<std::string, std::map<std::string, std::map<int, bool>>> links;
+	std::map<const Font*, std::map<std::string, std::map<int, bool>>> links;
 
 };
 

@@ -103,6 +103,7 @@
     <ClInclude Include="ModuleShadow.h" />
     <ClInclude Include="ModuleTextures.h" />
     <ClInclude Include="ModuleTime.h" />
+    <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Particle.h" />
@@ -137,6 +138,7 @@
     <ClCompile Include="ModuleShadow.cpp" />
     <ClCompile Include="ModuleTextures.cpp" />
     <ClCompile Include="ModuleTime.cpp" />
+    <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="PlayerShoot.cpp" />

@@ -13,11 +13,14 @@ public:
 	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr)const  override;
 	void Update() override;
 	void OnCollision(Collider* other)override;
+
 private:
 	const obstacleInfo* quad;
 	float positionQuad;
 	float lastFrameZ;
 	int counter = 0;
+
+	static const int classPoints = 2500;
 };
 
 #endif // !_OBSTACLE_

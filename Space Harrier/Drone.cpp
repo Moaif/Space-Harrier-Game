@@ -4,6 +4,7 @@ const float Drone::TIMEOFFSET = 1.0f*2;
 
 Drone::Drone(int droneMode,SDL_Texture* texture,Enemy* father):Enemy(texture,father),droneMode(droneMode) {
 	elapsedTime = 0.0f;
+	points = classPoints;
 }
 
 Drone::Drone(int droneMode,fPoint speed, SDL_Texture* texture, Enemy* father) : Enemy(texture, father), 

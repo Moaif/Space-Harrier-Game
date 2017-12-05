@@ -34,8 +34,11 @@ public:
 	bool CleanUp();
 	bool ModuleScene::LoadJson(string path);
 
+public:
+	//For UI module
+	string  stageName;
+	int currentStage;
 private:
-	const Font* blue;
 	string backgroundPath;
 	string stagePath;
 	string floorPath;
@@ -46,7 +49,7 @@ private:
 	static const float INTERVAL_DELAY;
 	float timeElapsed;
 	list<DelayList> elements;
-	int x, x2;
+
 };
 
 #endif // __MODULESCENE_H__

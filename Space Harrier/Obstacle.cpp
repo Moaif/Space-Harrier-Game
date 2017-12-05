@@ -6,6 +6,7 @@ Obstacle::Obstacle(SDL_Texture* texture, Enemy* father): Enemy(texture,father)
 {
 	quad = App->floor->GetQuad(App->floor->nHorizonQuads-1);
 	positionQuad = (float)((RAND()%100)/100.0);
+	points = classPoints;
 }
 Obstacle::~Obstacle() {
 }
@@ -58,6 +59,7 @@ void Obstacle::OnCollision(Collider* other) {
 	if (destructible) {
 		--hits;
 		if (hits <= 0) {
+			App->ui->AddPoints(points);
 			collider->to_delete = true;
 			to_delete = true;
 

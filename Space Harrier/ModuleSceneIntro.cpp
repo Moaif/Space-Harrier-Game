@@ -9,8 +9,6 @@
 #include "ModulePlayer.h"
 #include "ModuleFont.h"
 
-// Reference at https://www.youtube.com/watch?v=OEhmUuehGOA
-
 ModuleSceneIntro::ModuleSceneIntro(bool active) : Module(active)
 {
 	robot.frames.push_back({ 2,0,280,325 });
@@ -63,7 +61,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (App->fade->isFading() == false) {
 			App->player->SetLives(3);
-			App->fade->FadeToBlack((Module*)App->scene_space, this);
+			App->fade->FadeToBlack((Module*)App->scene, this);
 			App->audio->PlayFx(fx);
 		}
 	}

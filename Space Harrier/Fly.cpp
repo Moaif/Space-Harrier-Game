@@ -4,6 +4,7 @@ const float Fly::TIMEOFFSET = 1.0f / 2.0f;
 
 Fly::Fly(int flyMode, SDL_Texture* texture, Enemy* father):Enemy(texture,father),flyMode(flyMode) {
 	elapsedTime = 0.0f;
+	points = classPoints;
 }
 
 Fly::Fly(int flyMode, fPoint speed, SDL_Texture* texture, Enemy* father): Enemy(texture,father),flyMode(flyMode),tempSpeed(speed) {
