@@ -12,6 +12,8 @@ const float ModuleUI::SEPARATION_OFFSET = 10.0f;
 const float ModuleUI::TOPSCORE_X_POS = -120.0f;
 const float ModuleUI::SCORE_X_POS = 40.0f;
 const float ModuleUI::STAGE_X_POS = 100.0f;
+const float ModuleUI::TOP_ELEMENTS_Y_POS=208;
+const float ModuleUI::BOT_ELEMENTS_Y_POS=1;
 const float ModuleUI::TIME_WITH_TITLE = 5.0f;
 const int ModuleUI::POINTS_PER_SECOND = 100;
 const float ModuleUI::POINTS_ACTUALIZATION_PER_SECOND = 10;
@@ -64,34 +66,35 @@ update_status ModuleUI::Update() {
 	}
 	//Stage message
 	App->renderer->Print(blue, STAGE_X_POS, 1, "STAGE");
-	float stagepos = STAGE_X_POS + (score.w / 2) + (0.5f * blue->GetXSize())*stageTemp.size() + SEPARATION_OFFSET/2;
-	App->renderer->Print(blue,stagepos,1,stageTemp);
+	float stageposX = STAGE_X_POS + (score.w / 2) + (0.5f * blue->GetXSize())*stageTemp.size() + SEPARATION_OFFSET/2;
+	App->renderer->Print(blue,stageposX,BOT_ELEMENTS_Y_POS,stageTemp);
 
 
 	//TopScore
-	App->renderer->AddToBlitBuffer(graphics,TOPSCORE_X_POS,208,FONTS_Z,&topScore,nullptr);
-	
+	App->renderer->AddToBlitBuffer(graphics,TOPSCORE_X_POS,TOP_ELEMENTS_Y_POS,FONTS_Z,&topScore,nullptr);
+	float topScoreposY=TOP_ELEMENTS_Y_POS+((topScore.h-red->GetYSize())/2);
 	if (points > topPoints) {
 		string temp = to_string(points);
-		float topScorepos = TOPSCORE_X_POS + (topScore.w / 2) + ((0.5f * red->GetXSize())*temp.size())+SEPARATION_OFFSET;
-		App->renderer->Print(red,topScorepos,212,temp);
+		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + ((0.5f * red->GetXSize())*temp.size())+SEPARATION_OFFSET;
+		App->renderer->Print(red,topScoreposX,topScoreposY,temp);
 	}
 	else
 	{
 		string temp = to_string(topPoints);
-		float topScorepos = TOPSCORE_X_POS + (topScore.w / 2) + (0.5f * red->GetXSize())*temp.size()+SEPARATION_OFFSET;
-		App->renderer->Print(red,topScorepos,212,temp);
+		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + (0.5f * red->GetXSize())*temp.size()+SEPARATION_OFFSET;
+		App->renderer->Print(red,topScoreposX,topScoreposY,temp);
 	}
 
 	//Score
 	App->renderer->AddToBlitBuffer(graphics, SCORE_X_POS, 208, FONTS_Z, &score, nullptr);
 	string scoreTemp = to_string(points);
-	float scorepos = SCORE_X_POS + (score.w / 2) + (0.5f * green->GetXSize())*scoreTemp.size() + SEPARATION_OFFSET;
-	App->renderer->Print(green,scorepos,212,scoreTemp);
+	float scoreposY = TOP_ELEMENTS_Y_POS + ((score.h - green->GetYSize()) / 2);
+	float scoreposX = SCORE_X_POS + (score.w / 2) + (0.5f * green->GetXSize())*scoreTemp.size() + SEPARATION_OFFSET;
+	App->renderer->Print(green,scoreposX,scoreposY,scoreTemp);
 
 	//Lives
 	for (int i = 0; i < App->player->GetLives(); ++i) {
-		App->renderer->AddToBlitBuffer(graphics, -120-(i*(liveImg.w+1)), 1, FONTS_Z, &liveImg, nullptr);
+		App->renderer->AddToBlitBuffer(graphics, -120-(i*(liveImg.w+1)), BOT_ELEMENTS_Y_POS, FONTS_Z, &liveImg, nullptr);
 	}
 
 	//Increase points by time

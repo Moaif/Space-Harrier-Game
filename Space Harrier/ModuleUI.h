@@ -40,6 +40,8 @@ private:
 	static const float TOPSCORE_X_POS;
 	static const float SCORE_X_POS;
 	static const float STAGE_X_POS;
+	static const float TOP_ELEMENTS_Y_POS;
+	static const float BOT_ELEMENTS_Y_POS;
 	static const float TIME_WITH_TITLE;
 	static const int POINTS_PER_SECOND;
 	static const float POINTS_ACTUALIZATION_PER_SECOND;
