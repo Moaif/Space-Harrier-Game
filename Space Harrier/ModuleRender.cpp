@@ -173,7 +173,8 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 
 	SDL_Surface* tempSurface = font->GetImage();
 	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
-	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 0, 0, 0));
+	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
 
 	SDL_Rect srcrect;
 	srcrect.h = ySize;
@@ -205,6 +206,7 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
 
 	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
+	SDL_FreeSurface(surfaceFinal);
 
 	return ret;
 }

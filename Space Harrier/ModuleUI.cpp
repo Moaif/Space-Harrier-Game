@@ -60,8 +60,9 @@ update_status ModuleUI::Update() {
 	//Start Stage Title
 	string stageTemp = to_string(App->scene->currentStage);
 	if (startTitleTimer < TIME_WITH_TITLE) {
-		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)+blue->GetYSize(),"STAGE "+stageTemp,2);
-		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)-blue->GetYSize(),App->scene->stageName,2);
+		float titleScale = 2.0f;
+		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)+(blue->GetYSize()*titleScale),"STAGE "+stageTemp,titleScale);
+		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)-(blue->GetYSize()*titleScale),App->scene->stageName,titleScale);
 		startTitleTimer += App->time->GetDeltaTime();
 	}
 	//Stage message
