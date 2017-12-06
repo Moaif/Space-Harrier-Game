@@ -24,9 +24,8 @@ bool ModuleSceneIntro::Start()
 	
 	background = App->textures->Load("assets/intro.png");
 
-	App->audio->PlayMusic("assets/intro.ogg", 1.0f);
 	if(fx == 0)
-		fx = App->audio->LoadFx("assets/starting.wav");
+		fx = App->audio->LoadFx("assets/music/SFX/Coin.wav");
 
 	red = App->fonts->GetFont("Red",__FILE__,__LINE__);
 	blue = App->fonts->GetFont("Blue", __FILE__, __LINE__);

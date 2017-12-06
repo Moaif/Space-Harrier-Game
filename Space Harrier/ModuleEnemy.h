@@ -34,6 +34,10 @@ private:
 	list<Enemy*> prototypePartsClearList;
 	list<Enemy*> activeBodyParts;
 	map<string, Enemy*> enemies;
+
+	unsigned int DroneStartSFX;
+	unsigned int JellyStartSFX;
+	unsigned int FlyStartSFX;
 };
 
 #endif // !_MODULEENEMY_H_

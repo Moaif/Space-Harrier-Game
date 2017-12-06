@@ -45,6 +45,7 @@ public:
 		}
 		temp.position = {x,y,z};
 		temp.speed = speed;
+		temp.efxIndex = efxIndex;
 		temp.hits = hits;
 		temp.noDmg = noDmg;
 		temp.destructible = destructible;
@@ -73,6 +74,8 @@ public:
 	fPoint position = { 0, 0 , 1 };
 	Animation anim;
 	fPoint speed = {0,0,0};
+	unsigned int efxIndex = 0;
+	bool firstSound = true;
 	int hits=1;
 	bool destructible = true;
 	bool shadow = true;

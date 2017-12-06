@@ -40,8 +40,9 @@ bool ModuleParticles::Start()
 	laser->anim.frames.push_back({ 171, 0, 56, 38 });
 	laser->anim.randFrame = true;
 	laser->anim.speed = 1.0f;
-	laser->efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser->speed = 40.0f;
+	laser->efxIndex = App->audio->LoadFx("assets/music/SFX/PlayerShoot.wav");
+	((PlayerShoot*)laser)->reboundEfx = App->audio->LoadFx("assets/music/SFX/ReboundShoot.wav");
+	laser->speed = 150.0f;
 	prototipeClearList.push_back(laser);
 
 	fire = new EnemyShoot(shots);
@@ -49,6 +50,7 @@ bool ModuleParticles::Start()
 	fire->anim.frames.push_back({ 56,2,48,44 });
 	fire->anim.frames.push_back({ 110,0,50,48 });
 	fire->anim.speed = 5.0f;
+	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
 	fire->speed = 80.0f;
 	prototipeClearList.push_back(fire);
 
@@ -62,6 +64,7 @@ bool ModuleParticles::Start()
 	enemyLaser->anim.frames.push_back({ 170,90,68,68 });
 	enemyLaser->anim.frames.push_back({ 250,90,68,68 });
 	enemyLaser->anim.speed = 5.0f;
+	enemyLaser->efxIndex = App->audio->LoadFx("assets/music/SFX/LaserShoot.wav");
 	enemyLaser->speed = 80.0f;
 	prototipeClearList.push_back(enemyLaser);
 
@@ -145,7 +148,6 @@ update_status ModuleParticles::Update()
 			}
 		}
 
-		// Handle particle fx here ?
 		if (p->firstSound) {
 			App->audio->PlayFx(p->efxIndex);
 			p->firstSound = false;

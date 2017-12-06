@@ -58,6 +58,10 @@ private:
 	float deathStartingPosY=0.0f;
 	//Death recover
 	float recoverTimer = 0.0f;
+	//Audio
+	unsigned int ouch = 0;
+	unsigned int aaargh = 0;
+	unsigned int getReady = 0;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
 	static const float HORIZON_Y_SPEED;

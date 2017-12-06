@@ -22,7 +22,7 @@ const float ModuleScene::INTERVAL_DELAY = 0.1f;
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
 	timeElapsed = 0;
-	currentStage = 0;
+	currentStage = 2;//TODO: if introduced new stages, change
 }
 
 ModuleScene::~ModuleScene()
@@ -46,7 +46,7 @@ bool ModuleScene::Start()
 	App->ui->Enable();
 	App->playing = true;
 
-	App->audio->PlayMusic("assets/stage1.ogg", 1.0f);
+	App->audio->PlayMusic("assets/music/Theme.wav", 1.0f);
 	
 
 
@@ -77,6 +77,13 @@ update_status ModuleScene::Update()
 	if (elements.size() > 0) {
 		DelayList tempList = elements.front();
 		if (timeElapsed >= STARTING_DELAY + INTERVAL_DELAY + tempList.delay) {
+
+			//Only BOSS to be instantiated
+			if (elements.size() == 1) {
+				string path = "assets/music/Stage" + to_string(currentStage) + "Boss.wav";
+				App->audio->PlayMusic(path.c_str(), 1.0f);
+			}
+
 			for (list<EnemyInstantiate>::iterator it = tempList.list.begin(); it != tempList.list.end(); ++it) {
 				EnemyInstantiate e = (*it);
 				App->enemies->AddEnemy(*(e.enemy), e.x, e.y, e.z);

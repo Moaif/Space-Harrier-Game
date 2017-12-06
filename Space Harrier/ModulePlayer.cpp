@@ -11,6 +11,7 @@
 #include "ModuleScene.h"
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
+#include "ModuleAudio.h"
 
 const float ModulePlayer::MIN_X_SPEED = -300.0f;
 const float ModulePlayer::MAX_X_SPEED = 300.0f;
@@ -68,12 +69,22 @@ bool ModulePlayer::Start()
 
 	graphics = App->textures->Load("assets/character.png");
 
+	if (ouch == 0) {
+		ouch=App->audio->LoadFx("assets/music/SFX/Ouch.wav");
+	}
+	if (aaargh == 0) {
+		aaargh=App->audio->LoadFx("assets/music/SFX/Aaargh.wav");
+	}
+	if (getReady == 0) {
+		getReady=App->audio->LoadFx("assets/music/SFX/GetReady.wav");
+	}
+
 	destroyed = false;
 	position.x = 0;
 	position.y = 0;
 	position.z = 0;
-	//Collider
-	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,25,50 },position.z,1, PLAYER, this);
+	//Collider smaller than sprites, in order to make it easier
+	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,15,40 },position.z,1, PLAYER, this);
 
 	return true;
 }
@@ -188,10 +199,12 @@ update_status ModulePlayer::Update()
 void ModulePlayer::OnCollision(Collider* other) {
 	if (other->type == NO_DMG_ENEMY) {
 		fall.Reset();
+		App->audio->PlayFx(ouch);
 		current_animation = &fall;
 	}
 	else {
 		--lives;
+		App->audio->PlayFx(aaargh);
 		hit = true;
 		deathStartingPosY = position.y;
 		collider->active = false;
@@ -306,6 +319,7 @@ void ModulePlayer::Death() {
 	}
 	if (current_animation->Finished()) {
 		death.Reset();
+		App->audio->PlayFx(getReady);
 		current_animation = &run;
 		deathBounced = false;
 		App->time->SetTimeScale(1.0f);

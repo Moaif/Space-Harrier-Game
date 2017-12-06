@@ -3,6 +3,7 @@
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
+#include "ModuleAudio.h"
 #include "Obstacle.h"
 #include "Jellyfish.h"
 #include "Drone.h"
@@ -28,6 +29,10 @@ bool ModuleEnemy::Start()
 	trees3 = App->textures->Load("assets/Trees3.png");
 	rocks = App->textures->Load("assets/models.png");
 	dragonTexture = App->textures->Load("assets/Dragon3.png");
+
+	DroneStartSFX = App->audio->LoadFx("assets/music/SFX/DroneStart.wav");
+	JellyStartSFX = App->audio->LoadFx("assets/music/SFX/JellyStart.wav");
+	FlyStartSFX = App->audio->LoadFx("assets/music/SFX/FlyStart.wav");
 
 	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
@@ -73,6 +78,7 @@ bool ModuleEnemy::Start()
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish->speed = { 30.0f, 200.0f, 0.0f };
+	jellyfish->efxIndex = JellyStartSFX;
 	enemies["jelly1"] = jellyfish;
 
 	Enemy* jellyfish2 = new Jellyfish(200.0f, enemiesTexture);
@@ -80,6 +86,7 @@ bool ModuleEnemy::Start()
 	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish2->speed = { -30.0f, 200.0f, 0.0f };
+	jellyfish2->efxIndex = JellyStartSFX;
 	enemies["jelly2"] = jellyfish2;
 
 	Enemy* jellyfish3 = new Jellyfish(200.0f, enemiesTexture);
@@ -87,6 +94,7 @@ bool ModuleEnemy::Start()
 	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish3->speed = { 30.0f, 100.0f, 0.0f };
+	jellyfish3->efxIndex = JellyStartSFX;
 	enemies["jelly3"] = jellyfish3;
 
 	Enemy* jellyfish4 = new Jellyfish(200.0f, enemiesTexture);
@@ -94,6 +102,7 @@ bool ModuleEnemy::Start()
 	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish4->speed = { -30.0f, 100.0f, 0.0f };
+	jellyfish4->efxIndex = JellyStartSFX;
 	enemies["jelly4"] = jellyfish4;
 
 	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
@@ -102,6 +111,7 @@ bool ModuleEnemy::Start()
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
 	drone->speed = {100.0f,100.0f,5.0f };
+	drone->efxIndex = DroneStartSFX;
 	enemies["drone0"] = drone;
 
 	Enemy* drone1 = new Drone(0,enemiesTexture);
@@ -109,6 +119,7 @@ bool ModuleEnemy::Start()
 	drone1->anim.frames.push_back({ 84,7,80,34 });
 	drone1->anim.frames.push_back({ 168,7,80,34 });
 	drone1->speed = { -100.0f,100.0f,5.0f };
+	drone1->efxIndex = DroneStartSFX;
 	enemies["drone1"] = drone1;
 
 	Enemy* drone2 = new Drone(1, enemiesTexture);
@@ -116,6 +127,7 @@ bool ModuleEnemy::Start()
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
 	drone2->speed = { 100.0f,0.0f,5.0f };
+	drone2->efxIndex = DroneStartSFX;
 	enemies["drone2"] = drone2;
 
 	Enemy* drone3 = new Drone(1, enemiesTexture);
@@ -123,6 +135,7 @@ bool ModuleEnemy::Start()
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
 	drone3->speed = { -100.0f,0.0f,5.0f };
+	drone3->efxIndex = DroneStartSFX;
 	enemies["drone3"] = drone3;
 
 	Enemy* drone4 = new Drone(2, enemiesTexture);
@@ -130,6 +143,7 @@ bool ModuleEnemy::Start()
 	drone4->anim.frames.push_back({ 84,7,80,34 });
 	drone4->anim.frames.push_back({ 168,7,80,34 });
 	drone4->speed = { 50.0f,120.0f,-5.0f };
+	drone4->efxIndex = DroneStartSFX;
 	enemies["drone4"] = drone4;
 
 	Enemy* drone5 = new Drone(2, enemiesTexture);
@@ -137,6 +151,7 @@ bool ModuleEnemy::Start()
 	drone5->anim.frames.push_back({ 84,7,80,34 });
 	drone5->anim.frames.push_back({ 168,7,80,34 });
 	drone5->speed = { -50.0f,120.0f,-5.0f };
+	drone5->efxIndex = DroneStartSFX;
 	enemies["drone5"] = drone5;
 
 	Enemy* drone6 = new Drone(3, enemiesTexture);
@@ -144,6 +159,7 @@ bool ModuleEnemy::Start()
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
 	drone6->speed = { 100.0f,100.0f,5.0f };
+	drone6->efxIndex = DroneStartSFX;
 	enemies["drone6"] = drone6;
 
 	Enemy* drone7 = new Drone(3, enemiesTexture);
@@ -151,32 +167,38 @@ bool ModuleEnemy::Start()
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
 	drone7->speed = { -100.0f,100.0f,5.0f };
+	drone7->efxIndex = DroneStartSFX;
 	enemies["drone7"] = drone7;
 
 	//Fly needs x=150 or x=0 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({8,144,78,32});
 	fly->speed = {50.0f, -140.0f, -5.0f};
+	fly->efxIndex = FlyStartSFX;
 	enemies["fly1"] = fly;
 
 	Enemy* fly2 = new Fly(0, enemiesTexture);
 	fly2->anim.frames.push_back({ 8,144,78,32 });
 	fly2->speed = { 0.0f, -140.0f, -5.0f };
+	fly2->efxIndex = FlyStartSFX;
 	enemies["fly2"] = fly2;
 
 	Enemy* fly3 = new Fly(0, enemiesTexture);
 	fly3->anim.frames.push_back({ 8,144,78,32 });
 	fly3->speed = { -50.0f, -140.0f, -5.0f };
+	fly3->efxIndex = FlyStartSFX;
 	enemies["fly3"] = fly3;
 
 	Enemy* fly4 = new Fly(1, enemiesTexture);
 	fly4->anim.frames.push_back({ 8,144,78,32 });
 	fly4->speed = { 70.0f, -120.0f, -5.0f };
+	fly4->efxIndex = FlyStartSFX;
 	enemies["fly4"] = fly4;
 
 	Enemy* fly5 = new Fly(1, enemiesTexture);
 	fly5->anim.frames.push_back({ 8,144,78,32 });
 	fly5->speed = { -70.0f, -120.0f, -5.0f };
+	fly5->efxIndex = FlyStartSFX;
 	enemies["fly5"] = fly5;
 
 
@@ -404,13 +426,21 @@ update_status ModuleEnemy::Update()
 				resizeStruct resizeInfo = { (*it2)->screenPoint.w,(*it2)->screenPoint.h };
 				App->renderer->AddToBlitBuffer((*it2)->texture,(*it2)->screenPoint.x,(*it2)->screenPoint.y,(*it2)->position.z,&((*it2)->anim.GetCurrentFrame()),&resizeInfo);
 			}
-		}
-		else if (p->screenPoint.h ==0 && p->screenPoint.w ==0) {
-			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()),nullptr);
+
 		}
 		else {
-			resizeStruct resizeInfo = { p->screenPoint.w,p->screenPoint.h };
-			App->renderer->AddToBlitBuffer(p->texture, (float)p->screenPoint.x, (float)p->screenPoint.y, p->position.z, &(p->anim.GetCurrentFrame()), &resizeInfo);
+			if (p->screenPoint.h == 0 && p->screenPoint.w == 0) {
+				App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()), nullptr);
+			}
+			else {
+				resizeStruct resizeInfo = { p->screenPoint.w,p->screenPoint.h };
+				App->renderer->AddToBlitBuffer(p->texture, (float)p->screenPoint.x, (float)p->screenPoint.y, p->position.z, &(p->anim.GetCurrentFrame()), &resizeInfo);
+			}
+
+			if (p->firstSound && p->efxIndex != 0) {
+				App->audio->PlayFx(p->efxIndex);
+				p->firstSound = false;
+			}
 		}
 	}
 	return UPDATE_CONTINUE;
