@@ -14,7 +14,8 @@
 #include "ModuleTime.h"
 #include "ModuleUI.h"
 
-#include "ModuleSceneIntro.h"
+#include "ModuleSceneSega.h"
+#include "ModuleMenu.h"
 #include "ModuleScene.h"
 #include "ModulePlayer.h"
 
@@ -34,7 +35,8 @@ Application::Application()
 	modules.push_back(fonts = new ModuleFont());
 
 	// Game Modules
-	modules.push_back(scene_intro = new ModuleSceneIntro(false));
+	modules.push_back(sega = new ModuleSceneSega(false));
+	modules.push_back(menu = new ModuleMenu(false));
 	modules.push_back(player = new ModulePlayer(false));
 	modules.push_back(scene = new ModuleScene(false));
 
@@ -73,7 +75,7 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-	fade->FadeToBlack(scene_intro, nullptr, 3.0f);
+	fade->FadeToBlack(sega, nullptr, 3.0f);
 
 	return ret;
 }

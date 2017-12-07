@@ -22,7 +22,8 @@ class ModuleUI;
 
 // Game modules ---
 class ModulePlayer;
-class ModuleSceneIntro;
+class ModuleSceneSega;
+class ModuleMenu;
 class ModuleScene;
 
 class Application
@@ -54,7 +55,8 @@ public:
 
 	// Game modules ---
 	ModulePlayer* player;
-	ModuleSceneIntro* scene_intro;
+	ModuleSceneSega* sega;
+	ModuleMenu* menu;
 	ModuleScene* scene;
 
 	bool playing;
