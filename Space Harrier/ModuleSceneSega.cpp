@@ -6,8 +6,8 @@
 #include "ModuleFadeToBlack.h"
 #include "SDL\include\SDL.h"
 
-const float ModuleSceneSega::OFFSET = 1;
-const float ModuleSceneSega::INTERVAL = 0.05;
+const float ModuleSceneSega::OFFSET = 2;
+const float ModuleSceneSega::INTERVAL = 0.025;
 
 ModuleSceneSega::ModuleSceneSega(bool active):Module(active) {
 }
@@ -26,8 +26,8 @@ bool ModuleSceneSega::Start() {
 	image = { totalRect.w/2.0f, totalRect.h/2.0f, 0, 0};
 	timer = 0.0f;
 
-	if (fx == 0)
-		fx = App->audio->LoadFx("assets/music/SFX/Coin.wav");
+	fx = App->audio->LoadFx("assets/music/SFX/Sega.wav");
+	App->audio->PlayFx(fx);
 
 	return true;
 }
@@ -47,6 +47,8 @@ update_status ModuleSceneSega::Update() {
 	SDL_Rect rect = { image.x,image.y,image.w,image.h };
 	App->renderer->Blit(background, 0, 0, &rect, &size);
 	
+
+	timer += App->time->GetDeltaTime();
 	if (image.w < SCREEN_WIDTH && image.h < SCREEN_HEIGHT) {
 		if (timer > INTERVAL) {
 			float ratio = (float)totalRect.w / totalRect.h;
@@ -58,7 +60,6 @@ update_status ModuleSceneSega::Update() {
 			timer = 0;
 		}
 	}
-	timer += App->time->GetDeltaTime();
 
 	if (timer > INTERVAL*5) {
 		LOG("entra");

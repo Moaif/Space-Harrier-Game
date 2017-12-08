@@ -211,6 +211,51 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 	return ret;
 }
 
+bool ModuleRender::DirectPrint(const Font* font, float x, float y, string mesage, float fontSize) {
+	bool ret = true;
+	int xSize = font->GetXSize();
+	int ySize = font->GetYSize();
+
+	SDL_Surface* tempSurface = font->GetImage();
+	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
+	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
+
+	SDL_Rect srcrect;
+	srcrect.h = ySize;
+	srcrect.w = xSize;
+	SDL_Rect dstrect;
+	dstrect.h = ySize;
+	dstrect.w = xSize;
+	if (tempSurface == nullptr)
+	{
+		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
+		ret = false;
+	}
+	for (unsigned int i = 0; i < mesage.size(); ++i) {
+		int offset = font->GetCharOffset(mesage[i]);
+		srcrect.x = offset*xSize;
+		srcrect.y = 0;
+		dstrect.x = i*xSize;
+		dstrect.y = 0;
+		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
+	}
+	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(renderer, surfaceFinal);
+	if (tempTexture == nullptr) {
+		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
+		ret = false;
+	}
+
+	SDL_Rect rect;
+	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
+	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
+
+	Blit(tempTexture, x, y, nullptr, &size);
+	SDL_FreeSurface(surfaceFinal);
+
+	return ret;
+}
+
 bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	bool ret = true;

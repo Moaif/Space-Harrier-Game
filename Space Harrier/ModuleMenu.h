@@ -17,9 +17,19 @@ public:
 	bool CleanUp();
 
 private:
-	SDL_Texture* background = nullptr;
+	const Font* red;
+	int redFontLineReference;
+	float textTimer;
+	SDL_Texture* content = nullptr;
 	uint fx = 0;
+	SDL_Rect background;
 	Animation robot;
+	Animation eye;
+	Animation title;
+	int titleMult;
+	SDL_Rect finalTitle;
+	Animation man;
+	static const float TEXT_INTERVAL;
 
 };
 
