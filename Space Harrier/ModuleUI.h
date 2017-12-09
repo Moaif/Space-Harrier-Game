@@ -22,6 +22,8 @@ public:
 	void Congratulations();
 	void TheEnd();
 
+	void PauseMenu();
+
 	void SetCountingPoints(bool value);
 
 private:

@@ -98,7 +98,8 @@ update_status Application::Update()
 
 	//Game pause
 	if (input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && playing) {
-		//Hacer copia del renderer actual
+		App->ui->PauseMenu();
+		App->renderer->PostUpdate();
 		while (true)
 		{
 			time->PreUpdate();//In order to not stack aditional time on deltaTime

@@ -160,6 +160,10 @@ void ModuleUI::TheEnd() {
 	endSize = 0;
 }
 
+void ModuleUI::PauseMenu() {
+	App->renderer->DirectPrint(red,0,SCREEN_HEIGHT/2,"PAUSE",2);
+}
+
 void ModuleUI::SetCountingPoints(bool value) {
 	countingPoints = value;
 }

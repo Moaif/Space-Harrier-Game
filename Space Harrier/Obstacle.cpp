@@ -38,7 +38,7 @@ void Obstacle::Update() {
 	screenPoint = {(int) (position.x*scale),(int)(yScreen),w,h };
 
 	collider->rect = screenPoint;
-	collider->z = position.z;
+	collider->z = position.z;//TODO:verify collision with obstacles when pausing
 	collider->speed = speed.z;
 
 	//Verify that this object wont return and made more than 1 loop from horizon to screen
