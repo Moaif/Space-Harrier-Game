@@ -17,6 +17,9 @@ const float ModuleUI::BOT_ELEMENTS_Y_POS=1;
 const float ModuleUI::TIME_WITH_TITLE = 5.0f;
 const int ModuleUI::POINTS_PER_SECOND = 100;
 const float ModuleUI::POINTS_ACTUALIZATION_PER_SECOND = 10;
+const float ModuleUI::CONGRATS_TIME = 5;
+const float ModuleUI::END_TIME = 8;
+const float ModuleUI::END_MAX_SIZE = 5;
 
 ModuleUI::ModuleUI(bool active):Module(active) {
 	topScore = {1,0,38,15};
@@ -24,7 +27,8 @@ ModuleUI::ModuleUI(bool active):Module(active) {
 	liveImg = {105,2,6,10};
 	points = 0;
 	topPoints = 100000;
-	pointsTimer = 0;
+	pointsTimer = 0.0f;
+	endGameTimer = 0.0f;
 }
 
 ModuleUI::~ModuleUI() {
@@ -57,6 +61,34 @@ bool ModuleUI::CleanUp() {
 }
 
 update_status ModuleUI::Update() {
+	if (congrat) {
+		if (endGameTimer <= CONGRATS_TIME) {
+			float size = 1.5f;
+			App->renderer->Print(blue, 0, (SCREEN_HEIGHT/2) + (blue->GetYSize()*size), "CONGRATULATIONS", size);
+			App->renderer->Print(blue, 0, (SCREEN_HEIGHT / 2) - (blue->GetYSize()*size), "YOU WIN", size);
+		}
+		else
+		{
+			congrat = false;
+			endGameTimer = 0.0f;
+		}
+		endGameTimer += App->time->GetDeltaTime();
+	}
+
+	if (end) {
+		if (endGameTimer <= END_TIME) {
+			App->renderer->Print(yellow,0,(SCREEN_HEIGHT/2)+(yellow->GetYSize()*(endSize-1)),"THE",(endSize-1));
+			App->renderer->Print(yellow, 0, (SCREEN_HEIGHT / 2) - (yellow->GetYSize()*endSize), "END", endSize);
+			endSize =endGameTimer * END_MAX_SIZE / END_TIME;
+		}
+		else
+		{
+			end = false;
+			endGameTimer = 0.0f;
+		}
+		endGameTimer += App->time->GetDeltaTime();
+	}
+
 	//Start Stage Title
 	string stageTemp = to_string(App->scene->currentStage);
 	if (startTitleTimer < TIME_WITH_TITLE) {
@@ -99,11 +131,13 @@ update_status ModuleUI::Update() {
 	}
 
 	//Increase points by time
-	while (pointsTimer >= 1/POINTS_ACTUALIZATION_PER_SECOND) {
-		points += POINTS_PER_SECOND/POINTS_ACTUALIZATION_PER_SECOND;
-		pointsTimer -= 1/POINTS_ACTUALIZATION_PER_SECOND;
+	if (countingPoints) {
+		while (pointsTimer >= 1 / POINTS_ACTUALIZATION_PER_SECOND) {
+			points += POINTS_PER_SECOND / POINTS_ACTUALIZATION_PER_SECOND;
+			pointsTimer -= 1 / POINTS_ACTUALIZATION_PER_SECOND;
+		}
+		pointsTimer += App->time->GetDeltaTime();
 	}
-	pointsTimer += App->time->GetDeltaTime();
 
 	return UPDATE_CONTINUE;
 }
@@ -114,4 +148,18 @@ void ModuleUI::AddPoints(int value) {
 
 int ModuleUI::GetPoints() {
 	return points;
+}
+
+void ModuleUI::Congratulations() {
+	congrat = true;
+	endGameTimer = 0.0f;
+}
+void ModuleUI::TheEnd() {
+	end = true;
+	endGameTimer = 0.0f;
+	endSize = 0;
+}
+
+void ModuleUI::SetCountingPoints(bool value) {
+	countingPoints = value;
 }

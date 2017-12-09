@@ -171,6 +171,10 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
 
+	if (fontSize < 0) {
+		fontSize = 0;
+	}
+
 	SDL_Surface* tempSurface = font->GetImage();
 	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
 	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
@@ -215,6 +219,10 @@ bool ModuleRender::DirectPrint(const Font* font, float x, float y, string mesage
 	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
+
+	if (fontSize < 0) {
+		fontSize = 0;
+	}
 
 	SDL_Surface* tempSurface = font->GetImage();
 	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);

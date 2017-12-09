@@ -19,8 +19,14 @@ public:
 	void AddPoints(int value);
 	int GetPoints();
 
+	void Congratulations();
+	void TheEnd();
+
+	void SetCountingPoints(bool value);
+
 private:
 	long points;
+	bool countingPoints = true;
 	long topPoints;
 	float startTitleTimer;
 	float pointsTimer;
@@ -45,6 +51,14 @@ private:
 	static const float TIME_WITH_TITLE;
 	static const int POINTS_PER_SECOND;
 	static const float POINTS_ACTUALIZATION_PER_SECOND;
+	static const float CONGRATS_TIME;
+	static const float END_TIME;
+	static const float END_MAX_SIZE;
+	//End game
+	bool congrat = false;
+	bool end = false;
+	float endSize;
+	float endGameTimer;
 };
 
 #endif // !_MODULEUI_H_

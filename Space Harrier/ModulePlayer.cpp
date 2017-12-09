@@ -12,6 +12,7 @@
 #include "ModuleFloor.h"
 #include "ModuleShadow.h"
 #include "ModuleAudio.h"
+#include "ModuleUI.h"
 
 const float ModulePlayer::MIN_X_SPEED = -300.0f;
 const float ModulePlayer::MAX_X_SPEED = 300.0f;
@@ -102,6 +103,14 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	//If ended the game
+	if (win) {
+		if (position.z < MAX_Z) {
+			AnimWin();
+		}
+		return UPDATE_CONTINUE;
+	}
+	//Normal game
 	VerifyHorizonY();
 	if (hit) 
 	{
@@ -186,12 +195,12 @@ update_status ModulePlayer::Update()
 
 
 	// Draw everything --------------------------------------
-	if (destroyed == false) {
-		collider->rect.x =(int) position.x;
-		collider->rect.y =(int) position.y;
-		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
-		App->shadows->DrawShadow(position.x,0,1);
-	}
+
+	collider->rect.x =(int) position.x;
+	collider->rect.y =(int) position.y;
+	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
+	App->shadows->DrawShadow(position.x,0,1);
+	
 
 	return UPDATE_CONTINUE;
 }
@@ -325,5 +334,56 @@ void ModulePlayer::Death() {
 		App->time->SetTimeScale(1.0f);
 		recoverTimer = 0;
 		hit = false;
+	}
+}
+
+void ModulePlayer::Win() {
+	win = true;
+	initialPosition = position;
+	currentLerpPercentaje = 0.0f;
+}
+
+void ModulePlayer::AnimWin() {
+	if (centered) {
+		position.z += 5.0f*App->time->GetDeltaTime();
+
+		float screenY = App->floor->GetFloorPositionFromZ(position.z);
+
+		float scale = 1 - (screenY / App->floor->horizon.y);
+
+		App->shadows->DrawShadow(position.x, screenY, scale);
+
+		screenY += position.y*scale;
+
+		if (position.z >= MAX_Z) {
+			App->ui->TheEnd();
+		}
+
+		resizeStruct resizeInfo = { current_animation->GetCurrentFrame().w *scale,current_animation->GetCurrentFrame().h *scale };
+		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(current_animation->GetCurrentFrame()), &resizeInfo);
+	}
+	else
+	{
+		currentLerpPercentaje += 0.05f;
+		fPoint zero = { 0,0,0 };
+		fPoint temp = zero - initialPosition;
+		position.x = initialPosition.x + (temp.x*currentLerpPercentaje);
+		position.y = initialPosition.y + (temp.y*currentLerpPercentaje);
+		if (position.y > 0) {
+			VerifyFlyAnimation();
+		}
+		else
+		{
+			current_animation = &run;
+			VerifyFloorSpeed();
+		}
+
+		if (currentLerpPercentaje >= 1.0f) {
+			centered = true;
+			position.z = 0;
+			current_animation = &run;
+		}
+
+		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
 	}
 }

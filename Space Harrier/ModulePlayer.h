@@ -22,6 +22,7 @@ public:
 	void SetLives(int amount);
 	int GetLives();
 	fPoint GetRelativeWorldPosition();
+	void Win();
 
 private:
 	void VerifyFlyAnimation();
@@ -30,6 +31,7 @@ private:
 	void VerifyHorizonY();
 	void CalculateSpeed();
 	void Death();
+	void AnimWin();
 
 public:
 
@@ -62,6 +64,11 @@ private:
 	unsigned int ouch = 0;
 	unsigned int aaargh = 0;
 	unsigned int getReady = 0;
+	//Win anim variables
+	bool win = false;
+	bool centered=false;
+	fPoint initialPosition;
+	float currentLerpPercentaje;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
 	static const float HORIZON_Y_SPEED;

@@ -25,7 +25,7 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 	title.frames.push_back({ 710,20,180,70 });
 	title.frames.push_back({ 1100,10,180,100 });
 
-	finalTitle = {1420,10,170,100};
+	finalTitle = { 1100,10,180,100 };
 
 	titleMult = 4;
 

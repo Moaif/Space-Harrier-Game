@@ -144,3 +144,9 @@ bool ModuleScene::LoadJson(string path) {
 	}
 	return true;
 }
+
+void ModuleScene::Win(){
+	App->player->Win();
+	App->ui->Congratulations();
+	App->ui->SetCountingPoints(false);
+}

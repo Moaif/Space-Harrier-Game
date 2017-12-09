@@ -1,6 +1,7 @@
 #include "Dragon3.h"
 #include "BodyPart.h"
 #include "ModuleEnemy.h"
+#include "ModuleScene.h"
 
 const float Dragon3::ARRIVALTIME = 1.0f;
 const float Dragon3::TURNAMPLITUDE = 4.0f;
@@ -33,6 +34,7 @@ Dragon3::~Dragon3() {
 
 Enemy* Dragon3::Copy(const float& x, const float& y, const float& z, Enemy* father)const {
 	Enemy* temp = new Dragon3(dragonMode,y,speed,texture, father);
+	App->scene->numEnemies++;
 	temp->collider = nullptr;
 	temp->speed = speed;
 	temp->hits = hits;
@@ -108,6 +110,9 @@ void Dragon3::OnCollision(Collider* other) {
 			App->particles->AddParticle(App->particles->explosion, childs[i]->position.x, childs[i]->position.y, childs[i]->position.z);
 		}
 		to_delete = true;
+		if (--App->scene->numEnemies == 0) {
+			App->scene->Win();
+		}
 	}
 }
 

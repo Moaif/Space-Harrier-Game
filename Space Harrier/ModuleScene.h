@@ -33,11 +33,14 @@ public:
 	update_status Update();
 	bool CleanUp();
 	bool ModuleScene::LoadJson(string path);
+	void Win();
 
 public:
 	//For UI module
 	string  stageName;
 	int currentStage;
+	//For multiple enemy Boss
+	int numEnemies = 0;
 private:
 	string backgroundPath;
 	string stagePath;
