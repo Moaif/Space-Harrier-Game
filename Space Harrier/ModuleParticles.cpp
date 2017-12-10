@@ -51,21 +51,21 @@ bool ModuleParticles::Start()
 	fire->anim.frames.push_back({ 110,0,50,48 });
 	fire->anim.speed = 5.0f;
 	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
-	fire->speed = 80.0f;
+	fire->speed = 100.0f;
 	prototipeClearList.push_back(fire);
 
 	enemyLaser = new EnemyShoot(enemLaser);
-	enemyLaser->anim.frames.push_back({ 10,10,68,68});
-	enemyLaser->anim.frames.push_back({ 90,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 170,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 250,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 10,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 90,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 170,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 250,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 8,8,59,59});
+	enemyLaser->anim.frames.push_back({ 76,8,59,59 });
+	enemyLaser->anim.frames.push_back({ 144,8,59,59 });
+	enemyLaser->anim.frames.push_back({ 213,10,59,59 });
+	enemyLaser->anim.frames.push_back({ 8,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 76,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 144,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 213,76,59,59 });
 	enemyLaser->anim.speed = 5.0f;
 	enemyLaser->efxIndex = App->audio->LoadFx("assets/music/SFX/LaserShoot.wav");
-	enemyLaser->speed = 80.0f;
+	enemyLaser->speed = 100.0f;
 	prototipeClearList.push_back(enemyLaser);
 
 	explosion = new Explosion(200.0f,exp);

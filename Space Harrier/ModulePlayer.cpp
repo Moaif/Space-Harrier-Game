@@ -14,14 +14,16 @@
 #include "ModuleAudio.h"
 #include "ModuleUI.h"
 
-const float ModulePlayer::MIN_X_SPEED = -300.0f;
-const float ModulePlayer::MAX_X_SPEED = 300.0f;
+const float ModulePlayer::MIN_X_SPEED = -150.0f;
+const float ModulePlayer::MAX_X_SPEED = 150.0f;
 const float ModulePlayer::HORIZON_Y_SPEED = 0.01f;
-const float ModulePlayer::MOVEMENT_SPEED = 300.0f;
+const float ModulePlayer::MOVEMENT_SPEED = 150.0f;
 const float ModulePlayer::FALL_SPEED = 2.0f;
 const float ModulePlayer::FALL_BOUNCE = 15.0f;
 const float ModulePlayer::RECOVER_TIME = 2.0f;
 const float ModulePlayer::SCREEN_SEGMENT = 0.4f;//5 screen zones
+const float ModulePlayer::COLLIDER_H = 30;
+const float ModulePlayer::COLLIDER_W = 10;
 
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
@@ -85,7 +87,8 @@ bool ModulePlayer::Start()
 	position.y = 0;
 	position.z = 0;
 	//Collider smaller than sprites, in order to make it easier
-	collider = App->collision->AddCollider({ (int)position.x,(int)position.y,15,40 },position.z,1, PLAYER, this);
+	int y = (int)(position.y + (current_animation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
+	collider = App->collision->AddCollider({ (int)position.x,y,(int)COLLIDER_W,(int)COLLIDER_H },position.z,1, PLAYER, this);
 
 	return true;
 }
@@ -197,7 +200,7 @@ update_status ModulePlayer::Update()
 	// Draw everything --------------------------------------
 
 	collider->rect.x =(int) position.x;
-	collider->rect.y =(int) position.y;
+	collider->rect.y =(int)(position.y + (current_animation->GetCurrentFrame().h / 2) - (COLLIDER_H / 2));
 	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
 	App->shadows->DrawShadow(position.x,0,1);
 	

@@ -77,6 +77,8 @@ private:
 	static const float FALL_SPEED;
 	static const float FALL_BOUNCE;
 	static const float RECOVER_TIME;
+	static const float COLLIDER_W;
+	static const float COLLIDER_H;
 };
 
 #endif

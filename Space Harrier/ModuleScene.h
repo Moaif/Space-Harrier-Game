@@ -52,7 +52,6 @@ private:
 	static const float INTERVAL_DELAY;
 	float timeElapsed;
 	list<DelayList> elements;
-
 };
 
 #endif // __MODULESCENE_H__

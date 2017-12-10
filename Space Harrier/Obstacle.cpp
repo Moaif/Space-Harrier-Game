@@ -21,7 +21,9 @@ void Obstacle::Update() {
 	yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
 
 	position.z = yScreen*CLIPDISTANCE/App->floor->actualCameraY;
-	speed.z = (lastFrameZ - position.z)/App->time->GetDeltaTime();
+	if (App->time->GetDeltaTime() > 0.0f) {//If not checked, after a pause, it may be 0, and speed would turn into infinite/nan
+		speed.z = (lastFrameZ - position.z) / App->time->GetDeltaTime();
+	}
 	lastFrameZ = position.z;
 
 	float xOffset = App->player->speedStage*App->time->GetDeltaTime();
@@ -38,7 +40,7 @@ void Obstacle::Update() {
 	screenPoint = {(int) (position.x*scale),(int)(yScreen),w,h };
 
 	collider->rect = screenPoint;
-	collider->z = position.z;//TODO:verify collision with obstacles when pausing
+	collider->z = position.z;
 	collider->speed = speed.z;
 
 	//Verify that this object wont return and made more than 1 loop from horizon to screen

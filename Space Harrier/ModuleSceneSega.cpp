@@ -62,7 +62,6 @@ update_status ModuleSceneSega::Update() {
 	}
 
 	if (timer > INTERVAL*5) {
-		LOG("entra");
 		if (App->fade->isFading() == false) {
 			App->fade->FadeToBlack((Module*)App->menu, this);
 		}

@@ -44,6 +44,7 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 	eye.frames.push_back({ 347,140,34,18 });
 	eye.frames.push_back({ 305,140,34,18 });
 	eye.frames.push_back({ 263,140,34,18 });
+	eye.speed = 3.0f;
 
 	//Robot
 	robot.frames.push_back({ 8,176,113,137 });
@@ -72,6 +73,7 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 	robot.frames.push_back({ 1197,325,113,137 });
 	robot.frames.push_back({ 1315,325,113,137 });
 	robot.frames.push_back({ 1434,325,113,137 });
+	robot.speed = 5.0f;
 
 	//Man
 	man.frames.push_back({10,480,50,30});

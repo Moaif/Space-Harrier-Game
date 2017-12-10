@@ -46,7 +46,7 @@ bool ModuleScene::Start()
 	App->ui->Enable();
 	App->playing = true;
 
-	App->audio->PlayMusic("assets/music/Theme.wav", 1.0f);
+	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
 	
 
 
@@ -80,8 +80,8 @@ update_status ModuleScene::Update()
 
 			//Only BOSS to be instantiated
 			if (elements.size() == 1) {
-				string path = "assets/music/Stage" + to_string(currentStage) + "Boss.wav";
-				App->audio->PlayMusic(path.c_str(), 1.0f);
+				string path = "assets/music/Stage" + to_string(currentStage) + "Boss.ogg";
+				App->audio->PlayMusic(path.c_str(),0);
 			}
 
 			for (list<EnemyInstantiate>::iterator it = tempList.list.begin(); it != tempList.list.end(); ++it) {
@@ -149,4 +149,5 @@ void ModuleScene::Win(){
 	App->player->Win();
 	App->ui->Congratulations();
 	App->ui->SetCountingPoints(false);
+	App->audio->PlayMusic("assets/music/Win.ogg",0);
 }

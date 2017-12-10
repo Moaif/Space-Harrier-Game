@@ -6,7 +6,7 @@
 #include "SDL/include/SDL.h"
 
 const float ModuleFloor::SEGMENT_REDUCTION = 0.60f;
-const float ModuleFloor::ALPHA_LINES_SPEED = 3.0f;
+const float ModuleFloor::ALPHA_LINES_SPEED = 4.0f;
 const float ModuleFloor::HORIZON_Y_MAX = 100;
 const float ModuleFloor::HORIZON_Y_MIN = 20;
 const float ModuleFloor::STAGE_SPEED_MAX = 60;
