@@ -128,3 +128,12 @@ bool Application::CleanUp()
 	return ret;
 }
 
+bool Application::Restart()
+{
+	bool ret = true;
+	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
+			ret = (*it)->Restart();
+
+	return ret;
+}
+

@@ -52,15 +52,19 @@ bool ModuleUI::Start() {
 	green = App->fonts->GetFont("Green", __FILE__,greenFontLineReference=__LINE__);
 	yellow = App->fonts->GetFont("Yellow", __FILE__,yellowFontLineReference=__LINE__);
 
-	topPoints = GetTopScore();
-
-	points = 0;
 	startTitleTimer = 0.0f;
 	pointsTimer = 0.0f;
+
+	return true;
+}
+
+bool ModuleUI::Restart() {
+	topPoints = GetTopScore();
+	points = 0;
+	actualPlayerName = "___";
 	endGameTimer = 0.0f;
 	scoreB = false;
 	playerPosInScore = -1;
-	actualPlayerName = "___";
 	actualLetterSelected = 65;
 	actualLetterInName = 0;
 

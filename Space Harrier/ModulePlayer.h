@@ -15,6 +15,7 @@ public:
 	~ModulePlayer();
 
 	bool Start();
+	bool Restart();
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(Collider* other)override;
@@ -69,6 +70,7 @@ private:
 	bool centered=false;
 	fPoint initialPosition;
 	float currentLerpPercentaje;
+	static const int INITIAL_LIVES;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
 	static const float HORIZON_Y_SPEED;

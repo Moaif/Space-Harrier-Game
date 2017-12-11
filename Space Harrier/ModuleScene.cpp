@@ -21,7 +21,6 @@ const float ModuleScene::INTERVAL_DELAY = 0.1f;
 
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
-	currentStage = 2;//TODO: if introduced new stages, change
 }
 
 ModuleScene::~ModuleScene()
@@ -51,6 +50,11 @@ bool ModuleScene::Start()
 	
 
 
+	return true;
+}
+
+bool ModuleScene::Restart() {
+	currentStage = 2;//TODO: if introduced new stages, change
 	return true;
 }
 

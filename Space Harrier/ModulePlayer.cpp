@@ -14,6 +14,7 @@
 #include "ModuleAudio.h"
 #include "ModuleUI.h"
 
+const int ModulePlayer::INITIAL_LIVES = 3;
 const float ModulePlayer::MIN_X_SPEED = -150.0f;
 const float ModulePlayer::MAX_X_SPEED = 150.0f;
 const float ModulePlayer::HORIZON_Y_SPEED = 0.01f;
@@ -56,10 +57,6 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	fall.frames.push_back({5,117,24,40});
 	fall.frames.push_back({ 45,119,22,35 });
 	fall.frames.push_back({ 82,122,26,30 });
-
-	current_animation = &run;
-
-	actualHorizonPercentage=0.0f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -82,13 +79,23 @@ bool ModulePlayer::Start()
 		getReady=App->audio->LoadFx("assets/music/SFX/GetReady.wav");
 	}
 
-	destroyed = false;
 	position.x = 0;
 	position.y = 0;
 	position.z = 0;
 	//Collider smaller than sprites, in order to make it easier
 	int y = (int)(position.y + (current_animation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
 	collider = App->collision->AddCollider({ (int)position.x,y,(int)COLLIDER_W,(int)COLLIDER_H },position.z,1, PLAYER, this);
+
+	return true;
+}
+
+bool ModulePlayer::Restart() {
+
+	lives = INITIAL_LIVES;
+	current_animation = &run;
+	actualHorizonPercentage = 0.0f;
+	win = false;
+	destroyed = false;
 
 	return true;
 }
@@ -108,7 +115,9 @@ update_status ModulePlayer::Update()
 {
 	//If ended the game
 	if (win) {
-		AnimWin();
+		if (position.z < MAX_Z) {
+			AnimWin();
+		}
 		return UPDATE_CONTINUE;
 	}
 	//Normal game
@@ -364,7 +373,6 @@ void ModulePlayer::AnimWin() {
 
 		if (position.z >= MAX_Z) {
 			App->ui->TheEnd();
-			win = false;
 		}
 
 		resizeStruct resizeInfo = { current_animation->GetCurrentFrame().w *scale,current_animation->GetCurrentFrame().h *scale };

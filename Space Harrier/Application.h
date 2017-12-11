@@ -37,6 +37,8 @@ public:
 	update_status Update();
 	bool CleanUp();
 
+	bool Restart();
+
 public:
 	ModuleRender* renderer;
 	ModuleWindow* window;

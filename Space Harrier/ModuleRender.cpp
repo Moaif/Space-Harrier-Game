@@ -211,7 +211,7 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 
 	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
 	SDL_FreeSurface(surfaceFinal);
-
+	//SDL_DestroyTexture(tempTexture); TODO: hacer esta limpieza, pero mantener de alguna manera los mensajes que quiero
 	return ret;
 }
 

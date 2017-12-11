@@ -92,6 +92,9 @@ bool ModuleMenu::Start()
 	
 	content = App->textures->Load("assets/Menu.png");
 	red = App->fonts->GetFont("Red",__FILE__,redFontLineReference = __LINE__);
+
+	App->Restart();//We restart all modules to start a new game
+
 	textTimer = 0.0f;
 
 	if(fx == 0)
@@ -153,7 +156,6 @@ update_status ModuleMenu::Update()
 	if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		if (App->fade->isFading() == false) {
-			App->player->SetLives(1);
 			App->fade->FadeToBlack((Module*)App->scene, this);
 			App->audio->PlayFx(fx);
 		}

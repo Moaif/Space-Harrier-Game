@@ -19,6 +19,7 @@ public:
 	~ModuleUI();
 
 	bool Start();
+	bool Restart();
 	update_status Update();
 	bool CleanUp();
 

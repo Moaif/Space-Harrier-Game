@@ -30,6 +30,7 @@ public:
 	~ModuleScene();
 
 	bool Start();
+	bool Restart();
 	update_status Update();
 	bool CleanUp();
 	bool ModuleScene::LoadJson(string path);
