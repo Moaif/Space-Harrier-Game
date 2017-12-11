@@ -3,6 +3,8 @@
 #include "Application.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleRender.h"
+#include "ModuleAudio.h"
+#include "ModuleTime.h"
 #include "SDL/include/SDL.h"
 
 ModuleFadeToBlack::ModuleFadeToBlack(bool start_enabled) :  Module(start_enabled)
@@ -46,9 +48,11 @@ update_status ModuleFadeToBlack::Update()
 		{
 			if(fading_in == true)
 			{	
+				App->audio->PauseMusic();
 				if(module_off != nullptr) 
 					module_off->Disable();
 				module_on->Enable();
+				App->time->SetTimeScale(1);
 
 				total_time += total_time;
 				start_time = SDL_GetTicks();

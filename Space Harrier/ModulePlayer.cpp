@@ -108,9 +108,7 @@ update_status ModulePlayer::Update()
 {
 	//If ended the game
 	if (win) {
-		if (position.z < MAX_Z) {
-			AnimWin();
-		}
+		AnimWin();
 		return UPDATE_CONTINUE;
 	}
 	//Normal game
@@ -221,7 +219,6 @@ void ModulePlayer::OnCollision(Collider* other) {
 		deathStartingPosY = position.y;
 		collider->active = false;
 		if (lives <= 0) {
-			//TODO: Call to scoreboard
 			collider->to_delete = true;
 			destroyed = true;
 		}
@@ -330,11 +327,17 @@ void ModulePlayer::Death() {
 		position.y -= FALL_SPEED;
 	}
 	if (current_animation->Finished()) {
+		if (destroyed == true) {
+			App->scene->End();
+		}
+		else
+		{
+			App->audio->PlayFx(getReady);
+			App->time->SetTimeScale(1.0f);
+		}
 		death.Reset();
-		App->audio->PlayFx(getReady);
 		current_animation = &run;
 		deathBounced = false;
-		App->time->SetTimeScale(1.0f);
 		recoverTimer = 0;
 		hit = false;
 	}
@@ -342,6 +345,7 @@ void ModulePlayer::Death() {
 
 void ModulePlayer::Win() {
 	win = true;
+	collider->active = false;
 	initialPosition = position;
 	currentLerpPercentaje = 0.0f;
 }
@@ -360,6 +364,7 @@ void ModulePlayer::AnimWin() {
 
 		if (position.z >= MAX_Z) {
 			App->ui->TheEnd();
+			win = false;
 		}
 
 		resizeStruct resizeInfo = { current_animation->GetCurrentFrame().w *scale,current_animation->GetCurrentFrame().h *scale };

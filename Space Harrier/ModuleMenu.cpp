@@ -153,7 +153,7 @@ update_status ModuleMenu::Update()
 	if(App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		if (App->fade->isFading() == false) {
-			App->player->SetLives(3);
+			App->player->SetLives(1);
 			App->fade->FadeToBlack((Module*)App->scene, this);
 			App->audio->PlayFx(fx);
 		}

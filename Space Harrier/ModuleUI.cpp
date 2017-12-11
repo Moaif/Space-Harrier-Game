@@ -5,8 +5,16 @@
 #include "ModuleRender.h"
 #include "ModulePlayer.h"
 #include "ModuleScene.h"
+#include "ModuleInput.h"
+#include "ModuleFadeToBlack.h"
+#include "ModuleMenu.h"
 #include <string>
 #include "Font.h"
+#include "json.hpp"
+#include <fstream>
+
+using json = nlohmann::json;
+
 
 const float ModuleUI::SEPARATION_OFFSET = 10.0f;
 const float ModuleUI::TOPSCORE_X_POS = -120.0f;
@@ -20,15 +28,16 @@ const float ModuleUI::POINTS_ACTUALIZATION_PER_SECOND = 10;
 const float ModuleUI::CONGRATS_TIME = 5;
 const float ModuleUI::END_TIME = 8;
 const float ModuleUI::END_MAX_SIZE = 5;
+const int ModuleUI::MAX_SCOREBOARD = 7;
+const long ModuleUI::DEFAULT_SCORE = 100000;
+const float ModuleUI::SCOREBOARD_TEXT_SEPARATION = 10;
+const float ModuleUI::SCOREBOARD_COLUMN_SEPARATION = 70;
+const int ModuleUI::MAX_LETTER_PER_NAME = 3;
 
 ModuleUI::ModuleUI(bool active):Module(active) {
 	topScore = {1,0,38,15};
 	score = {40,0,60,15};
 	liveImg = {105,2,6,10};
-	points = 0;
-	topPoints = 100000;
-	pointsTimer = 0.0f;
-	endGameTimer = 0.0f;
 }
 
 ModuleUI::~ModuleUI() {
@@ -43,7 +52,17 @@ bool ModuleUI::Start() {
 	green = App->fonts->GetFont("Green", __FILE__,greenFontLineReference=__LINE__);
 	yellow = App->fonts->GetFont("Yellow", __FILE__,yellowFontLineReference=__LINE__);
 
+	topPoints = GetTopScore();
+
+	points = 0;
 	startTitleTimer = 0.0f;
+	pointsTimer = 0.0f;
+	endGameTimer = 0.0f;
+	scoreB = false;
+	playerPosInScore = -1;
+	actualPlayerName = "___";
+	actualLetterSelected = 65;
+	actualLetterInName = 0;
 
 	return true;
 }
@@ -83,10 +102,16 @@ update_status ModuleUI::Update() {
 		}
 		else
 		{
+			App->scene->End();
 			end = false;
 			endGameTimer = 0.0f;
 		}
 		endGameTimer += App->time->GetDeltaTime();
+	}
+
+	if (scoreB) {
+		ScoreBoard();
+		return UPDATE_CONTINUE;//We dont want to print anything else
 	}
 
 	//Start Stage Title
@@ -164,6 +189,153 @@ void ModuleUI::PauseMenu() {
 	App->renderer->DirectPrint(red,0,SCREEN_HEIGHT/2,"PAUSE",2);
 }
 
-void ModuleUI::SetCountingPoints(bool value) {
-	countingPoints = value;
+void ModuleUI::SetCountingPoints(bool active) {
+	countingPoints = active;
+}
+
+void ModuleUI::SetScoreBoard(bool active) {
+
+	scoreB = active;
+
+	if (active) {
+		json input;
+		ifstream ifs("assets/json/Scores.json");
+		bool placed = false;
+		scores.clear();
+		if (ifs.fail()) {
+			LOG("The file Scores.json could not be found in it's directory");
+			for (int i = 0; i < MAX_SCOREBOARD; ++i) {
+				if (points > DEFAULT_SCORE && !placed) {
+					scores.push_back({ actualPlayerName,points });
+					playerPosInScore = i;
+					placed = true;
+				}
+				else
+				{
+					scores.push_back({ "ABC",DEFAULT_SCORE });
+				}
+			}
+			return;
+		}
+		ifs >> input;
+		int scoreOffset = 0;
+		for (int i = 0; i < MAX_SCOREBOARD;++i) {
+			long tempValue = input[to_string(scoreOffset)]["Score"];
+			if (points > tempValue  && !placed) {
+				scores.push_back({ actualPlayerName,points });
+				playerPosInScore = i;
+				placed = true;
+			}
+			else
+			{
+				string tempS = input[to_string(scoreOffset)]["Name"];
+				scores.push_back({ tempS,tempValue  });
+				++scoreOffset;
+			}
+		}
+	}
+}
+
+void ModuleUI::ScoreBoard() {
+	float lastYPos = SCREEN_HEIGHT - (SCOREBOARD_TEXT_SEPARATION+blue->GetYSize());
+	App->renderer->Print(blue,0,lastYPos,"RANKING LIST");
+	
+	lastYPos -= (SCOREBOARD_TEXT_SEPARATION+blue->GetYSize());
+	App->renderer->Print(blue,0,lastYPos,"SCORE");
+	App->renderer->Print(blue,SCOREBOARD_COLUMN_SEPARATION,lastYPos,"NAME");
+
+	for (int i = 0; i < MAX_SCOREBOARD; ++i) {
+		lastYPos -= (SCOREBOARD_TEXT_SEPARATION + blue->GetYSize());
+		App->renderer->Print(blue,-SCOREBOARD_COLUMN_SEPARATION,lastYPos,to_string(i+1)+".");
+		App->renderer->Print(blue,0,lastYPos,to_string(scores[i].score));
+		if (playerPosInScore == i) {
+			App->renderer->Print(yellow, SCOREBOARD_COLUMN_SEPARATION, lastYPos, actualPlayerName);
+		}
+		else
+		{
+			App->renderer->Print(yellow, SCOREBOARD_COLUMN_SEPARATION, lastYPos, scores[i].name);
+		}
+	}
+
+	//If player in scoreboard
+	if (playerPosInScore != -1) {
+		float actualPosX = -(((yellow->GetXSize() * 27)/2)-(yellow->GetXSize()/2));//27 letters in alphabet
+		lastYPos -= (SCOREBOARD_TEXT_SEPARATION + yellow->GetYSize());
+		//Print alphabet 65 = A, 90 = Z
+		for (int i = 65; i <= 90; ++i) {
+			char tempC = i;
+			string message;
+			message.push_back(tempC);
+			if (actualLetterSelected == i) {
+				actualPosX += red->GetXSize();
+				App->renderer->Print(red,actualPosX,lastYPos,message);
+			}
+			else
+			{
+				actualPosX += yellow->GetXSize();
+				App->renderer->Print(yellow, actualPosX, lastYPos, message);
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+			if (++actualLetterSelected > 90) {
+				actualLetterSelected = 65;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+			if (--actualLetterSelected < 65) {
+				actualLetterSelected = 90;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) {
+			if (actualLetterInName > 0) {
+				actualPlayerName[actualLetterInName - 1] = '_';
+				--actualLetterInName;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			if (actualLetterInName == MAX_LETTER_PER_NAME) {
+				scores[playerPosInScore].name = actualPlayerName;
+				Write();
+				App->fade->FadeToBlack(App->menu,App->scene);
+			}
+			else
+			{
+				actualPlayerName[actualLetterInName] = ((char)actualLetterSelected);
+				++actualLetterInName;
+			}
+		}
+	}
+	else {
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+			App->fade->FadeToBlack(App->menu, App->scene);
+		}
+	}
+}
+
+void ModuleUI::Write() {
+	json output;
+
+	for (int i = 0; i < MAX_SCOREBOARD; ++i) {
+		output[to_string(i)]["Name"] = scores[i].name;
+		output[to_string(i)]["Score"] = scores[i].score;
+	}
+
+	ofstream ofs("assets/json/Scores.json");
+	ofs << setw(4) << output << endl;
+}
+
+long ModuleUI::GetTopScore() {
+	json input;
+	ifstream ifs("assets/json/Scores.json");
+	if (ifs.fail()) {
+		LOG("The file Scores.json could not be found in it's directory");
+		return DEFAULT_SCORE;
+	}
+	ifs >> input;
+	long tempL = input["0"]["Score"];
+	return tempL;
 }

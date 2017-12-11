@@ -3,9 +3,15 @@
 
 #include "Module.h"
 #include "Globals.h"
+#include <vector>
 
 struct SDL_Texture;
 class Font;
+
+struct ScoreInfo {
+	std::string name;
+	long score;
+};
 
 class ModuleUI :public Module {
 public:
@@ -24,8 +30,12 @@ public:
 
 	void PauseMenu();
 
-	void SetCountingPoints(bool value);
-
+	void SetCountingPoints(bool active);
+	void SetScoreBoard(bool active);
+private:
+	void ScoreBoard();
+	void Write();
+	long GetTopScore();
 private:
 	long points;
 	bool countingPoints = true;
@@ -56,11 +66,23 @@ private:
 	static const float CONGRATS_TIME;
 	static const float END_TIME;
 	static const float END_MAX_SIZE;
+	static const int MAX_SCOREBOARD;
+	static const long DEFAULT_SCORE;
+	static const float SCOREBOARD_TEXT_SEPARATION;
+	static const float SCOREBOARD_COLUMN_SEPARATION;
+	static const int MAX_LETTER_PER_NAME;
 	//End game
 	bool congrat = false;
 	bool end = false;
 	float endSize;
 	float endGameTimer;
+	//ScoreBoard
+	bool scoreB = false;
+	std::vector<ScoreInfo> scores;
+	int playerPosInScore;
+	std::string actualPlayerName;
+	int actualLetterInName;
+	int actualLetterSelected;
 };
 
 #endif // !_MODULEUI_H_

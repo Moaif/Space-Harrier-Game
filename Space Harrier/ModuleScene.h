@@ -34,6 +34,7 @@ public:
 	bool CleanUp();
 	bool ModuleScene::LoadJson(string path);
 	void Win();
+	void End();
 
 public:
 	//For UI module

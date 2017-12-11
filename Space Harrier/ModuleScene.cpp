@@ -21,7 +21,6 @@ const float ModuleScene::INTERVAL_DELAY = 0.1f;
 
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
-	timeElapsed = 0;
 	currentStage = 2;//TODO: if introduced new stages, change
 }
 
@@ -33,18 +32,20 @@ bool ModuleScene::Start()
 {
 	LOG("Loading space scene");
 
+	App->player->Enable();
+	App->collision->Enable();
+	App->particles->Enable();
+	App->enemies->Enable();
+	App->ui->Enable();
+	App->playing = true;
+
+	timeElapsed = 0;
 	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/Stage3.json");
+	LoadJson("assets/json/STest.json");
 	
 	background = App->textures->Load(backgroundPath.c_str());
 	stage = App->textures->Load(stagePath.c_str());
 	floor = App->textures->Load(floorPath.c_str());
-
-	App->player->Enable();
-	App->particles->Enable();
-	App->collision->Enable();
-	App->ui->Enable();
-	App->playing = true;
 
 	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
 	
@@ -62,6 +63,7 @@ bool ModuleScene::CleanUp()
 	App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
+	App->enemies->Disable();
 	App->ui->Disable();
 	
 	return true;
@@ -104,7 +106,8 @@ bool ModuleScene::LoadJson(string path) {
 	json input;
 	ifstream ifs(path);
 	if (ifs.fail()) {
-		cerr << "\nThe file Info.json could not be found in it's directory" << endl;
+		string temp = "The file " + path + " could not be found in it's directory";
+		LOG(temp.c_str());
 		return false;
 	}
 	ifs >> input;
@@ -150,4 +153,10 @@ void ModuleScene::Win(){
 	App->ui->Congratulations();
 	App->ui->SetCountingPoints(false);
 	App->audio->PlayMusic("assets/music/Win.ogg",0);
+}
+
+void ModuleScene::End() {
+	App->time->SetTimeScale(0);
+	App->ui->SetScoreBoard(true);
+	App->playing = false;
 }
