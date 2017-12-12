@@ -33,6 +33,7 @@ const long ModuleUI::DEFAULT_SCORE = 100000;
 const float ModuleUI::SCOREBOARD_TEXT_SEPARATION = 10;
 const float ModuleUI::SCOREBOARD_COLUMN_SEPARATION = 70;
 const int ModuleUI::MAX_LETTER_PER_NAME = 3;
+const float ModuleUI::LETTER_INTERVAL = 0.25f;
 
 ModuleUI::ModuleUI(bool active):Module(active) {
 	topScore = {1,0,38,15};
@@ -67,6 +68,7 @@ bool ModuleUI::Restart() {
 	playerPosInScore = -1;
 	actualLetterSelected = 65;
 	actualLetterInName = 0;
+	letterTimer = 0.0f;
 
 	return true;
 }
@@ -87,7 +89,7 @@ update_status ModuleUI::Update() {
 	if (congrat) {
 		if (endGameTimer <= CONGRATS_TIME) {
 			float size = 1.5f;
-			App->renderer->Print(blue, 0, (SCREEN_HEIGHT/2) + (blue->GetYSize()*size), "CONGRATULATIONS", size);
+			App->renderer->Print(blue, 0, (SCREEN_HEIGHT / 2) + (blue->GetYSize()*size), "CONGRATULATIONS", size);
 			App->renderer->Print(blue, 0, (SCREEN_HEIGHT / 2) - (blue->GetYSize()*size), "YOU WIN", size);
 		}
 		else
@@ -100,9 +102,9 @@ update_status ModuleUI::Update() {
 
 	if (end) {
 		if (endGameTimer <= END_TIME) {
-			App->renderer->Print(yellow,0,(SCREEN_HEIGHT/2)+(yellow->GetYSize()*(endSize-1)),"THE",(endSize-1));
+			App->renderer->Print(yellow, 0, (SCREEN_HEIGHT / 2) + (yellow->GetYSize()*(endSize - 1)), "THE", (endSize - 1));
 			App->renderer->Print(yellow, 0, (SCREEN_HEIGHT / 2) - (yellow->GetYSize()*endSize), "END", endSize);
-			endSize =endGameTimer * END_MAX_SIZE / END_TIME;
+			endSize = endGameTimer * END_MAX_SIZE / END_TIME;
 		}
 		else
 		{
@@ -122,29 +124,29 @@ update_status ModuleUI::Update() {
 	string stageTemp = to_string(App->scene->currentStage);
 	if (startTitleTimer < TIME_WITH_TITLE) {
 		float titleScale = 2.0f;
-		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)+(blue->GetYSize()*titleScale),"STAGE "+stageTemp,titleScale);
-		App->renderer->Print(blue,0,(SCREEN_HEIGHT/2)-(blue->GetYSize()*titleScale),App->scene->stageName,titleScale);
+		App->renderer->Print(blue, 0, (SCREEN_HEIGHT / 2) + (blue->GetYSize()*titleScale), "STAGE " + stageTemp, titleScale);
+		App->renderer->Print(blue, 0, (SCREEN_HEIGHT / 2) - (blue->GetYSize()*titleScale), App->scene->stageName, titleScale);
 		startTitleTimer += App->time->GetDeltaTime();
 	}
 	//Stage message
 	App->renderer->Print(blue, STAGE_X_POS, 1, "STAGE");
-	float stageposX = STAGE_X_POS + (score.w / 2) + (0.5f * blue->GetXSize())*stageTemp.size() + SEPARATION_OFFSET/2;
-	App->renderer->Print(blue,stageposX,BOT_ELEMENTS_Y_POS,stageTemp);
+	float stageposX = STAGE_X_POS + (score.w / 2) + (0.5f * blue->GetXSize())*stageTemp.size() + SEPARATION_OFFSET / 2;
+	App->renderer->Print(blue, stageposX, BOT_ELEMENTS_Y_POS, stageTemp);
 
 
 	//TopScore
-	App->renderer->AddToBlitBuffer(graphics,TOPSCORE_X_POS,TOP_ELEMENTS_Y_POS,FONTS_Z,&topScore,nullptr);
-	float topScoreposY=TOP_ELEMENTS_Y_POS+((topScore.h-red->GetYSize())/2);
+	App->renderer->AddToBlitBuffer(graphics, TOPSCORE_X_POS, TOP_ELEMENTS_Y_POS, FONTS_Z, &topScore, nullptr);
+	float topScoreposY = TOP_ELEMENTS_Y_POS + ((topScore.h - red->GetYSize()) / 2);
 	if (points > topPoints) {
 		string temp = to_string(points);
-		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + ((0.5f * red->GetXSize())*temp.size())+SEPARATION_OFFSET;
-		App->renderer->Print(red,topScoreposX,topScoreposY,temp);
+		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + ((0.5f * red->GetXSize())*temp.size()) + SEPARATION_OFFSET;
+		App->renderer->Print(red, topScoreposX, topScoreposY, temp);
 	}
 	else
 	{
 		string temp = to_string(topPoints);
-		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + (0.5f * red->GetXSize())*temp.size()+SEPARATION_OFFSET;
-		App->renderer->Print(red,topScoreposX,topScoreposY,temp);
+		float topScoreposX = TOPSCORE_X_POS + (topScore.w / 2) + (0.5f * red->GetXSize())*temp.size() + SEPARATION_OFFSET;
+		App->renderer->Print(red, topScoreposX, topScoreposY, temp);
 	}
 
 	//Score
@@ -152,21 +154,20 @@ update_status ModuleUI::Update() {
 	string scoreTemp = to_string(points);
 	float scoreposY = TOP_ELEMENTS_Y_POS + ((score.h - green->GetYSize()) / 2);
 	float scoreposX = SCORE_X_POS + (score.w / 2) + (0.5f * green->GetXSize())*scoreTemp.size() + SEPARATION_OFFSET;
-	App->renderer->Print(green,scoreposX,scoreposY,scoreTemp);
+	App->renderer->Print(green, scoreposX, scoreposY, scoreTemp);
 
 	//Lives
 	for (int i = 0; i < App->player->GetLives(); ++i) {
-		App->renderer->AddToBlitBuffer(graphics, -120-(i*(liveImg.w+1)), BOT_ELEMENTS_Y_POS, FONTS_Z, &liveImg, nullptr);
+		App->renderer->AddToBlitBuffer(graphics, -120 - (i*(liveImg.w + 1)), BOT_ELEMENTS_Y_POS, FONTS_Z, &liveImg, nullptr);
 	}
 
 	//Increase points by time
-	if (countingPoints) {
-		while (pointsTimer >= 1 / POINTS_ACTUALIZATION_PER_SECOND) {
-			points += POINTS_PER_SECOND / POINTS_ACTUALIZATION_PER_SECOND;
-			pointsTimer -= 1 / POINTS_ACTUALIZATION_PER_SECOND;
-		}
-		pointsTimer += App->time->GetDeltaTime();
+	while (pointsTimer >= 1 / POINTS_ACTUALIZATION_PER_SECOND) {
+		points += POINTS_PER_SECOND / POINTS_ACTUALIZATION_PER_SECOND;
+		pointsTimer -= 1 / POINTS_ACTUALIZATION_PER_SECOND;
 	}
+	pointsTimer += App->time->GetDeltaTime();
+
 
 	return UPDATE_CONTINUE;
 }
@@ -191,10 +192,6 @@ void ModuleUI::TheEnd() {
 
 void ModuleUI::PauseMenu() {
 	App->renderer->DirectPrint(red,0,SCREEN_HEIGHT/2,"PAUSE",2);
-}
-
-void ModuleUI::SetCountingPoints(bool active) {
-	countingPoints = active;
 }
 
 void ModuleUI::SetScoreBoard(bool active) {
@@ -295,6 +292,7 @@ void ModuleUI::ScoreBoard() {
 
 		if (App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN) {
 			if (actualLetterInName > 0) {
+				actualPlayerName[actualLetterInName] = '_';
 				actualPlayerName[actualLetterInName - 1] = '_';
 				--actualLetterInName;
 			}
@@ -310,6 +308,15 @@ void ModuleUI::ScoreBoard() {
 			{
 				actualPlayerName[actualLetterInName] = ((char)actualLetterSelected);
 				++actualLetterInName;
+			}
+		}
+		//Show actualLetter on player name at intervals
+		float actualTime = App->time->GetTimeSinceStart();
+		if (( actualTime- letterTimer) >= LETTER_INTERVAL) {
+			actualPlayerName[actualLetterInName] = (char)actualLetterSelected;
+			if ((actualTime - letterTimer) > LETTER_INTERVAL * 2) {
+				actualPlayerName[actualLetterInName] = '_';
+				letterTimer = actualTime;
 			}
 		}
 	}

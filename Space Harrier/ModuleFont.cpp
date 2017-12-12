@@ -2,10 +2,14 @@
 #include "Application.h"
 #include "ModuleFont.h"
 #include "ModuleTextures.h"
+#include "ModuleRender.h"
 #include "Font.h"
 #include <string>
 
 using namespace std;
+
+const int ModuleFont::MAX_TIME_TO_LIVE = 25;
+const int ModuleFont::MAX_CACHE_SIZE_PER_FONT = 500;
 
 ModuleFont::ModuleFont() {
 
@@ -45,7 +49,23 @@ bool ModuleFont::CleanUp() {
 	}
 	fontMap.clear();
 	links.clear();
+	messageCache.clear();
 	return true;
+}
+
+update_status ModuleFont::PreUpdate() {
+	for (map<const Font*, map<string, CacheInfo>>::iterator it = messageCache.begin(); it != messageCache.end(); ++it) {
+		for (map<string, CacheInfo>::iterator it2 = (*it).second.begin(), next_it2= (*it).second.begin(); it2 != (*it).second.end(); it2 = next_it2) {
+			next_it2 = it2;
+			++next_it2;
+			if ((--(*it2).second.timeToLive) <= 0) {
+				SDL_DestroyTexture((*it2).second.texture);
+				(*it2).second.texture = nullptr;
+				(*it).second.erase((*it2).first);
+			}
+		}
+	}
+	return UPDATE_CONTINUE;
 }
 
 
@@ -86,10 +106,51 @@ bool ModuleFont::VerifyLinks() {
 			}
 		}
 
-		//Se libera aunque no se encontraron dependencias
 		delete it->second;
 	}
 	return ret;
+}
+
+SDL_Texture* ModuleFont::GetMessage(const Font* font, string message) {
+	//First we search if the message is in cache
+	if (!messageCache.empty()) {
+		map<const Font*, map<string, CacheInfo>>::iterator tempIt = messageCache.find(font);
+		if (tempIt != messageCache.end()) {
+			if (!(*tempIt).second.empty()) {
+				map<string, CacheInfo>::iterator tempIt2 = (*tempIt).second.find(message);
+				if (tempIt2 != (*tempIt).second.end()) {
+					(*tempIt2).second.timeToLive = MAX_TIME_TO_LIVE;
+					return (*tempIt2).second.texture;
+				}
+			}
+		}
+	}
+
+	//If we dont fint it, we made it
+	SDL_Texture* temp = CreateMessage(font,message);
+	if (messageCache[font].size() > MAX_CACHE_SIZE_PER_FONT) {//Cache full case
+		int minTtl= MAX_TIME_TO_LIVE+1;
+		string messageToRemove="";
+		for (map<string, CacheInfo>::iterator it = messageCache[font].begin(); it != messageCache[font].end(); ++it) {
+			if ((*it).second.timeToLive < minTtl) {
+				minTtl = (*it).second.timeToLive;
+				messageToRemove = (*it).first;
+			}
+		}
+		//Error
+		if (messageToRemove == "") {
+			return nullptr;
+		}
+		SDL_DestroyTexture(messageCache[font][messageToRemove].texture);
+		messageCache[font][messageToRemove].texture=nullptr;
+		messageCache[font].erase(messageToRemove);
+		messageCache[font][message] = { temp,MAX_TIME_TO_LIVE };
+	}
+	else {
+		messageCache[font][message] = { temp,MAX_TIME_TO_LIVE };
+	}
+
+	return temp;
 }
 
 bool ModuleFont::LoadFontRed() {
@@ -141,4 +202,43 @@ bool ModuleFont::LoadFontYellow() {
 	}
 	fontMap[fontName] = font;
 	return true;
+}
+
+SDL_Texture* ModuleFont::CreateMessage(const Font* font, std::string message) {
+
+	int xSize = font->GetXSize();
+	int ySize = font->GetYSize();
+
+	SDL_Surface* tempSurface = font->GetImage();
+	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, message.length() * xSize, ySize, 32, 0, 0, 0, 0);
+	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
+
+	SDL_Rect srcrect;
+	srcrect.h = ySize;
+	srcrect.w = xSize;
+	SDL_Rect dstrect;
+	dstrect.h = ySize;
+	dstrect.w = xSize;
+	if (tempSurface == nullptr)
+	{
+		printf("Unable to create a temporal SDL surface for message SDL Error: %s\n", SDL_GetError());
+		return nullptr;
+	}
+	for (unsigned int i = 0; i < message.size(); ++i) {
+		int offset = font->GetCharOffset(message[i]);
+		srcrect.x = offset*xSize;
+		srcrect.y = 0;
+		dstrect.x = i*xSize;
+		dstrect.y = 0;
+		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
+	}
+	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(App->renderer->renderer, surfaceFinal);
+	if (tempTexture == nullptr) {
+		printf("Unable to create message texture from surface SDL Error: %s\n", SDL_GetError());
+		return nullptr;
+	}
+
+	SDL_FreeSurface(surfaceFinal);
+	return tempTexture;
 }

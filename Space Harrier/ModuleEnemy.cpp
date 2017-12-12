@@ -361,6 +361,7 @@ bool ModuleEnemy::CleanUp()
 	LOG("Unloading enemies");
 	App->textures->Unload(enemiesTexture);
 	App->textures->Unload(trees);
+	App->textures->Unload(trees3);
 	App->textures->Unload(rocks);
 	App->textures->Unload(dragonTexture);
 

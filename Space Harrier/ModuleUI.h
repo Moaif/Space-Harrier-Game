@@ -31,7 +31,6 @@ public:
 
 	void PauseMenu();
 
-	void SetCountingPoints(bool active);
 	void SetScoreBoard(bool active);
 private:
 	void ScoreBoard();
@@ -39,7 +38,6 @@ private:
 	long GetTopScore();
 private:
 	long points;
-	bool countingPoints = true;
 	long topPoints;
 	float startTitleTimer;
 	float pointsTimer;
@@ -72,6 +70,7 @@ private:
 	static const float SCOREBOARD_TEXT_SEPARATION;
 	static const float SCOREBOARD_COLUMN_SEPARATION;
 	static const int MAX_LETTER_PER_NAME;
+	static const float LETTER_INTERVAL;
 	//End game
 	bool congrat = false;
 	bool end = false;
@@ -84,6 +83,7 @@ private:
 	std::string actualPlayerName;
 	int actualLetterInName;
 	int actualLetterSelected;
+	float letterTimer;
 };
 
 #endif // !_MODULEUI_H_

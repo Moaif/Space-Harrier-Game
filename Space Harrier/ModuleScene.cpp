@@ -62,6 +62,9 @@ bool ModuleScene::Restart() {
 bool ModuleScene::CleanUp()
 {
 	LOG("Unloading space scene");
+	App->textures->Unload(background);
+	App->textures->Unload(stage);
+	App->textures->Unload(floor);
 
  	App->textures->Unload(background);
 	App->player->Disable();
@@ -155,7 +158,6 @@ bool ModuleScene::LoadJson(string path) {
 void ModuleScene::Win(){
 	App->player->Win();
 	App->ui->Congratulations();
-	App->ui->SetCountingPoints(false);
 	App->audio->PlayMusic("assets/music/Win.ogg",0);
 }
 
@@ -163,4 +165,5 @@ void ModuleScene::End() {
 	App->time->SetTimeScale(0);
 	App->ui->SetScoreBoard(true);
 	App->playing = false;
+	App->audio->PlayMusic("assets/music/EndSong.ogg", 0);
 }

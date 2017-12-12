@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModulePlayer.h"
+#include "ModuleFont.h"
 #include "SDL/include/SDL.h"
 #include <iostream>
 #include "Font.h"
@@ -168,40 +169,14 @@ bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* sectio
 
 bool ModuleRender::Print(const Font* font, float x, float y, string mesage, float fontSize) {
 	bool ret = true;
-	int xSize = font->GetXSize();
-	int ySize = font->GetYSize();
 
 	if (fontSize < 0) {
 		fontSize = 0;
 	}
 
-	SDL_Surface* tempSurface = font->GetImage();
-	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
-	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
-	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
-
-	SDL_Rect srcrect;
-	srcrect.h = ySize;
-	srcrect.w = xSize;
-	SDL_Rect dstrect;
-	dstrect.h = ySize;
-	dstrect.w = xSize;
-	if (tempSurface == nullptr)
-	{
-		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
-		ret = false;
-	}
-	for (unsigned int i = 0; i < mesage.size(); ++i) {
-		int offset = font->GetCharOffset(mesage[i]);
-		srcrect.x = offset*xSize;
-		srcrect.y = 0;
-		dstrect.x = i*xSize;
-		dstrect.y = 0;
-		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
-	}
-	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(renderer, surfaceFinal);
+	SDL_Texture* tempTexture = App->fonts->GetMessage(font,mesage);
 	if (tempTexture == nullptr) {
-		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
+		LOG("Message texture failed on construction");
 		ret = false;
 	}
 
@@ -210,8 +185,6 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
 
 	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
-	SDL_FreeSurface(surfaceFinal);
-	//SDL_DestroyTexture(tempTexture); TODO: hacer esta limpieza, pero mantener de alguna manera los mensajes que quiero
 	return ret;
 }
 

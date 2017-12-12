@@ -91,6 +91,9 @@ bool ModuleParticles::CleanUp()
 {
 	LOG("Unloading particles");
 	App->textures->Unload(lasers);
+	App->textures->Unload(shots);
+	App->textures->Unload(exp);
+	App->textures->Unload(enemLaser);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);

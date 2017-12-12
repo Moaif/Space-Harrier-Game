@@ -95,6 +95,7 @@ bool ModulePlayer::Restart() {
 	current_animation = &run;
 	actualHorizonPercentage = 0.0f;
 	win = false;
+	centered = false;
 	destroyed = false;
 
 	return true;

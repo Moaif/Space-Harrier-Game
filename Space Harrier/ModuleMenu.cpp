@@ -27,8 +27,6 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 
 	finalTitle = { 1100,10,180,100 };
 
-	titleMult = 4;
-
 	//Eye
 	eye.frames.push_back({8,140,34,18});
 	eye.frames.push_back({ 50,140,34,18 });
@@ -95,6 +93,7 @@ bool ModuleMenu::Start()
 
 	App->Restart();//We restart all modules to start a new game
 
+	titleMult = 4;
 	textTimer = 0.0f;
 
 	if(fx == 0)
