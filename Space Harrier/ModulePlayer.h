@@ -14,15 +14,15 @@ public:
 	ModulePlayer(bool active = true);
 	~ModulePlayer();
 
-	bool Start();
-	bool Restart();
-	update_status Update();
-	bool CleanUp();
+	bool Start()override;
+	bool Restart()override;
+	update_status Update()override;
+	bool CleanUp()override;
 	void OnCollision(Collider* other)override;
 
-	void SetLives(int amount);
-	int GetLives();
-	fPoint GetRelativeWorldPosition();
+	void SetLives(const int& amount);
+	int GetLives()const;
+	fPoint GetRelativeWorldPosition() const;
 	void Win();
 
 private:
@@ -47,7 +47,6 @@ public:
 	Animation fall;
 	Animation death;
 	fPoint position;
-	Collider* collider;
 	bool destroyed = false;
 	float speedStage=0.0f;
 
@@ -70,6 +69,7 @@ private:
 	bool centered=false;
 	fPoint initialPosition;
 	float currentLerpPercentaje;
+	//Static variables
 	static const int INITIAL_LIVES;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;

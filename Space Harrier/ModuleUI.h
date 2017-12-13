@@ -18,13 +18,13 @@ public:
 	ModuleUI(bool active=true);
 	~ModuleUI();
 
-	bool Start();
-	bool Restart();
-	update_status Update();
-	bool CleanUp();
+	bool Start()override;
+	bool Restart()override;
+	update_status Update()override;
+	bool CleanUp()override;
 
-	void AddPoints(int value);
-	int GetPoints();
+	void AddPoints(const int& value);
+	int GetPoints()const;
 
 	void Congratulations();
 	void TheEnd();
@@ -35,20 +35,21 @@ public:
 private:
 	void ScoreBoard();
 	void Write();
-	long GetTopScore();
+	long GetTopScore()const;
 private:
+	//Basic UI
 	long points;
 	long topPoints;
 	float startTitleTimer;
 	float pointsTimer;
-	SDL_Texture* graphics;
+	SDL_Texture* graphics=nullptr;
 	SDL_Rect topScore;
 	SDL_Rect score;
 	SDL_Rect liveImg;
-	const Font* red;
-	const Font* blue;
-	const Font* green;
-	const Font * yellow;
+	const Font* red=nullptr;
+	const Font* blue=nullptr;
+	const Font* green=nullptr;
+	const Font * yellow=nullptr;
 	int redFontLineReference;
 	int blueFontLineReference;
 	int greenFontLineReference;
@@ -60,7 +61,7 @@ private:
 	static const float TOP_ELEMENTS_Y_POS;
 	static const float BOT_ELEMENTS_Y_POS;
 	static const float TIME_WITH_TITLE;
-	static const int POINTS_PER_SECOND;
+	static const long POINTS_PER_SECOND;
 	static const float POINTS_ACTUALIZATION_PER_SECOND;
 	static const float CONGRATS_TIME;
 	static const float END_TIME;

@@ -6,8 +6,8 @@
 #include "ModuleFadeToBlack.h"
 #include "SDL\include\SDL.h"
 
-const float ModuleSceneSega::OFFSET = 2;
-const float ModuleSceneSega::INTERVAL = 0.025;
+const float ModuleSceneSega::OFFSET = 2.0f;
+const float ModuleSceneSega::INTERVAL = 0.025f;
 
 ModuleSceneSega::ModuleSceneSega(bool active):Module(active) {
 }
@@ -43,8 +43,8 @@ bool ModuleSceneSega::CleanUp() {
 update_status ModuleSceneSega::Update() {
 	float coefX = SCREEN_WIDTH/image.w;
 	float coefY = SCREEN_HEIGHT/image.h;
-	resizeStruct size = {coefX*image.w,coefY*image.h};
-	SDL_Rect rect = { image.x,image.y,image.w,image.h };
+	resizeStruct size = {(int)(coefX*image.w),(int)(coefY*image.h)};
+	SDL_Rect rect = { (int)image.x,(int)image.y,(int)image.w,(int)image.h };
 	App->renderer->Blit(background, 0, 0, &rect, &size);
 	
 

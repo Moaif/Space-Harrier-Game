@@ -18,9 +18,9 @@ public:
 	ModuleSceneSega(bool active=true);
 	~ModuleSceneSega();
 
-	bool Start();
-	update_status Update();
-	bool CleanUp();
+	bool Start()override;
+	update_status Update()override;
+	bool CleanUp()override;
 
 private:
 	SDL_Texture* background = nullptr;

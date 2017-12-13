@@ -40,26 +40,26 @@ public:
 	bool Restart();
 
 public:
-	ModuleRender* renderer;
-	ModuleWindow* window;
-	ModuleTextures* textures;
-	ModuleInput* input;
-	ModuleAudio* audio;
-	ModuleFadeToBlack* fade;
-	ModuleCollision* collision;
-	ModuleParticles* particles;
-	ModuleEnemy* enemies;
-	ModuleFont* fonts;
-	ModuleFloor* floor;
-	ModuleShadow* shadows;
-	ModuleTime* time;
-	ModuleUI* ui;
+	ModuleRender* renderer=nullptr;
+	ModuleWindow* window=nullptr;
+	ModuleTextures* textures=nullptr;
+	ModuleInput* input=nullptr;
+	ModuleAudio* audio=nullptr;
+	ModuleFadeToBlack* fade=nullptr;
+	ModuleCollision* collision=nullptr;
+	ModuleParticles* particles=nullptr;
+	ModuleEnemy* enemies=nullptr;
+	ModuleFont* fonts=nullptr;
+	ModuleFloor* floor=nullptr;
+	ModuleShadow* shadows=nullptr;
+	ModuleTime* time=nullptr;
+	ModuleUI* ui=nullptr;
 
 	// Game modules ---
-	ModulePlayer* player;
-	ModuleSceneSega* sega;
-	ModuleMenu* menu;
-	ModuleScene* scene;
+	ModulePlayer* player=nullptr;
+	ModuleSceneSega* sega=nullptr;
+	ModuleMenu* menu=nullptr;
+	ModuleScene* scene=nullptr;
 
 	bool playing;
 

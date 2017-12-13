@@ -188,7 +188,7 @@ update_status ModulePlayer::Update()
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_animation != &fall)
 		{
 			float y = position.y + (current_animation->GetCurrentFrame().h / 2);
-			App->particles->AddParticle(App->particles->laser, position.x, y, position.z);
+			App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
 		}
 
 		if (current_animation == &fall) {
@@ -235,11 +235,11 @@ void ModulePlayer::OnCollision(Collider* other) {
 	}
 }
 
-void ModulePlayer::SetLives(int amount) {
+void ModulePlayer::SetLives(const int& amount) {
 	lives = amount;
 }
 
-int ModulePlayer::GetLives() {
+int ModulePlayer::GetLives() const {
 	return lives;
 }
 
@@ -316,7 +316,7 @@ void ModulePlayer::CalculateSpeed() {
 	speedStage = MIN_X_SPEED + (temp*(MAX_X_SPEED - MIN_X_SPEED));
 }
 
-fPoint ModulePlayer::GetRelativeWorldPosition() {
+fPoint ModulePlayer::GetRelativeWorldPosition() const {
 	fPoint p;
 	p.x= (position.x*2) / (SCREEN_WIDTH);
 	p.y = (((position.y) *2) / (SCREEN_HEIGHT- current_animation->GetCurrentFrame().h))-1;
@@ -376,7 +376,7 @@ void ModulePlayer::AnimWin() {
 			App->ui->TheEnd();
 		}
 
-		resizeStruct resizeInfo = { current_animation->GetCurrentFrame().w *scale,current_animation->GetCurrentFrame().h *scale };
+		resizeStruct resizeInfo = { (int)(current_animation->GetCurrentFrame().w *scale),(int)(current_animation->GetCurrentFrame().h *scale) };
 		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(current_animation->GetCurrentFrame()), &resizeInfo);
 	}
 	else

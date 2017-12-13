@@ -69,7 +69,7 @@ update_status ModuleFont::PreUpdate() {
 }
 
 
-const Font* ModuleFont::GetFont(string fontName, string file, int line) {
+const Font* ModuleFont::GetFont(const string& fontName, const string& file,const int& line) {
 	if (fontMap.count(fontName)) {
 		links[fontMap[fontName]][file][line] = true;
 		return fontMap[fontName];
@@ -78,11 +78,24 @@ const Font* ModuleFont::GetFont(string fontName, string file, int line) {
 	return nullptr;
 }
 
-void ModuleFont::FreeFont(const Font ** p, string file, int line) {
-	if (links.count(*p)) {
-		if (links[*p].count(file)) {
-			if (links[*p][file].count(line)) {
-				links[*p][file][line] = false;
+void ModuleFont::FreeFont(const Font ** p,const string& file,const int& line) {
+	if (p == nullptr) {
+		LOG("FreeFont received a null p")
+		return;
+	}
+
+	if (*p == nullptr) {
+		LOG("FreeFont received a null *p");
+		return;
+	}
+
+	map<const Font*, map<string, map<int, bool>>>::iterator it = links.begin();
+	if (it != links.end()) {
+		map<string, map<int, bool>>::iterator it2 = (*it).second.begin();
+		if (it2 != (*it).second.end()) {
+			map<int, bool>::iterator it3 = (*it2).second.begin();
+			if (it3 != (*it2).second.end()) {
+				(*it3).second = false;
 			}
 		}
 		*p = nullptr;
@@ -111,7 +124,13 @@ bool ModuleFont::VerifyLinks() {
 	return ret;
 }
 
-SDL_Texture* ModuleFont::GetMessage(const Font* font, string message) {
+SDL_Texture* ModuleFont::GetMessage(const Font* font,const string& message) {
+	
+	if (font == nullptr) {
+		LOG("GetMessage received a null font");
+		return nullptr;
+	}
+
 	//First we search if the message is in cache
 	if (!messageCache.empty()) {
 		map<const Font*, map<string, CacheInfo>>::iterator tempIt = messageCache.find(font);
@@ -128,6 +147,10 @@ SDL_Texture* ModuleFont::GetMessage(const Font* font, string message) {
 
 	//If we dont fint it, we made it
 	SDL_Texture* temp = CreateMessage(font,message);
+	if (temp == nullptr) {
+		LOG("Failed on CreateMessage");
+		return nullptr;
+	}
 	if (messageCache[font].size() > MAX_CACHE_SIZE_PER_FONT) {//Cache full case
 		int minTtl= MAX_TIME_TO_LIVE+1;
 		string messageToRemove="";
@@ -139,6 +162,7 @@ SDL_Texture* ModuleFont::GetMessage(const Font* font, string message) {
 		}
 		//Error
 		if (messageToRemove == "") {
+			LOG("Could not find a message to remove in messageCache");
 			return nullptr;
 		}
 		SDL_DestroyTexture(messageCache[font][messageToRemove].texture);
@@ -204,7 +228,12 @@ bool ModuleFont::LoadFontYellow() {
 	return true;
 }
 
-SDL_Texture* ModuleFont::CreateMessage(const Font* font, std::string message) {
+SDL_Texture* ModuleFont::CreateMessage(const Font* font,const string& message) {
+
+	if (font == nullptr) {
+		LOG("CreateMessage received a null font");
+		return nullptr;
+	}
 
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();

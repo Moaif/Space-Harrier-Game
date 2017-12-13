@@ -1,30 +1,30 @@
 {
     "0": {
+        "Name": "ALC",
+        "Score": 504470
+    },
+    "1": {
+        "Name": "ABC",
+        "Score": 503790
+    },
+    "2": {
+        "Name": "DEF",
+        "Score": 503080
+    },
+    "3": {
         "Name": "NQR",
         "Score": 503000
     },
-    "1": {
+    "4": {
         "Name": "ADE",
         "Score": 502540
     },
-    "2": {
+    "5": {
         "Name": "OKK",
         "Score": 502530
     },
-    "3": {
-        "Name": "DEF",
-        "Score": 502340
-    },
-    "4": {
-        "Name": "CEF",
-        "Score": 502300
-    },
-    "5": {
-        "Name": "ALC",
-        "Score": 501760
-    },
     "6": {
-        "Name": "ABC",
-        "Score": 100000
+        "Name": "AAA",
+        "Score": 502360
     }
 }

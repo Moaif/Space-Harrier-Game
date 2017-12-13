@@ -160,15 +160,15 @@ update_status ModuleParticles::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z)
+void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z)
 {
-	Particle* p = particle->Copy(x,y,z);
+	Particle* p = particle.Copy(x,y,z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
-	Particle* p = particle->Copy(x, y, z);
+void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
+	Particle* p = particle.Copy(x, y, z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	p->pathVector = unitaryVector;
 	active.push_back(p);

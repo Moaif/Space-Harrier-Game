@@ -40,7 +40,8 @@ bool ModuleScene::Start()
 
 	timeElapsed = 0;
 	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/STest.json");
+	LoadJson("assets/json/STage3.json");
+	LOG("list %d",elements.size());
 	
 	background = App->textures->Load(backgroundPath.c_str());
 	stage = App->textures->Load(stagePath.c_str());
@@ -66,13 +67,18 @@ bool ModuleScene::CleanUp()
 	App->textures->Unload(stage);
 	App->textures->Unload(floor);
 
+	for (list<DelayList>::iterator it = elements.begin(); it != elements.end(); ++it) {
+		(*it).list.clear();
+	}
+	elements.clear();
+
  	App->textures->Unload(background);
 	App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
 	App->enemies->Disable();
 	App->ui->Disable();
-	
+
 	return true;
 }
 
@@ -109,7 +115,7 @@ update_status ModuleScene::Update()
 	return UPDATE_CONTINUE;
 }
 
-bool ModuleScene::LoadJson(string path) {
+bool ModuleScene::LoadJson(const string& path) {
 	json input;
 	ifstream ifs(path);
 	if (ifs.fail()) {
@@ -146,7 +152,7 @@ bool ModuleScene::LoadJson(string path) {
 				z = MAX_Z;
 			}
 			string id = input["enemies"][i]["list"][j]["id"];
-			Enemy* enemy = App->enemies->GetById(id);
+			const Enemy* enemy = App->enemies->GetById(id);
 			EnemyInstantiate temp = { x,y,z,enemy };
 			tempList.list.push_back(temp);
 		}

@@ -68,7 +68,7 @@ void Obstacle::OnCollision(Collider* other) {
 			float yScreen = quad->y + quad->h*positionQuad;
 			yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
 			float scale = 1 - (yScreen / App->floor->horizon.y);
-			App->particles->AddParticle(App->particles->explosion, position.x*scale, position.y, position.z);
+			App->particles->AddParticle(*App->particles->explosion, position.x*scale, position.y, position.z);
 		}
 	}
 }

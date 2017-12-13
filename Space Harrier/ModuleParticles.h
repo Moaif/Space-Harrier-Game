@@ -17,13 +17,13 @@ public:
 	ModuleParticles();
 	~ModuleParticles();
 
-	bool Start();
-	update_status PreUpdate(); 
-	update_status Update(); 
-	bool CleanUp();
+	bool Start()override;
+	update_status PreUpdate()override; 
+	update_status Update()override; 
+	bool CleanUp()override;
 
-	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z);
-	void AddParticle(const Particle* particle, const float& x, const float& y,const float& z,const fPoint& unitaryVector);
+	void AddParticle(const Particle& particle, const float& x, const float& y,const float& z);
+	void AddParticle(const Particle& particle, const float& x, const float& y,const float& z,const fPoint& unitaryVector);
 
 private:
 
@@ -36,10 +36,10 @@ private:
 public:
 	list<Particle*> prototipeClearList;
 	// prototype particles go here ...
-	Particle* laser;
-	Particle* fire;
-	Particle* enemyLaser;
-	Particle* explosion;
+	Particle* laser=nullptr;
+	Particle* fire=nullptr;
+	Particle* enemyLaser=nullptr;
+	Particle* explosion=nullptr;
 };
 
 #endif // __MODULEPARTICLES_H__

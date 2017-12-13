@@ -104,7 +104,13 @@ bool ModuleRender::CleanUp()
 	return true;
 }
 
-void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo) {
+void ModuleRender::AddToBlitBuffer(SDL_Texture* texture,const float& x,const float& y, const float& z, SDL_Rect* section, resizeStruct* resizeInfo) {
+	
+	if (texture == nullptr) {
+		LOG("AddToBlitBuffer received a null texture");
+		return;
+	}
+
 	SDL_Rect empty = { 0,0,0,0 };
 	resizeStruct noResize= { 0,0 };
 	BlitStruct temp;
@@ -125,8 +131,14 @@ void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float 
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo)
+bool ModuleRender::Blit(SDL_Texture* texture,float x,float y, SDL_Rect* section, resizeStruct* resizeInfo)
 {
+
+	if (texture == nullptr) {
+		LOG("Blit received a null texture");
+		return false;
+	}
+
 	bool ret = true;
 	SDL_Rect rect;
 
@@ -167,7 +179,13 @@ bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* sectio
 	return ret;
 }
 
-bool ModuleRender::Print(const Font* font, float x, float y, string mesage, float fontSize) {
+bool ModuleRender::Print(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
+
+	if (font == nullptr) {
+		LOG("Print received a null font");
+		return false;
+	}
+
 	bool ret = true;
 
 	if (fontSize < 0) {
@@ -182,13 +200,19 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 
 	SDL_Rect rect;
 	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
-	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
+	resizeStruct size = { (int)(rect.w*fontSize),(int)(rect.h*fontSize) };
 
 	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
 	return ret;
 }
 
-bool ModuleRender::DirectPrint(const Font* font, float x, float y, string mesage, float fontSize) {
+bool ModuleRender::DirectPrint(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
+
+	if (font == nullptr) {
+		LOG("DirectPrint received a null font");
+		return false;
+	}
+
 	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
@@ -229,7 +253,7 @@ bool ModuleRender::DirectPrint(const Font* font, float x, float y, string mesage
 
 	SDL_Rect rect;
 	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
-	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
+	resizeStruct size = { (int)(rect.w*fontSize),(int)(rect.h*fontSize) };
 
 	Blit(tempTexture, x, y, nullptr, &size);
 	SDL_FreeSurface(surfaceFinal);
@@ -271,7 +295,7 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+bool ModuleRender::DrawQuads(const SDL_Rect rects[],const int& count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	bool ret = true;
 

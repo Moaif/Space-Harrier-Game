@@ -30,13 +30,13 @@ string Font::GetName() const {
 int Font::GetXSize() const {
 	return xSize;
 }
-void Font::SetXSize(int x) {
+void Font::SetXSize(const int& x) {
 	xSize = x;
 }
 int Font::GetYSize() const {
 	return ySize;
 }
-void Font::SetYSize(int y) {
+void Font::SetYSize(const int& y) {
 	ySize = y;
 }
 
@@ -56,6 +56,6 @@ void Font::SetOnlyCaps(bool value) {
 	onlyCaps = value;
 }
 
-bool Font::GetOnlyCaps() {
+bool Font::GetOnlyCaps()const {
 	return onlyCaps;
 }

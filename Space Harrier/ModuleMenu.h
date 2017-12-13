@@ -12,16 +12,17 @@ public:
 	ModuleMenu(bool active = true);
 	~ModuleMenu();
 
-	bool Start();
-	update_status Update();
-	bool CleanUp();
+	bool Start()override;
+	update_status Update()override;
+	bool CleanUp()override;
 
 private:
-	const Font* red;
+	//Text
+	const Font* red=nullptr;
 	int redFontLineReference;
 	float textTimer;
+	//Images
 	SDL_Texture* content = nullptr;
-	uint fx = 0;
 	SDL_Rect background;
 	Animation robot;
 	Animation eye;
@@ -29,6 +30,9 @@ private:
 	int titleMult;
 	SDL_Rect finalTitle;
 	Animation man;
+	//Sound
+	uint fx = 0;
+	//Static variables
 	static const float TEXT_INTERVAL;
 
 };

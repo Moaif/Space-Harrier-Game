@@ -23,7 +23,7 @@ const float ModuleUI::STAGE_X_POS = 100.0f;
 const float ModuleUI::TOP_ELEMENTS_Y_POS=208;
 const float ModuleUI::BOT_ELEMENTS_Y_POS=1;
 const float ModuleUI::TIME_WITH_TITLE = 5.0f;
-const int ModuleUI::POINTS_PER_SECOND = 100;
+const long ModuleUI::POINTS_PER_SECOND = 100;
 const float ModuleUI::POINTS_ACTUALIZATION_PER_SECOND = 10;
 const float ModuleUI::CONGRATS_TIME = 5;
 const float ModuleUI::END_TIME = 8;
@@ -158,12 +158,12 @@ update_status ModuleUI::Update() {
 
 	//Lives
 	for (int i = 0; i < App->player->GetLives(); ++i) {
-		App->renderer->AddToBlitBuffer(graphics, -120 - (i*(liveImg.w + 1)), BOT_ELEMENTS_Y_POS, FONTS_Z, &liveImg, nullptr);
+		App->renderer->AddToBlitBuffer(graphics, -120.0f - (i*(liveImg.w + 1)), BOT_ELEMENTS_Y_POS, FONTS_Z, &liveImg, nullptr);
 	}
 
 	//Increase points by time
 	while (pointsTimer >= 1 / POINTS_ACTUALIZATION_PER_SECOND) {
-		points += POINTS_PER_SECOND / POINTS_ACTUALIZATION_PER_SECOND;
+		points +=(long)( POINTS_PER_SECOND / POINTS_ACTUALIZATION_PER_SECOND);
 		pointsTimer -= 1 / POINTS_ACTUALIZATION_PER_SECOND;
 	}
 	pointsTimer += App->time->GetDeltaTime();
@@ -172,11 +172,11 @@ update_status ModuleUI::Update() {
 	return UPDATE_CONTINUE;
 }
 
-void ModuleUI::AddPoints(int value) {
+void ModuleUI::AddPoints(const int& value) {
 	points += value;
 }
 
-int ModuleUI::GetPoints() {
+int ModuleUI::GetPoints() const {
 	return points;
 }
 
@@ -260,7 +260,7 @@ void ModuleUI::ScoreBoard() {
 
 	//If player in scoreboard
 	if (playerPosInScore != -1) {
-		float actualPosX = -(((yellow->GetXSize() * 27)/2)-(yellow->GetXSize()/2));//27 letters in alphabet
+		float actualPosX = -(((yellow->GetXSize() * 27.0f)/2.0f)-(yellow->GetXSize()/2.0f));//27 letters in alphabet
 		lastYPos -= (SCOREBOARD_TEXT_SEPARATION + yellow->GetYSize());
 		//Print alphabet 65 = A, 90 = Z
 		for (int i = 65; i <= 90; ++i) {
@@ -339,7 +339,7 @@ void ModuleUI::Write() {
 	ofs << setw(4) << output << endl;
 }
 
-long ModuleUI::GetTopScore() {
+long ModuleUI::GetTopScore() const {
 	json input;
 	ifstream ifs("assets/json/Scores.json");
 	if (ifs.fail()) {

@@ -20,6 +20,10 @@ struct SDL_Texture;
 class Enemy:public GameObject {
 public:
 	Enemy(SDL_Texture* texture,Enemy* father=nullptr) :texture(texture),father(father) { 
+		if (texture == nullptr) {
+			LOG("Enemy received a null texture");
+			return;
+		}
 		if (father != nullptr) {
 			father->childs.push_back(this);
 		}
@@ -33,8 +37,8 @@ public:
 		float scale = 1 - (screenY / App->floor->horizon.y);
 		screenY += y*scale;
 
-		int w = anim.GetCurrentFrameConst().w*scale;
-		int h = anim.GetCurrentFrameConst().h*scale;
+		int w = (int)(anim.GetCurrentFrameConst().w*scale);
+		int h = (int)(anim.GetCurrentFrameConst().h*scale);
 
 		temp.anim = anim;
 		if (noDmg) {
@@ -54,7 +58,7 @@ public:
 	}
 	virtual void Update() {}
 
-	void OnCollision(Collider* other) override {
+	void OnCollision(Collider* other) override {//Dont check for nullptr cause we know that only its called if collides with other one
 		if (other->type == PLAYER) {
 			return;
 		}
@@ -64,7 +68,7 @@ public:
 				App->ui->AddPoints(points);
 				collider->to_delete = true;
 				to_delete = true;
-				App->particles->AddParticle(App->particles->explosion, position.x, position.y, position.z);
+				App->particles->AddParticle(*App->particles->explosion, position.x, position.y, position.z);
 			}
 		}
 	}
@@ -85,8 +89,7 @@ public:
 	Enemy* father=nullptr;//Only used by enemies with more than 1 collider, they have "parts" which have colliders, and the enemie is part's father
 	vector<Enemy*> childs;//Used to delete all components of a part made enemy
 
-	Collider* collider;
-	SDL_Texture* texture;
+	SDL_Texture* texture=nullptr;
 	SDL_Rect screenPoint = {0,0,0,0};
 
 };

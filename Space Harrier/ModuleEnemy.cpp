@@ -425,7 +425,7 @@ update_status ModuleEnemy::Update()
 		if (p->texture == nullptr) {
 			for (vector<Enemy*>::iterator it2 = p->childs.begin(); it2 != p->childs.end(); ++it2) {
 				resizeStruct resizeInfo = { (*it2)->screenPoint.w,(*it2)->screenPoint.h };
-				App->renderer->AddToBlitBuffer((*it2)->texture,(*it2)->screenPoint.x,(*it2)->screenPoint.y,(*it2)->position.z,&((*it2)->anim.GetCurrentFrame()),&resizeInfo);
+				App->renderer->AddToBlitBuffer((*it2)->texture,(float)(*it2)->screenPoint.x,(float)(*it2)->screenPoint.y,(*it2)->position.z,&((*it2)->anim.GetCurrentFrame()),&resizeInfo);
 			}
 
 		}
@@ -452,17 +452,17 @@ void ModuleEnemy::AddEnemy(const Enemy& enemy, const float& x, const float& y, c
 	Enemy* p = enemy.Copy(x, y, z,father);
 	active.push_back(p);
 	if (p->childs.size() > 0) {
-		for (int i = 0; i < p->childs.size(); ++i) {
+		for (unsigned int i = 0; i < p->childs.size(); ++i) {
 			activeBodyParts.push_back(p->childs[i]);
 		}
 	}
 }
 
 
-Enemy* ModuleEnemy::GetById(string id) {
-	map<string, Enemy*>::iterator it = enemies.find(id);
+const Enemy* ModuleEnemy::GetById(string id) const {
+	map<string, Enemy*>::const_iterator it = enemies.find(id);
 	if (it != enemies.end()) {
-		return enemies[id];
+		return (*it).second;
 	}
 	return nullptr;
 }

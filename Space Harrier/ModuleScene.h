@@ -14,7 +14,7 @@ struct EnemyInstantiate
 	float x;
 	float y;
 	float z;
-	Enemy* enemy;
+	const Enemy* enemy;
 };
 
 struct DelayList 
@@ -29,11 +29,12 @@ public:
 	ModuleScene(bool active = true);
 	~ModuleScene();
 
-	bool Start();
-	bool Restart();
-	update_status Update();
-	bool CleanUp();
-	bool ModuleScene::LoadJson(string path);
+	bool Start()override;
+	bool Restart()override;
+	update_status Update()override;
+	bool CleanUp()override;
+
+	bool ModuleScene::LoadJson(const string& path);
 	void Win();
 	void End();
 

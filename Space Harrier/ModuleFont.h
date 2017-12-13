@@ -20,21 +20,21 @@ public:
 	ModuleFont();
 	~ModuleFont();
 
-	bool Init();
-	bool CleanUp();
-	update_status PreUpdate();
+	bool Init()override;
+	bool CleanUp()override;
+	update_status PreUpdate()override;
 
-	const Font* GetFont(std::string fontName, std::string file, int line);
-	void FreeFont(const Font ** p, std::string file, int line);
+	const Font* GetFont(const std::string& fontName, const std::string& file, const int& line);
+	void FreeFont(const Font ** p,const std::string& file,const int& line);
 	bool VerifyLinks();
-	SDL_Texture* GetMessage(const Font* font,std::string message);
+	SDL_Texture* GetMessage(const Font* font,const std::string& message);
 
 private:
 	bool LoadFontRed();
 	bool LoadFontBlue();
 	bool LoadFontGreen();
 	bool LoadFontYellow();
-	SDL_Texture* CreateMessage(const Font* font,std::string message);
+	SDL_Texture* CreateMessage(const Font* font,const std::string& message);
 
 private:
 	std::map<std::string, Font*> fontMap;

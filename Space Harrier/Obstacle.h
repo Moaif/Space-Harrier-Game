@@ -15,7 +15,7 @@ public:
 	void OnCollision(Collider* other)override;
 
 private:
-	const obstacleInfo* quad;
+	const obstacleInfo* quad=nullptr;
 	float positionQuad;
 	float lastFrameZ;
 	int counter = 0;
