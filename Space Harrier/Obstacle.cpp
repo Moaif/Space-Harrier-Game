@@ -21,7 +21,9 @@ void Obstacle::Update() {
 	yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
 
 	position.z = yScreen*CLIPDISTANCE/App->floor->actualCameraY;
-	speed.z = (lastFrameZ - position.z)/App->time->GetDeltaTime();
+	if (App->time->GetDeltaTime() > 0.0f) {//If not checked, after a pause, it may be 0, and speed would turn into infinite/nan
+		speed.z = (lastFrameZ - position.z) / App->time->GetDeltaTime();
+	}
 	lastFrameZ = position.z;
 
 	float xOffset = App->player->speedStage*App->time->GetDeltaTime();
@@ -66,7 +68,7 @@ void Obstacle::OnCollision(Collider* other) {
 			float yScreen = quad->y + quad->h*positionQuad;
 			yScreen = (SCREEN_HEIGHT - (yScreen / SCREEN_SIZE));
 			float scale = 1 - (yScreen / App->floor->horizon.y);
-			App->particles->AddParticle(App->particles->explosion, position.x*scale, position.y, position.z);
+			App->particles->AddParticle(*App->particles->explosion, position.x*scale, position.y, position.z);
 		}
 	}
 }

@@ -15,7 +15,7 @@ public:
 
 private:
 	float bounceYMax;
-	const obstacleInfo* quad;
+	const obstacleInfo* quad=nullptr;
 	float positionQuad;
 	float lastFrameZ;
 	int counter = 0;

@@ -40,8 +40,9 @@ bool ModuleParticles::Start()
 	laser->anim.frames.push_back({ 171, 0, 56, 38 });
 	laser->anim.randFrame = true;
 	laser->anim.speed = 1.0f;
-	laser->efxIndex = App->audio->LoadFx("assets/laser.wav");
-	laser->speed = 40.0f;
+	laser->efxIndex = App->audio->LoadFx("assets/music/SFX/PlayerShoot.wav");
+	((PlayerShoot*)laser)->reboundEfx = App->audio->LoadFx("assets/music/SFX/ReboundShoot.wav");
+	laser->speed = 150.0f;
 	prototipeClearList.push_back(laser);
 
 	fire = new EnemyShoot(shots);
@@ -49,20 +50,22 @@ bool ModuleParticles::Start()
 	fire->anim.frames.push_back({ 56,2,48,44 });
 	fire->anim.frames.push_back({ 110,0,50,48 });
 	fire->anim.speed = 5.0f;
-	fire->speed = 80.0f;
+	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
+	fire->speed = 100.0f;
 	prototipeClearList.push_back(fire);
 
 	enemyLaser = new EnemyShoot(enemLaser);
-	enemyLaser->anim.frames.push_back({ 10,10,68,68});
-	enemyLaser->anim.frames.push_back({ 90,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 170,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 250,10,68,68 });
-	enemyLaser->anim.frames.push_back({ 10,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 90,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 170,90,68,68 });
-	enemyLaser->anim.frames.push_back({ 250,90,68,68 });
+	enemyLaser->anim.frames.push_back({ 8,8,59,59});
+	enemyLaser->anim.frames.push_back({ 76,8,59,59 });
+	enemyLaser->anim.frames.push_back({ 144,8,59,59 });
+	enemyLaser->anim.frames.push_back({ 213,10,59,59 });
+	enemyLaser->anim.frames.push_back({ 8,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 76,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 144,76,59,59 });
+	enemyLaser->anim.frames.push_back({ 213,76,59,59 });
 	enemyLaser->anim.speed = 5.0f;
-	enemyLaser->speed = 80.0f;
+	enemyLaser->efxIndex = App->audio->LoadFx("assets/music/SFX/LaserShoot.wav");
+	enemyLaser->speed = 100.0f;
 	prototipeClearList.push_back(enemyLaser);
 
 	explosion = new Explosion(200.0f,exp);
@@ -88,6 +91,9 @@ bool ModuleParticles::CleanUp()
 {
 	LOG("Unloading particles");
 	App->textures->Unload(lasers);
+	App->textures->Unload(shots);
+	App->textures->Unload(exp);
+	App->textures->Unload(enemLaser);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);
@@ -145,7 +151,6 @@ update_status ModuleParticles::Update()
 			}
 		}
 
-		// Handle particle fx here ?
 		if (p->firstSound) {
 			App->audio->PlayFx(p->efxIndex);
 			p->firstSound = false;
@@ -155,15 +160,15 @@ update_status ModuleParticles::Update()
 	return UPDATE_CONTINUE;
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z)
+void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z)
 {
-	Particle* p = particle->Copy(x,y,z);
+	Particle* p = particle.Copy(x,y,z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
 }
 
-void ModuleParticles::AddParticle(const Particle* particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
-	Particle* p = particle->Copy(x, y, z);
+void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
+	Particle* p = particle.Copy(x, y, z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	p->pathVector = unitaryVector;
 	active.push_back(p);

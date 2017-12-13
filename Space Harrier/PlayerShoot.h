@@ -10,6 +10,12 @@ public:
 
 	Particle* Copy(const float & x, const float & y, const float & z)const override;
 	void Update() override;
+	void OnCollision(Collider* other) override;
+
+public:
+	unsigned int reboundEfx;
+private:
+	float reboundXSpeed=0;
 
 };
 

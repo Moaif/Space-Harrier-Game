@@ -14,7 +14,7 @@ struct EnemyInstantiate
 	float x;
 	float y;
 	float z;
-	Enemy* enemy;
+	const Enemy* enemy;
 };
 
 struct DelayList 
@@ -29,15 +29,21 @@ public:
 	ModuleScene(bool active = true);
 	~ModuleScene();
 
-	bool Start();
-	update_status Update();
-	bool CleanUp();
-	bool ModuleScene::LoadJson(string path);
+	bool Start()override;
+	bool Restart()override;
+	update_status Update()override;
+	bool CleanUp()override;
+
+	bool ModuleScene::LoadJson(const string& path);
+	void Win();
+	void End();
 
 public:
 	//For UI module
 	string  stageName;
 	int currentStage;
+	//For multiple enemy Boss
+	int numEnemies = 0;
 private:
 	string backgroundPath;
 	string stagePath;
@@ -49,7 +55,6 @@ private:
 	static const float INTERVAL_DELAY;
 	float timeElapsed;
 	list<DelayList> elements;
-
 };
 
 #endif // __MODULESCENE_H__

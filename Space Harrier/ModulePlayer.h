@@ -14,14 +14,16 @@ public:
 	ModulePlayer(bool active = true);
 	~ModulePlayer();
 
-	bool Start();
-	update_status Update();
-	bool CleanUp();
+	bool Start()override;
+	bool Restart()override;
+	update_status Update()override;
+	bool CleanUp()override;
 	void OnCollision(Collider* other)override;
 
-	void SetLives(int amount);
-	int GetLives();
-	fPoint GetRelativeWorldPosition();
+	void SetLives(const int& amount);
+	int GetLives()const;
+	fPoint GetRelativeWorldPosition() const;
+	void Win();
 
 private:
 	void VerifyFlyAnimation();
@@ -30,6 +32,7 @@ private:
 	void VerifyHorizonY();
 	void CalculateSpeed();
 	void Death();
+	void AnimWin();
 
 public:
 
@@ -44,7 +47,6 @@ public:
 	Animation fall;
 	Animation death;
 	fPoint position;
-	Collider* collider;
 	bool destroyed = false;
 	float speedStage=0.0f;
 
@@ -58,6 +60,17 @@ private:
 	float deathStartingPosY=0.0f;
 	//Death recover
 	float recoverTimer = 0.0f;
+	//Audio
+	unsigned int ouch = 0;
+	unsigned int aaargh = 0;
+	unsigned int getReady = 0;
+	//Win anim variables
+	bool win = false;
+	bool centered=false;
+	fPoint initialPosition;
+	float currentLerpPercentaje;
+	//Static variables
+	static const int INITIAL_LIVES;
 	static const float MIN_X_SPEED;
 	static const float MAX_X_SPEED;
 	static const float HORIZON_Y_SPEED;
@@ -66,6 +79,8 @@ private:
 	static const float FALL_SPEED;
 	static const float FALL_BOUNCE;
 	static const float RECOVER_TIME;
+	static const float COLLIDER_W;
+	static const float COLLIDER_H;
 };
 
 #endif

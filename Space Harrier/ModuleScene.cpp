@@ -21,8 +21,6 @@ const float ModuleScene::INTERVAL_DELAY = 0.1f;
 
 ModuleScene::ModuleScene(bool active) : Module(active)
 {
-	timeElapsed = 0;
-	currentStage = 0;
 }
 
 ModuleScene::~ModuleScene()
@@ -33,23 +31,31 @@ bool ModuleScene::Start()
 {
 	LOG("Loading space scene");
 
+	App->player->Enable();
+	App->collision->Enable();
+	App->particles->Enable();
+	App->enemies->Enable();
+	App->ui->Enable();
+	App->playing = true;
+
+	timeElapsed = 0;
 	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/Stage3.json");
+	LoadJson("assets/json/STage3.json");
+	LOG("list %d",elements.size());
 	
 	background = App->textures->Load(backgroundPath.c_str());
 	stage = App->textures->Load(stagePath.c_str());
 	floor = App->textures->Load(floorPath.c_str());
 
-	App->player->Enable();
-	App->particles->Enable();
-	App->collision->Enable();
-	App->ui->Enable();
-	App->playing = true;
-
-	App->audio->PlayMusic("assets/stage1.ogg", 1.0f);
+	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
 	
 
 
+	return true;
+}
+
+bool ModuleScene::Restart() {
+	currentStage = 2;//TODO: if introduced new stages, change
 	return true;
 }
 
@@ -57,13 +63,22 @@ bool ModuleScene::Start()
 bool ModuleScene::CleanUp()
 {
 	LOG("Unloading space scene");
+	App->textures->Unload(background);
+	App->textures->Unload(stage);
+	App->textures->Unload(floor);
+
+	for (list<DelayList>::iterator it = elements.begin(); it != elements.end(); ++it) {
+		(*it).list.clear();
+	}
+	elements.clear();
 
  	App->textures->Unload(background);
 	App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
+	App->enemies->Disable();
 	App->ui->Disable();
-	
+
 	return true;
 }
 
@@ -77,6 +92,13 @@ update_status ModuleScene::Update()
 	if (elements.size() > 0) {
 		DelayList tempList = elements.front();
 		if (timeElapsed >= STARTING_DELAY + INTERVAL_DELAY + tempList.delay) {
+
+			//Only BOSS to be instantiated
+			if (elements.size() == 1) {
+				string path = "assets/music/Stage" + to_string(currentStage) + "Boss.ogg";
+				App->audio->PlayMusic(path.c_str(),0);
+			}
+
 			for (list<EnemyInstantiate>::iterator it = tempList.list.begin(); it != tempList.list.end(); ++it) {
 				EnemyInstantiate e = (*it);
 				App->enemies->AddEnemy(*(e.enemy), e.x, e.y, e.z);
@@ -93,11 +115,12 @@ update_status ModuleScene::Update()
 	return UPDATE_CONTINUE;
 }
 
-bool ModuleScene::LoadJson(string path) {
+bool ModuleScene::LoadJson(const string& path) {
 	json input;
 	ifstream ifs(path);
 	if (ifs.fail()) {
-		cerr << "\nThe file Info.json could not be found in it's directory" << endl;
+		string temp = "The file " + path + " could not be found in it's directory";
+		LOG(temp.c_str());
 		return false;
 	}
 	ifs >> input;
@@ -129,11 +152,24 @@ bool ModuleScene::LoadJson(string path) {
 				z = MAX_Z;
 			}
 			string id = input["enemies"][i]["list"][j]["id"];
-			Enemy* enemy = App->enemies->GetById(id);
+			const Enemy* enemy = App->enemies->GetById(id);
 			EnemyInstantiate temp = { x,y,z,enemy };
 			tempList.list.push_back(temp);
 		}
 		elements.push_back(tempList);
 	}
 	return true;
+}
+
+void ModuleScene::Win(){
+	App->player->Win();
+	App->ui->Congratulations();
+	App->audio->PlayMusic("assets/music/Win.ogg",0);
+}
+
+void ModuleScene::End() {
+	App->time->SetTimeScale(0);
+	App->ui->SetScoreBoard(true);
+	App->playing = false;
+	App->audio->PlayMusic("assets/music/EndSong.ogg", 0);
 }

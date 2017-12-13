@@ -6,7 +6,7 @@
 #include "SDL/include/SDL.h"
 
 const float ModuleFloor::SEGMENT_REDUCTION = 0.60f;
-const float ModuleFloor::ALPHA_LINES_SPEED = 3.0f;
+const float ModuleFloor::ALPHA_LINES_SPEED = 4.0f;
 const float ModuleFloor::HORIZON_Y_MAX = 100;
 const float ModuleFloor::HORIZON_Y_MIN = 20;
 const float ModuleFloor::STAGE_SPEED_MAX = 60;
@@ -38,6 +38,11 @@ ModuleFloor::~ModuleFloor() {
 
 bool ModuleFloor::DrawFloor(SDL_Texture* texture)
 {
+	if (texture == nullptr) {
+		LOG("DrawFloor received a null texture");
+		return false;
+	}
+
 	bool ret = true;
 	SDL_Rect rect;
 	int textW, textH;
@@ -132,6 +137,12 @@ void ModuleFloor::DrawAlphaLines()
 }
 
 bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
+	
+	if (texture == nullptr) {
+		LOG("DrawBackground received a null texture");
+		return false;
+	}
+
 	bool ret = true;
 	SDL_Rect rect;
 	int w, h;
@@ -168,6 +179,12 @@ bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
 }
 
 bool ModuleFloor::DrawStage(SDL_Texture* texture) {
+
+	if (texture == nullptr) {
+		LOG("DrawStage received a null texture");
+		return false;
+	}
+
 	bool ret = true;
 	SDL_Rect rect;
 	int w, h;
@@ -203,17 +220,17 @@ bool ModuleFloor::DrawStage(SDL_Texture* texture) {
 	return ret;
 }
 
-void ModuleFloor::SetBackgroundParametersPercentual(float percent) {
+void ModuleFloor::SetBackgroundParametersPercentual(const float& percent) {
 	backgroundSpeed = BACKGROUND_SPEED_MIN + (percent*(BACKGROUND_SPEED_MAX - BACKGROUND_SPEED_MIN));
 	stageSpeed = STAGE_SPEED_MIN + (percent*(STAGE_SPEED_MAX - STAGE_SPEED_MIN));
 }
 
-void ModuleFloor::SetHorizonYPerccentual(float percen) {
+void ModuleFloor::SetHorizonYPerccentual(const float& percen) {
 	horizon.y=(HORIZON_Y_MIN + (percen*(HORIZON_Y_MAX - HORIZON_Y_MIN)));
 	actualCameraY = (cameraYMin +(percen*(cameraYMax - cameraYMin)));
 }
 
-const obstacleInfo* ModuleFloor::GetQuad(int index)const  {
+const obstacleInfo* ModuleFloor::GetQuad(const int& index)const  {
 	int innerIndex = (lastQuadIndex + index)%nHorizonQuads;
 	return &quad2[innerIndex];
 }

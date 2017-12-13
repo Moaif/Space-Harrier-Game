@@ -118,8 +118,12 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,CollisionType type,GameObject* callback)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,const float& z,const float& speed,const CollisionType& type,GameObject* callback)
 {
+	if (callback == nullptr) {
+		LOG("AddCollider received a null callback");
+		return nullptr;
+	}
 	Collider* ret = new Collider(rect,z,speed,type,callback);
 
 	colliders.push_back(ret);
@@ -129,13 +133,12 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,float z,float speed,
 
 // -----------------------------------------------------
 
-bool Collider::CheckCollision(const SDL_Rect& r,float z,float speed) const
+bool Collider::CheckCollision(const SDL_Rect& r,const float& z,const float& speed) const
 {
 	bool xHit = true;
 	bool yHit = true;
 	bool zHit = true;
 
-	//TODO mirar SDL_overlap
 	//Xcollision
 	if (r.x > (this->rect.x + this->rect.w) || (r.x+r.w) < this->rect.x) {
 		xHit = false;

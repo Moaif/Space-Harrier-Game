@@ -31,10 +31,10 @@ void ModuleTime::SetTimeScale(float value) {
 	scale = value;
 }
 
-float ModuleTime::GetDeltaTime() {
+float ModuleTime::GetDeltaTime() const {
 	return deltaTime;
 }
 
-float ModuleTime::GetTimeSinceStart() {
+float ModuleTime::GetTimeSinceStart() const {
 	return (float)SDL_GetTicks() / 1000.0f;
 }

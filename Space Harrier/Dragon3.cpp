@@ -1,6 +1,7 @@
 #include "Dragon3.h"
 #include "BodyPart.h"
 #include "ModuleEnemy.h"
+#include "ModuleScene.h"
 
 const float Dragon3::ARRIVALTIME = 1.0f;
 const float Dragon3::TURNAMPLITUDE = 4.0f;
@@ -33,6 +34,7 @@ Dragon3::~Dragon3() {
 
 Enemy* Dragon3::Copy(const float& x, const float& y, const float& z, Enemy* father)const {
 	Enemy* temp = new Dragon3(dragonMode,y,speed,texture, father);
+	App->scene->numEnemies++;
 	temp->collider = nullptr;
 	temp->speed = speed;
 	temp->hits = hits;
@@ -87,8 +89,8 @@ void Dragon3::Update() {
 	fPoint vec = childs[0]->position - childs[1]->position;
 	vec = vec / 6;// we have 5 body pieces and we dont want the last one over the tail
 
-	for (int i = 2; i < childs.size(); ++i) {
-		childs[i]->position = position - vec*(i - 1);
+	for (unsigned int i = 2; i < childs.size(); ++i) {
+		childs[i]->position = position - vec*(i - 1.0f);
 		childs[i]->Update();
 	}
 
@@ -97,24 +99,27 @@ void Dragon3::Update() {
 
 void Dragon3::OnCollision(Collider* other) {
 	--hits;
-	for (int i = 0; i < childs.size(); ++i) {
+	for (unsigned int i = 0; i < childs.size(); ++i) {
 		childs[i]->anim.SetNextFrame();
 	}
 	if (hits <= 0) {
 		App->ui->AddPoints(points);
-		for (int i = 0; i < childs.size(); ++i) {
+		for (unsigned int i = 0; i < childs.size(); ++i) {
 			childs[i]->collider->to_delete = true;
 			childs[i]->to_delete = true;
-			App->particles->AddParticle(App->particles->explosion, childs[i]->position.x, childs[i]->position.y, childs[i]->position.z);
+			App->particles->AddParticle(*App->particles->explosion, childs[i]->position.x, childs[i]->position.y, childs[i]->position.z);
 		}
 		to_delete = true;
+		if (--App->scene->numEnemies == 0) {
+			App->scene->Win();
+		}
 	}
 }
 
 
 
 void Dragon3::Shoot() {
-	((BodyPart*)childs[0])->Shoot(App->particles->fire);
+	((BodyPart*)childs[0])->Shoot(*App->particles->fire);
 }
 
 void Dragon3::Head1(){

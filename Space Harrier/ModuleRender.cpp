@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModulePlayer.h"
+#include "ModuleFont.h"
 #include "SDL/include/SDL.h"
 #include <iostream>
 #include "Font.h"
@@ -103,7 +104,13 @@ bool ModuleRender::CleanUp()
 	return true;
 }
 
-void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo) {
+void ModuleRender::AddToBlitBuffer(SDL_Texture* texture,const float& x,const float& y, const float& z, SDL_Rect* section, resizeStruct* resizeInfo) {
+	
+	if (texture == nullptr) {
+		LOG("AddToBlitBuffer received a null texture");
+		return;
+	}
+
 	SDL_Rect empty = { 0,0,0,0 };
 	resizeStruct noResize= { 0,0 };
 	BlitStruct temp;
@@ -124,8 +131,14 @@ void ModuleRender::AddToBlitBuffer(SDL_Texture* texture, float x, float y,float 
 }
 
 // Blit to screen
-bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo)
+bool ModuleRender::Blit(SDL_Texture* texture,float x,float y, SDL_Rect* section, resizeStruct* resizeInfo)
 {
+
+	if (texture == nullptr) {
+		LOG("Blit received a null texture");
+		return false;
+	}
+
 	bool ret = true;
 	SDL_Rect rect;
 
@@ -166,14 +179,52 @@ bool ModuleRender::Blit(SDL_Texture* texture, float x, float y, SDL_Rect* sectio
 	return ret;
 }
 
-bool ModuleRender::Print(const Font* font, float x, float y, string mesage, float fontSize) {
+bool ModuleRender::Print(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
+
+	if (font == nullptr) {
+		LOG("Print received a null font");
+		return false;
+	}
+
+	bool ret = true;
+
+	if (fontSize < 0) {
+		fontSize = 0;
+	}
+
+	SDL_Texture* tempTexture = App->fonts->GetMessage(font,mesage);
+	if (tempTexture == nullptr) {
+		LOG("Message texture failed on construction");
+		ret = false;
+	}
+
+	SDL_Rect rect;
+	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
+	resizeStruct size = { (int)(rect.w*fontSize),(int)(rect.h*fontSize) };
+
+	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
+	return ret;
+}
+
+bool ModuleRender::DirectPrint(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
+
+	if (font == nullptr) {
+		LOG("DirectPrint received a null font");
+		return false;
+	}
+
 	bool ret = true;
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
 
+	if (fontSize < 0) {
+		fontSize = 0;
+	}
+
 	SDL_Surface* tempSurface = font->GetImage();
 	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
-	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 0, 0, 0));
+	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
+	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
 
 	SDL_Rect srcrect;
 	srcrect.h = ySize;
@@ -202,9 +253,10 @@ bool ModuleRender::Print(const Font* font, float x, float y, string mesage, floa
 
 	SDL_Rect rect;
 	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
-	resizeStruct size = { rect.w*fontSize,rect.h*fontSize };
+	resizeStruct size = { (int)(rect.w*fontSize),(int)(rect.h*fontSize) };
 
-	AddToBlitBuffer(tempTexture, x, y, FONTS_Z, nullptr, &size);
+	Blit(tempTexture, x, y, nullptr, &size);
+	SDL_FreeSurface(surfaceFinal);
 
 	return ret;
 }
@@ -243,7 +295,7 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	return ret;
 }
 
-bool ModuleRender::DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+bool ModuleRender::DrawQuads(const SDL_Rect rects[],const int& count, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	bool ret = true;
 

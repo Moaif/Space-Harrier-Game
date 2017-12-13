@@ -14,7 +14,7 @@ struct obstacleInfo
 	float h;
 };
 
-class ModuleFloor: public Module{
+class ModuleFloor:public Module{
 public:
 	ModuleFloor();
 	~ModuleFloor();
@@ -22,9 +22,9 @@ public:
 	bool DrawFloor(SDL_Texture* texture);
 	bool DrawBackground(SDL_Texture* texture);
 	bool DrawStage(SDL_Texture* texture);
-	void SetBackgroundParametersPercentual(float percent);
-	void SetHorizonYPerccentual(float percen);
-	const obstacleInfo* GetQuad(int index)const ;
+	void SetBackgroundParametersPercentual(const float& percent);
+	void SetHorizonYPerccentual(const float& percen);
+	const obstacleInfo* GetQuad(const int& index)const ;
 	float GetFloorPositionFromZ(const float& z)const;
 
 private:

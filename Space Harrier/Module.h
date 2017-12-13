@@ -45,6 +45,11 @@ public:
 		return true;
 	}
 
+	virtual bool Restart()
+	{
+		return true;
+	}
+
 	virtual update_status PreUpdate()
 	{
 		return UPDATE_CONTINUE;

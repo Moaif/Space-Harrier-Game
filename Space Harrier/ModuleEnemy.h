@@ -15,13 +15,13 @@ public:
 	ModuleEnemy();
 	~ModuleEnemy();
 
-	bool Start();
-	update_status PreUpdate(); 
-	update_status Update(); 
-	bool CleanUp();
+	bool Start()override;
+	update_status PreUpdate()override; 
+	update_status Update()override; 
+	bool CleanUp()override;
 
 	void AddEnemy(const Enemy& enemy, const float& x, const float& y, const float& z,Enemy* father=nullptr);
-	Enemy* GetById(string id);
+	const Enemy* GetById(string id)const;
 
 private:
 
@@ -34,6 +34,10 @@ private:
 	list<Enemy*> prototypePartsClearList;
 	list<Enemy*> activeBodyParts;
 	map<string, Enemy*> enemies;
+
+	unsigned int DroneStartSFX;
+	unsigned int JellyStartSFX;
+	unsigned int FlyStartSFX;
 };
 
 #endif // !_MODULEENEMY_H_

@@ -25,7 +25,7 @@ bool ModuleShadow::CleanUp() {
 	return true;
 }
 
-void ModuleShadow::DrawShadow(float x, float y,float scale) {
+void ModuleShadow::DrawShadow(const float& x,const float& y,const float& scale) {
 	resizeStruct resizeInfo = {(int)(shadowRect.w*scale),(int)(shadowRect.h*scale) };
 	App->renderer->AddToBlitBuffer(shadow,x,y,SHADOW_Z,&shadowRect,&resizeInfo);
 }

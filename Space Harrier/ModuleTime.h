@@ -9,12 +9,12 @@ public:
 	ModuleTime();
 	~ModuleTime();
 
-	update_status PreUpdate();
+	update_status PreUpdate()override;
 
 	void SetTimeScale(float value);
 
-	float GetDeltaTime();
-	float GetTimeSinceStart();
+	float GetDeltaTime()const;
+	float GetTimeSinceStart()const;
 private:
 	float previousTicks;
 	float deltaTime;

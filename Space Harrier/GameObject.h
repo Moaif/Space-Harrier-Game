@@ -8,7 +8,7 @@ public:
 	virtual void OnCollision(Collider* other) {}
 
 public:
-	Collider* collider;
+	Collider* collider=nullptr;
 };
 
 #endif // !_GAMEOBJECT_

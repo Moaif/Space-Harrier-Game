@@ -41,17 +41,18 @@ public:
 	ModuleRender();
 	~ModuleRender();
 
-	bool Init();
-	update_status PreUpdate();
-	update_status Update();
-	update_status PostUpdate();
-	bool CleanUp();
+	bool Init()override;
+	update_status PreUpdate()override;
+	update_status Update()override;
+	update_status PostUpdate()override;
+	bool CleanUp()override;
 
-	void AddToBlitBuffer(SDL_Texture* texture, float x, float y,float z, SDL_Rect* section, resizeStruct* resizeInfo);
+	void AddToBlitBuffer(SDL_Texture* texture, const float& x, const float& y, const float& z, SDL_Rect* section, resizeStruct* resizeInfo);
 	bool Blit(SDL_Texture* texture, float x, float y, SDL_Rect* section, resizeStruct* resizeInfo);
-	bool Print(const Font* font,float x,float y,std::string message,float fontSize = 1);
+	bool Print(const Font* font,const float& x, const float& y,const std::string& message, float fontSize = 1);
+	bool DirectPrint(const Font* font,const  float& x,const float& y,const std::string& message, float fontSize = 1);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-	bool DrawQuads(const SDL_Rect rects[], int count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+	bool DrawQuads(const SDL_Rect rects[],const int& count, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 
 public:
 	SDL_Renderer* renderer = nullptr;

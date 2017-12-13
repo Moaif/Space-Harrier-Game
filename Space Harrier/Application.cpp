@@ -14,7 +14,8 @@
 #include "ModuleTime.h"
 #include "ModuleUI.h"
 
-#include "ModuleSceneIntro.h"
+#include "ModuleSceneSega.h"
+#include "ModuleMenu.h"
 #include "ModuleScene.h"
 #include "ModulePlayer.h"
 
@@ -34,7 +35,8 @@ Application::Application()
 	modules.push_back(fonts = new ModuleFont());
 
 	// Game Modules
-	modules.push_back(scene_intro = new ModuleSceneIntro(false));
+	modules.push_back(sega = new ModuleSceneSega(false));
+	modules.push_back(menu = new ModuleMenu(false));
 	modules.push_back(player = new ModulePlayer(false));
 	modules.push_back(scene = new ModuleScene(false));
 
@@ -73,7 +75,7 @@ bool Application::Init()
 	}
 
 	// Start the first scene --
-	fade->FadeToBlack(scene_intro, nullptr, 3.0f);
+	fade->FadeToBlack(sega, nullptr, 3.0f);
 
 	return ret;
 }
@@ -96,7 +98,8 @@ update_status Application::Update()
 
 	//Game pause
 	if (input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN && playing) {
-		//Hacer copia del renderer actual
+		App->ui->PauseMenu();
+		App->renderer->PostUpdate();
 		while (true)
 		{
 			time->PreUpdate();//In order to not stack aditional time on deltaTime
@@ -121,6 +124,15 @@ bool Application::CleanUp()
 	for(list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
 		if((*it)->IsEnabled() == true) 
 			ret = (*it)->CleanUp();
+
+	return ret;
+}
+
+bool Application::Restart()
+{
+	bool ret = true;
+	for (list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend() && ret; ++it)
+			ret = (*it)->Restart();
 
 	return ret;
 }

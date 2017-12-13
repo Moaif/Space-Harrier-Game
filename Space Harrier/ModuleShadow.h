@@ -12,13 +12,13 @@ public:
 	ModuleShadow();
 	~ModuleShadow();
 
-	bool Start();
-	bool CleanUp();
+	bool Start()override;
+	bool CleanUp()override;
 
-	void DrawShadow(float x, float y,float scale);
+	void DrawShadow(const float& x,const float& y,const float& scale);
 
 private:
-	SDL_Texture* shadow;
+	SDL_Texture* shadow=nullptr;
 	SDL_Rect shadowRect;
 };
 

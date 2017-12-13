@@ -67,9 +67,6 @@
     <ClInclude Include="ModuleCollision.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleSceneIntro.h">
-      <Filter>Game Modules</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleFont.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
@@ -136,6 +133,12 @@
     <ClInclude Include="ModuleUI.h">
       <Filter>Core Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleSceneSega.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleMenu.h">
+      <Filter>Game Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -173,9 +176,6 @@
     </ClCompile>
     <ClCompile Include="ModuleCollision.cpp">
       <Filter>Core Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleSceneIntro.cpp">
-      <Filter>Game Modules</Filter>
     </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>Main</Filter>
@@ -230,6 +230,12 @@
     </ClCompile>
     <ClCompile Include="ModuleUI.cpp">
       <Filter>Core Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSceneSega.cpp">
+      <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleMenu.cpp">
+      <Filter>Game Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
