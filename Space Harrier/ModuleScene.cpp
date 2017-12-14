@@ -40,7 +40,7 @@ bool ModuleScene::Start()
 
 	timeElapsed = 0;
 	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/STage3.json");
+	LoadJson("assets/json/STage1.json");
 	LOG("list %d",elements.size());
 	
 	background = App->textures->Load(backgroundPath.c_str());
@@ -148,9 +148,7 @@ bool ModuleScene::LoadJson(const string& path) {
 			float x = input["enemies"][i]["list"][j]["x"];
 			float y = input["enemies"][i]["list"][j]["y"];
 			float z = input["enemies"][i]["list"][j]["z"];
-			if (z > 0) {
-				z = MAX_Z;
-			}
+			z = z*MAX_Z;//z is a percentaje
 			string id = input["enemies"][i]["list"][j]["id"];
 			const Enemy* enemy = App->enemies->GetById(id);
 			EnemyInstantiate temp = { x,y,z,enemy };

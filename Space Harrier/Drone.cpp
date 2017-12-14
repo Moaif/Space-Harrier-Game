@@ -25,18 +25,32 @@ void Drone::Update() {
 	switch (droneMode)
 	{
 	case 0:
-		Mode0();
+		Mode3_1();
 		break;
 	case 1:
-		Mode1();
+		Mode3_2(true);
 		break;
 	case 2:
-		Mode2();
+		Mode3_3();
 		break;
 	case 3:
-		Mode3();
+		Mode3_4();
 		break;
-
+	case 4:
+		Mode1_1();
+		break;
+	case 5:
+		Mode1_2();
+		break;
+	case 6:
+		Mode3_2(false);//Same movement, but only 1 shoot
+		break;
+	case 7:
+		Mode1_3();
+		break;
+	case 8:
+		Mode1_4();
+		break;
 	}
 	elapsedTime += App->time->GetDeltaTime();
 
@@ -70,7 +84,7 @@ void Drone::Shoot() {
 	App->particles->AddParticle(*App->particles->enemyLaser, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z, unitaryVector);
 }
 
-void Drone::Mode0() {
+void Drone::Mode3_1() {
 	float maxBounce = 100;
 	position.y += tempSpeed.y * App->time->GetDeltaTime();
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
@@ -100,7 +114,7 @@ void Drone::Mode0() {
 	}
 }
 
-void Drone::Mode1() {
+void Drone::Mode3_2(bool doubleShoot) {
 	position.y += tempSpeed.y * App->time->GetDeltaTime();
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
@@ -116,16 +130,17 @@ void Drone::Mode1() {
 		}
 	}
 	else {
-
-		if (shoted) {
-			Shoot();
-			shoted = false;
+		if (doubleShoot) {
+			if (shoted) {
+				Shoot();
+				shoted = false;
+			}
 		}
 		tempSpeed.x = -speed.x;
 	}
 }
 
-void Drone::Mode2() {
+void Drone::Mode3_3() {
 	float maxBounce = 100;
 	position.y += tempSpeed.y * App->time->GetDeltaTime();
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
@@ -161,7 +176,7 @@ void Drone::Mode2() {
 	}
 }
 
-void Drone::Mode3() {
+void Drone::Mode3_4() {
 	position.y += tempSpeed.y * App->time->GetDeltaTime();
 	position.x += tempSpeed.x * App->time->GetDeltaTime();
 	position.z += tempSpeed.z * App->time->GetDeltaTime();
@@ -191,5 +206,112 @@ void Drone::Mode3() {
 			Shoot();
 			shoted = false;
 		}
+	}
+}
+
+void Drone::Mode1_1() {
+	position.y += tempSpeed.y * App->time->GetDeltaTime();
+	position.x += tempSpeed.x * App->time->GetDeltaTime();
+	position.z += tempSpeed.z * App->time->GetDeltaTime();
+
+	if (position.y <= 0) {
+		position.y = 0;
+	}
+
+	if (elapsedTime < TIMEOFFSET*1.8f) {
+		tempSpeed.z = 0;
+		tempSpeed.y = 0;
+	}
+	else{
+		tempSpeed.z = speed.z;
+		tempSpeed.y = speed.y;
+		tempSpeed.x = -speed.x*2;
+	}
+}
+
+void Drone::Mode1_2() {
+	position.y += tempSpeed.y * App->time->GetDeltaTime();
+	position.x += tempSpeed.x * App->time->GetDeltaTime();
+	position.z += tempSpeed.z * App->time->GetDeltaTime();
+
+	if (position.y <= 0) {
+		position.y = 0;
+	}
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if(elapsedTime < TIMEOFFSET*2.0f){
+		tempSpeed.z = 0;
+		tempSpeed.y = -speed.y*4;
+		tempSpeed.x = 0;
+	}else if(elapsedTime < TIMEOFFSET*3.0f){
+		if (!shoted) {
+			Shoot();
+			shoted = true;
+		}
+		tempSpeed.y = speed.y * 4;
+	}
+	else {
+		tempSpeed.z = speed.z*2;
+		tempSpeed.y = -speed.y/4;
+		tempSpeed.x = speed.x/4;
+	}
+}
+
+void Drone::Mode1_3() {
+	position.y += tempSpeed.y * App->time->GetDeltaTime();
+	position.x += tempSpeed.x * App->time->GetDeltaTime();
+	position.z += tempSpeed.z * App->time->GetDeltaTime();
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if (elapsedTime < TIMEOFFSET*1.5f) {
+		tempSpeed.x = -speed.x/2;
+		tempSpeed.z = speed.z / 2;
+		tempSpeed.y = speed.y * 4;
+	}
+	else if (elapsedTime < TIMEOFFSET*2.0f) {
+		tempSpeed.z = -speed.z/2;
+		tempSpeed.y = -speed.y*4;
+	}
+	else
+	{
+		tempSpeed.x = speed.x/2;
+		tempSpeed.z = -speed.z/1.5;
+		tempSpeed.y = -speed.y;
+	}
+}
+
+void Drone::Mode1_4() {
+	position.y += tempSpeed.y * App->time->GetDeltaTime();
+	position.x += tempSpeed.x * App->time->GetDeltaTime();
+	position.z += tempSpeed.z * App->time->GetDeltaTime();
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if (elapsedTime < TIMEOFFSET*1.25f) {
+		tempSpeed.x = 0;
+	}
+	else if (elapsedTime < TIMEOFFSET*1.65f) {
+		tempSpeed.x = -speed.x/1.3;
+		tempSpeed.z = speed.z/5;
+		tempSpeed.y = 0;
+	}
+	else if (elapsedTime < TIMEOFFSET*2.0f) {
+		tempSpeed.x = -speed.x / 1.3;
+		tempSpeed.z = -speed.z / 5;
+		tempSpeed.y = 0;
+	}
+	else {
+		if (!shoted) {
+			Shoot();
+			shoted = true;
+		}
+		tempSpeed.z = -speed.z;
+		tempSpeed.x = -speed.x/4;
+		tempSpeed.y = -speed.y;
 	}
 }

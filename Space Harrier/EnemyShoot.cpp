@@ -19,6 +19,8 @@ void EnemyShoot::Update() {
 	position.y += speed * pathVector.y * App->time->GetDeltaTime();
 	position.z += speed * pathVector.z * App->time->GetDeltaTime();
 
+	LOG("Y: %f", position.y);
+
 	float screenY = App->floor->GetFloorPositionFromZ(position.z);
 
 	if (position.z <= 0) {
@@ -35,7 +37,7 @@ void EnemyShoot::Update() {
 	screenPoint.w = 1 + (int)(anim.GetCurrentFrame().w *scale);
 	screenPoint.h = 1 + (int)(anim.GetCurrentFrame().h *scale);
 	screenPoint.x = (int)position.x;
-	screenPoint.y = (int)screenY;
+	screenPoint.y = (int)screenY-screenPoint.h/2;
 
 	Particle::Update();
 }

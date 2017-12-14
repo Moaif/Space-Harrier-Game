@@ -1,0 +1,43 @@
+{
+	"name": "AMAR",
+	"background": "assets/Background3.png",
+	"stage": "assets/Stage3.png",
+	"floor": "assets/Floor.png",
+
+	"enemies":[
+		{
+			"delay": 0,
+			"list":[
+				{
+					"x": -250,
+					"y": 100,
+					"z": 0,
+					"id": "drone15"
+				},
+				{
+					"x": 250,
+					"y": 100,
+					"z": 0,
+					"id": "drone16"
+				}
+			]
+		},
+		{
+			"delay": 0.1,
+			"list":[
+				{
+					"x": -250,
+					"y": 100,
+					"z": 0,
+					"id": "drone15"
+				},
+				{
+					"x": 250,
+					"y": 100,
+					"z": 0,
+					"id": "drone16"
+				}
+			]
+		}
+	]
+}

@@ -170,6 +170,78 @@ bool ModuleEnemy::Start()
 	drone7->efxIndex = DroneStartSFX;
 	enemies["drone7"] = drone7;
 
+	Enemy* drone8 = new Drone(4,enemiesTexture);
+	drone8->anim.frames.push_back({ 0,7,80,34 });
+	drone8->anim.frames.push_back({ 84,7,80,34 });
+	drone8->anim.frames.push_back({ 168,7,80,34 });
+	drone8->speed = { 110.0f,-350.0f,-5.0f };
+	drone8->efxIndex = DroneStartSFX;
+	enemies["drone8"] = drone8;
+
+	Enemy* drone9 = new Drone(5, enemiesTexture);
+	drone9->anim.frames.push_back({ 0,7,80,34 });
+	drone9->anim.frames.push_back({ 84,7,80,34 });
+	drone9->anim.frames.push_back({ 168,7,80,34 });
+	drone9->speed = { 25.0f,-50.0f,-5.0f };
+	drone9->efxIndex = DroneStartSFX;
+	enemies["drone9"] = drone9;
+
+	Enemy* drone10 = new Drone(5, enemiesTexture);
+	drone10->anim.frames.push_back({ 0,7,80,34 });
+	drone10->anim.frames.push_back({ 84,7,80,34 });
+	drone10->anim.frames.push_back({ 168,7,80,34 });
+	drone10->speed = { 0.0f,-50.0f,-5.0f };
+	drone10->efxIndex = DroneStartSFX;
+	enemies["drone10"] = drone10;
+
+	Enemy* drone11 = new Drone(5, enemiesTexture);
+	drone11->anim.frames.push_back({ 0,7,80,34 });
+	drone11->anim.frames.push_back({ 84,7,80,34 });
+	drone11->anim.frames.push_back({ 168,7,80,34 });
+	drone11->speed = { -25.0f,-50.0f,-5.0f };
+	drone11->efxIndex = DroneStartSFX;
+	enemies["drone11"] = drone11;
+
+	Enemy* drone12 = new Drone(6, enemiesTexture);
+	drone12->anim.frames.push_back({ 0,7,80,34 });
+	drone12->anim.frames.push_back({ 84,7,80,34 });
+	drone12->anim.frames.push_back({ 168,7,80,34 });
+	drone12->speed = { 100.0f,0.0f,5.0f };
+	drone12->efxIndex = DroneStartSFX;
+	enemies["drone12"] = drone12;
+
+	Enemy* drone13 = new Drone(6, enemiesTexture);
+	drone13->anim.frames.push_back({ 0,7,80,34 });
+	drone13->anim.frames.push_back({ 84,7,80,34 });
+	drone13->anim.frames.push_back({ 168,7,80,34 });
+	drone13->speed = { -100.0f,0.0f,5.0f };
+	drone13->efxIndex = DroneStartSFX;
+	enemies["drone13"] = drone13;
+
+	Enemy* drone14 = new Drone(7, enemiesTexture);
+	drone14->anim.frames.push_back({ 0,7,80,34 });
+	drone14->anim.frames.push_back({ 84,7,80,34 });
+	drone14->anim.frames.push_back({ 168,7,80,34 });
+	drone14->speed = { 120.0f,75.0f,7.5f };
+	drone14->efxIndex = DroneStartSFX;
+	enemies["drone14"] = drone14;
+
+	Enemy* drone15 = new Drone(8, enemiesTexture);
+	drone15->anim.frames.push_back({ 0,7,80,34 });
+	drone15->anim.frames.push_back({ 84,7,80,34 });
+	drone15->anim.frames.push_back({ 168,7,80,34 });
+	drone15->speed = { 180.0f,25.0f,7.5f };
+	drone15->efxIndex = DroneStartSFX;
+	enemies["drone15"] = drone15;
+
+	Enemy* drone16 = new Drone(8, enemiesTexture);
+	drone16->anim.frames.push_back({ 0,7,80,34 });
+	drone16->anim.frames.push_back({ 84,7,80,34 });
+	drone16->anim.frames.push_back({ 168,7,80,34 });
+	drone16->speed = { -180.0f,25.0f,7.5f };
+	drone16->efxIndex = DroneStartSFX;
+	enemies["drone16"] = drone16;
+
 	//Fly needs x=150 or x=0 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({176,144,169,68});
