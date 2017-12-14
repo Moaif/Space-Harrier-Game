@@ -23,6 +23,7 @@ public:
 	void SetLives(const int& amount);
 	int GetLives()const;
 	fPoint GetRelativeWorldPosition() const;
+	fPoint GetPlayerCenterPos()const;
 	void Win();
 
 private:

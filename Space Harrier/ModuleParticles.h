@@ -23,7 +23,6 @@ public:
 	bool CleanUp()override;
 
 	void AddParticle(const Particle& particle, const float& x, const float& y,const float& z);
-	void AddParticle(const Particle& particle, const float& x, const float& y,const float& z,const fPoint& unitaryVector);
 
 private:
 

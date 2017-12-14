@@ -70,8 +70,6 @@ public:
 	float speed;
 	fPoint reduction;
 
-	fPoint pathVector;
-
 	SDL_Texture* texture=nullptr;
 	SDL_Rect screenPoint = { 0,0,0,0 };
 };

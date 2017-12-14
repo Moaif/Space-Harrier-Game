@@ -46,8 +46,5 @@ void BodyPart::OnCollision(Collider* other) {
 
 
 void BodyPart::Shoot(const Particle& p) {
-	fPoint unitaryVector = App->player->position - position;
-	float div = (sqrt((pow(unitaryVector.x, 2) + pow(unitaryVector.y, 2) + pow(unitaryVector.z, 2))));
-	unitaryVector = unitaryVector / div;
-	App->particles->AddParticle(p, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z, unitaryVector);
+	App->particles->AddParticle(p, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z);
 }

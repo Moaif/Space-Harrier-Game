@@ -51,7 +51,7 @@ bool ModuleParticles::Start()
 	fire->anim.frames.push_back({ 110,0,50,48 });
 	fire->anim.speed = 5.0f;
 	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
-	fire->speed = 100.0f;
+	fire->speed = 10.0f;
 	prototipeClearList.push_back(fire);
 
 	enemyLaser = new EnemyShoot(enemLaser);
@@ -65,7 +65,7 @@ bool ModuleParticles::Start()
 	enemyLaser->anim.frames.push_back({ 213,76,59,59 });
 	enemyLaser->anim.speed = 5.0f;
 	enemyLaser->efxIndex = App->audio->LoadFx("assets/music/SFX/LaserShoot.wav");
-	enemyLaser->speed = 100.0f;
+	enemyLaser->speed = 10.0f;
 	prototipeClearList.push_back(enemyLaser);
 
 	explosion = new Explosion(200.0f,exp);
@@ -164,13 +164,6 @@ void ModuleParticles::AddParticle(const Particle& particle, const float& x, cons
 {
 	Particle* p = particle.Copy(x,y,z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
-	active.push_back(p);
-}
-
-void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z, const fPoint& unitaryVector) {
-	Particle* p = particle.Copy(x, y, z);
-	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
-	p->pathVector = unitaryVector;
 	active.push_back(p);
 }
 

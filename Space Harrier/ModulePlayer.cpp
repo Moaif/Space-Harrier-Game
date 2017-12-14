@@ -324,6 +324,10 @@ fPoint ModulePlayer::GetRelativeWorldPosition() const {
 	return p;
 }
 
+fPoint ModulePlayer::GetPlayerCenterPos()const {
+	return { position.x,position.y + current_animation->GetCurrentFrame().h/2,position.z };
+}
+
 void ModulePlayer::Death() {
 	App->time->SetTimeScale(0.0f);
 	current_animation = &death;
