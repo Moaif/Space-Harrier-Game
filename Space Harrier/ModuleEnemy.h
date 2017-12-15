@@ -29,6 +29,7 @@ private:
 	SDL_Texture* trees = nullptr;
 	SDL_Texture* trees3 = nullptr;
 	SDL_Texture* rocks = nullptr;
+	SDL_Texture* metalEnemy = nullptr;
 	SDL_Texture* dragonTexture = nullptr;
 	list<Enemy*> active;
 	list<Enemy*> prototypePartsClearList;

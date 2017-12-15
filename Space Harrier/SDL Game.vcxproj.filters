@@ -139,6 +139,9 @@
     <ClInclude Include="ModuleMenu.h">
       <Filter>Game Modules</Filter>
     </ClInclude>
+    <ClInclude Include="MetalBall.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -236,6 +239,9 @@
     </ClCompile>
     <ClCompile Include="ModuleMenu.cpp">
       <Filter>Game Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="MetalBall.cpp">
+      <Filter>Enemies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

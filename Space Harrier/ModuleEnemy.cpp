@@ -10,6 +10,7 @@
 #include "Fly.h"
 #include "Dragon3.h"
 #include "BodyPart.h"
+#include "MetalBall.h"
 
 
 
@@ -28,6 +29,7 @@ bool ModuleEnemy::Start()
 	trees = App->textures->Load("assets/Arboles.png");
 	trees3 = App->textures->Load("assets/Trees3.png");
 	rocks = App->textures->Load("assets/models.png");
+	metalEnemy = App->textures->Load("assets/Metalball.png");
 	dragonTexture = App->textures->Load("assets/Dragon3.png");
 
 	DroneStartSFX = App->audio->LoadFx("assets/music/SFX/DroneStart.wav");
@@ -104,6 +106,45 @@ bool ModuleEnemy::Start()
 	jellyfish4->speed = { -30.0f, 100.0f, 0.0f };
 	jellyfish4->efxIndex = JellyStartSFX;
 	enemies["jelly4"] = jellyfish4;
+
+	Enemy* metalBall = new MetalBall(0,metalEnemy);
+	metalBall->anim.frames.push_back({ 3, 2, 44, 44 });
+	metalBall->anim.frames.push_back({ 53, 2, 44, 46 });
+	metalBall->anim.frames.push_back({ 104, 2, 44, 46 });
+	metalBall->anim.frames.push_back({ 1, 53, 56, 56 });
+	metalBall->anim.frames.push_back({ 64, 53, 56, 56 });
+	metalBall->anim.frames.push_back({ 1, 116, 64, 68 });
+	metalBall->anim.frames.push_back({ 78, 116, 64, 68 });
+	metalBall->anim.speed = 2.0f;
+	metalBall->speed = {-80.0f,-200.0f,-5.0f};
+	//TODO:Insert audio
+	enemies["metalball0"] = metalBall;
+
+	Enemy* metalBall1 = new MetalBall(0, metalEnemy);
+	metalBall1->anim.frames.push_back({ 3, 2, 44, 44 });
+	metalBall1->anim.frames.push_back({ 53, 2, 44, 46 });
+	metalBall1->anim.frames.push_back({ 104, 2, 44, 46 });
+	metalBall1->anim.frames.push_back({ 1, 53, 56, 56 });
+	metalBall1->anim.frames.push_back({ 64, 53, 56, 56 });
+	metalBall1->anim.frames.push_back({ 1, 116, 64, 68 });
+	metalBall1->anim.frames.push_back({ 78, 116, 64, 68 });
+	metalBall1->anim.speed = 2.0f;
+	metalBall1->speed = { 0.0f,200.0f,-5.0f };
+	//TODO:Insert audio
+	enemies["metalball1"] = metalBall1;
+
+	Enemy* metalBall2 = new MetalBall(0, metalEnemy);
+	metalBall2->anim.frames.push_back({ 3, 2, 44, 44 });
+	metalBall2->anim.frames.push_back({ 53, 2, 44, 46 });
+	metalBall2->anim.frames.push_back({ 104, 2, 44, 46 });
+	metalBall2->anim.frames.push_back({ 1, 53, 56, 56 });
+	metalBall2->anim.frames.push_back({ 64, 53, 56, 56 });
+	metalBall2->anim.frames.push_back({ 1, 116, 64, 68 });
+	metalBall2->anim.frames.push_back({ 78, 116, 64, 68 });
+	metalBall2->anim.speed = 2.0f;
+	metalBall2->speed = { 80.0f,-200.0f,-5.0f };
+	//TODO:Insert audio
+	enemies["metalball2"] = metalBall2;
 
 	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
 	Enemy* drone = new Drone(0, enemiesTexture);
