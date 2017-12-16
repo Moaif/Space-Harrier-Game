@@ -59,7 +59,9 @@ update_status ModuleFont::PreUpdate() {
 			next_it2 = it2;
 			++next_it2;
 			if ((--(*it2).second.timeToLive) <= 0) {
-				SDL_DestroyTexture((*it2).second.texture);
+				if ((*it2).second.texture != nullptr) {
+					SDL_DestroyTexture((*it2).second.texture);
+				}
 				(*it2).second.texture = nullptr;
 				(*it).second.erase((*it2).first);
 			}

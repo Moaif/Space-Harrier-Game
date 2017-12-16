@@ -65,7 +65,7 @@ public:
 			}
 		}
 		else {
-			if (App->time->GetTimeSinceStart() > timer) {
+			if (timer >= 1) {
 				if (randFrame) {
 					current_frame = RAND() % frames.size();
 				}
@@ -74,11 +74,16 @@ public:
 					if (inversed) {
 						--current_frame;
 					}
-					else {
+					else
+					{
 						++current_frame;
 					}
 				}
-				timer = App->time->GetTimeSinceStart() + (1/speed);
+				timer = 0;
+			}
+			else
+			{
+				timer += speed*App->time->GetUnscaledDeltaTime();
 			}
 		}
 
@@ -119,7 +124,21 @@ public:
 	}
 
 	void SetNextFrame() {
-		current_frame=(current_frame+1) %frames.size();
+		if (inversed) {
+			current_frame = (current_frame - 1)+frames.size() % frames.size();
+		}
+		else {
+			current_frame = (current_frame + 1) % frames.size();
+		}
+	}
+
+	void SetPreviousFrame() {
+		if (inversed) {
+			current_frame = (current_frame + 1) % frames.size();
+		}
+		else {
+			current_frame = (current_frame - 1) + frames.size() % frames.size();
+		}
 	}
 
 	int GetCurrentFrameIndex()const {

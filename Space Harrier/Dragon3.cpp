@@ -69,7 +69,7 @@ void Dragon3::Update() {
 	}
 
 
-	elapsedTime += App->time->GetDeltaTime();
+	elapsedTime += App->time->GetUnscaledDeltaTime();
 
 	position = childs[0]->position;
 

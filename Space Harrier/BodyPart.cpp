@@ -15,7 +15,7 @@ Enemy* BodyPart::Copy(const float& x, const float& y, const float& z, Enemy* fat
 }
 
 void BodyPart::Update() {
-	position += speed * App->time->GetDeltaTime();
+	position += speed * App->time->GetUnscaledDeltaTime();
 
 	float screenY = App->floor->GetFloorPositionFromZ(position.z);
 

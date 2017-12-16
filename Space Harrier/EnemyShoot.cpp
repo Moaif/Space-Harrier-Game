@@ -20,7 +20,12 @@ Particle* EnemyShoot::Copy(const float & x, const float & y, const float & z)con
 }
 
 void EnemyShoot::Update() {
-	position.z += -speed * App->time->GetDeltaTime();
+	if (timeScaled) {
+		position.z += -speed * App->time->GetDeltaTime();
+	}
+	else {
+		position.z += -speed * App->time->GetUnscaledDeltaTime();
+	}
 
 	float percent =1-( position.z / initialPos.z);
 	position.y = initialPos.y + pathVector.y*percent;
@@ -43,4 +48,8 @@ void EnemyShoot::Update() {
 	screenPoint.y = (int)position.y-screenPoint.h/2;
 
 	Particle::Update();
+}
+
+void EnemyShoot::OnCollision(Collider* other){
+	timeScaled = true;
 }

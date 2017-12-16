@@ -52,7 +52,7 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	death.frames.push_back({ 108,2,26,49 });
 	death.timeBased = false;
 	death.loop = false;
-	death.speed = 1.5f;
+	death.speed = 0.35f;
 
 	fall.frames.push_back({5,117,24,40});
 	fall.frames.push_back({ 45,119,22,35 });
@@ -79,6 +79,7 @@ bool ModulePlayer::Start()
 		getReady=App->audio->LoadFx("assets/music/SFX/GetReady.wav");
 	}
 
+	recoverTimer = RECOVER_TIME;
 	position.x = 0;
 	position.y = 0;
 	position.z = 0;
@@ -228,6 +229,7 @@ void ModulePlayer::OnCollision(Collider* other) {
 		hit = true;
 		deathStartingPosY = position.y;
 		collider->active = false;
+		App->time->SetTimeScale(0.0f);
 		if (lives <= 0) {
 			collider->to_delete = true;
 			destroyed = true;
@@ -329,7 +331,6 @@ fPoint ModulePlayer::GetPlayerCenterPos()const {
 }
 
 void ModulePlayer::Death() {
-	App->time->SetTimeScale(0.0f);
 	current_animation = &death;
 	if (!deathBounced) {
 		position.y += FALL_SPEED/2;

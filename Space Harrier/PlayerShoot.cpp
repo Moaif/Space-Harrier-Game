@@ -17,8 +17,8 @@ Particle* PlayerShoot::Copy(const float & x, const float & y, const float & z)co
 }
 
 void PlayerShoot::Update() {
-	position.z += speed*App->time->GetDeltaTime();
-	position.x += reboundXSpeed*App->time->GetDeltaTime();
+	position.z += speed*App->time->GetUnscaledDeltaTime();
+	position.x += reboundXSpeed*App->time->GetUnscaledDeltaTime();
 
 	if (position.z >= MAX_Z) {
 		collider->to_delete = true;

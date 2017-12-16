@@ -14,14 +14,21 @@ public:
 	void OnCollision(Collider* other) override;
 
 private:
-	Dragon1(const float& startingY,fPoint speed, SDL_Texture* texture, Enemy* father = nullptr);
+	Dragon1(fPoint speed, SDL_Texture* texture, Enemy* father = nullptr);
 	void Shoot();
 	void Movement();
+	void ReorderPartSpeed();
 
 private:
 	float elapsedTime;
 	vector<fPoint> partSpeed;
-	float startingY;
+	bool arrived = false;
+	float shootTimer;
+
+	static const float MAX_DRAGON_Z;
+	static const float MOVEMENT_UPDATE_TIME;
+	static const float SHOOT_INTERVAL;
+	static const float MIN_Z_SHOOT;
 
 	static const int classPoints = 250000;
 };

@@ -11,6 +11,7 @@
 #include "Dragon3.h"
 #include "BodyPart.h"
 #include "MetalBall.h"
+#include "Dragon1.h"
 
 
 
@@ -31,6 +32,7 @@ bool ModuleEnemy::Start()
 	rocks = App->textures->Load("assets/models.png");
 	metalEnemy = App->textures->Load("assets/Metalball.png");
 	dragonTexture = App->textures->Load("assets/Dragon3.png");
+	dragonTexture2 = App->textures->Load("assets/Dragon1.png");
 
 	DroneStartSFX = App->audio->LoadFx("assets/music/SFX/DroneStart.wav");
 	JellyStartSFX = App->audio->LoadFx("assets/music/SFX/JellyStart.wav");
@@ -314,6 +316,106 @@ bool ModuleEnemy::Start()
 	fly5->efxIndex = FlyStartSFX;
 	enemies["fly5"] = fly5;
 
+	Enemy* dragon1 = new Dragon1(nullptr);
+	dragon1->speed = {80.0f,80.0f,-5.0f};
+	dragon1->hits = 6;
+	Enemy* head1 = new BodyPart(dragonTexture2,dragon1);
+	head1->anim.frames.push_back({79,7,67,105});
+	head1->anim.frames.push_back({0,7,71,108});
+	head1->anim.frames.push_back({ 79,123,67,105 });
+	head1->anim.frames.push_back({ 0,123,71,108 });
+	head1->anim.frames.push_back({ 79,7,67,105 });
+	head1->anim.frames.push_back({ 0,7,71,108 });
+	head1->anim.frames.push_back({ 79,239,67,105 });
+	head1->anim.frames.push_back({ 0,239,71,108 });
+	head1->anim.frames.push_back({ 79,7,67,105 });
+	head1->anim.frames.push_back({ 0,7,71,108 });
+	head1->anim.frames.push_back({ 79,355,67,105 });
+	head1->anim.frames.push_back({ 0,355,71,108 });
+	head1->anim.speed = 0;
+	Enemy* body1_1 = new BodyPart(dragonTexture2,dragon1);
+	body1_1->anim.frames.push_back({161,26,114,73});
+	body1_1->anim.frames.push_back({ 161,142,114,73 });
+	body1_1->anim.frames.push_back({ 161,26,114,73 });
+	body1_1->anim.frames.push_back({ 161,258,114,73 });
+	body1_1->anim.frames.push_back({ 161,26,114,73 });
+	body1_1->anim.frames.push_back({ 161,374,114,73 });
+	body1_1->anim.speed = 0;
+	body1_1->destructible = false;
+	Enemy* body1_2 = new BodyPart(dragonTexture2, dragon1);
+	body1_2->anim.frames.push_back({ 161,26,114,73 });
+	body1_2->anim.frames.push_back({ 161,142,114,73 });
+	body1_2->anim.frames.push_back({ 161,26,114,73 });
+	body1_2->anim.frames.push_back({ 161,258,114,73 });
+	body1_2->anim.frames.push_back({ 161,26,114,73 });
+	body1_2->anim.frames.push_back({ 161,374,114,73 });
+	body1_2->anim.speed = 0;
+	body1_2->destructible = false;
+	Enemy* body1_3 = new BodyPart(dragonTexture2, dragon1);
+	body1_3->anim.frames.push_back({ 161,26,114,73 });
+	body1_3->anim.frames.push_back({ 161,142,114,73 });
+	body1_3->anim.frames.push_back({ 161,26,114,73 });
+	body1_3->anim.frames.push_back({ 161,258,114,73 });
+	body1_3->anim.frames.push_back({ 161,26,114,73 });
+	body1_3->anim.frames.push_back({ 161,374,114,73 });
+	body1_3->anim.speed = 0;
+	body1_3->destructible = false;
+	Enemy* body1_4 = new BodyPart(dragonTexture2, dragon1);
+	body1_4->anim.frames.push_back({ 161,26,114,73 });
+	body1_4->anim.frames.push_back({ 161,142,114,73 });
+	body1_4->anim.frames.push_back({ 161,26,114,73 });
+	body1_4->anim.frames.push_back({ 161,258,114,73 });
+	body1_4->anim.frames.push_back({ 161,26,114,73 });
+	body1_4->anim.frames.push_back({ 161,374,114,73 });
+	body1_4->anim.speed = 0;
+	body1_4->destructible = false;
+	Enemy* body1_5 = new BodyPart(dragonTexture2, dragon1);
+	body1_5->anim.frames.push_back({ 161,26,114,73 });
+	body1_5->anim.frames.push_back({ 161,142,114,73 });
+	body1_5->anim.frames.push_back({ 161,26,114,73 });
+	body1_5->anim.frames.push_back({ 161,258,114,73 });
+	body1_5->anim.frames.push_back({ 161,26,114,73 });
+	body1_5->anim.frames.push_back({ 161,374,114,73 });
+	body1_5->anim.speed = 0;
+	body1_5->destructible = false;
+	Enemy* body1_6 = new BodyPart(dragonTexture2, dragon1);
+	body1_6->anim.frames.push_back({ 161,26,114,73 });
+	body1_6->anim.frames.push_back({ 161,142,114,73 });
+	body1_6->anim.frames.push_back({ 161,26,114,73 });
+	body1_6->anim.frames.push_back({ 161,258,114,73 });
+	body1_6->anim.frames.push_back({ 161,26,114,73 });
+	body1_6->anim.frames.push_back({ 161,374,114,73 });
+	body1_6->anim.speed = 0;
+	body1_6->destructible = false;
+	Enemy* body1_7 = new BodyPart(dragonTexture2, dragon1);
+	body1_7->anim.frames.push_back({ 161,26,114,73 });
+	body1_7->anim.frames.push_back({ 161,142,114,73 });
+	body1_7->anim.frames.push_back({ 161,26,114,73 });
+	body1_7->anim.frames.push_back({ 161,258,114,73 });
+	body1_7->anim.frames.push_back({ 161,26,114,73 });
+	body1_7->anim.frames.push_back({ 161,374,114,73 });
+	body1_7->anim.speed = 0;
+	body1_7->destructible = false;
+	Enemy* tail1 = new BodyPart(dragonTexture2,dragon1);
+	tail1->anim.frames.push_back({284,18,96,91});
+	tail1->anim.frames.push_back({ 284,134,96,91 });
+	tail1->anim.frames.push_back({ 284,18,96,91 });
+	tail1->anim.frames.push_back({ 284,250,96,91 });
+	tail1->anim.frames.push_back({ 284,18,96,91 });
+	tail1->anim.frames.push_back({ 284,366,96,91 });
+	tail1->anim.speed = 0;
+	tail1->destructible = false;
+	enemies["dragon1"] = dragon1;
+	prototypePartsClearList.push_back(head1);
+	prototypePartsClearList.push_back(body1_1);
+	prototypePartsClearList.push_back(body1_2);
+	prototypePartsClearList.push_back(body1_3);
+	prototypePartsClearList.push_back(body1_4);
+	prototypePartsClearList.push_back(body1_5);
+	prototypePartsClearList.push_back(body1_6);
+	prototypePartsClearList.push_back(body1_7);
+	prototypePartsClearList.push_back(tail1);
+
 
 	Enemy* dragon3_1 = new Dragon3(0,nullptr);
 	dragon3_1->speed = {-20,25,-4};
@@ -476,7 +578,9 @@ bool ModuleEnemy::CleanUp()
 	App->textures->Unload(trees);
 	App->textures->Unload(trees3);
 	App->textures->Unload(rocks);
+	App->textures->Unload(metalEnemy);
 	App->textures->Unload(dragonTexture);
+	App->textures->Unload(dragonTexture2);
 
 	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);
