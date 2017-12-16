@@ -1,7 +1,7 @@
 {
-	"name": "AMAR",
-	"background": "assets/Background3.png",
-	"stage": "assets/Stage3.png",
+	"name": "MOOT",
+	"background": "assets/Background1.png",
+	"stage": "assets/Stage1.png",
 	"floor": "assets/Floor.png",
 
 	"enemies":[

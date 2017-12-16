@@ -34,9 +34,10 @@ bool ModuleEnemy::Start()
 	dragonTexture = App->textures->Load("assets/Dragon3.png");
 	dragonTexture2 = App->textures->Load("assets/Dragon1.png");
 
-	DroneStartSFX = App->audio->LoadFx("assets/music/SFX/DroneStart.wav");
-	JellyStartSFX = App->audio->LoadFx("assets/music/SFX/JellyStart.wav");
-	FlyStartSFX = App->audio->LoadFx("assets/music/SFX/FlyStart.wav");
+	droneStartSFX = App->audio->LoadFx("assets/music/SFX/DroneStart.wav");
+	jellyStartSFX = App->audio->LoadFx("assets/music/SFX/JellyStart.wav");
+	flyStartSFX = App->audio->LoadFx("assets/music/SFX/FlyStart.wav");
+	metalStartSFX = App->audio->LoadFx("assets/music/SFX/MetalBall.wav");
 
 	Enemy* tree = new Obstacle(trees);
 	tree->anim.frames.push_back({ 206,48,44,163 });
@@ -82,7 +83,7 @@ bool ModuleEnemy::Start()
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish->speed = { 30.0f, 200.0f, 0.0f };
-	jellyfish->efxIndex = JellyStartSFX;
+	jellyfish->efxIndex = jellyStartSFX;
 	enemies["jelly1"] = jellyfish;
 
 	Enemy* jellyfish2 = new Jellyfish(200.0f, enemiesTexture);
@@ -90,7 +91,7 @@ bool ModuleEnemy::Start()
 	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish2->speed = { -30.0f, 200.0f, 0.0f };
-	jellyfish2->efxIndex = JellyStartSFX;
+	jellyfish2->efxIndex = jellyStartSFX;
 	enemies["jelly2"] = jellyfish2;
 
 	Enemy* jellyfish3 = new Jellyfish(200.0f, enemiesTexture);
@@ -98,7 +99,7 @@ bool ModuleEnemy::Start()
 	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish3->speed = { 30.0f, 100.0f, 0.0f };
-	jellyfish3->efxIndex = JellyStartSFX;
+	jellyfish3->efxIndex = jellyStartSFX;
 	enemies["jelly3"] = jellyfish3;
 
 	Enemy* jellyfish4 = new Jellyfish(200.0f, enemiesTexture);
@@ -106,7 +107,7 @@ bool ModuleEnemy::Start()
 	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
 	jellyfish4->speed = { -30.0f, 100.0f, 0.0f };
-	jellyfish4->efxIndex = JellyStartSFX;
+	jellyfish4->efxIndex = jellyStartSFX;
 	enemies["jelly4"] = jellyfish4;
 
 	Enemy* metalBall = new MetalBall(0,metalEnemy);
@@ -119,7 +120,7 @@ bool ModuleEnemy::Start()
 	metalBall->anim.frames.push_back({ 78, 116, 64, 68 });
 	metalBall->anim.speed = 2.0f;
 	metalBall->speed = {-80.0f,-200.0f,-5.0f};
-	//TODO:Insert audio
+	metalBall->efxIndex = metalStartSFX;
 	enemies["metalball0"] = metalBall;
 
 	Enemy* metalBall1 = new MetalBall(0, metalEnemy);
@@ -132,7 +133,7 @@ bool ModuleEnemy::Start()
 	metalBall1->anim.frames.push_back({ 78, 116, 64, 68 });
 	metalBall1->anim.speed = 2.0f;
 	metalBall1->speed = { 0.0f,200.0f,-5.0f };
-	//TODO:Insert audio
+	metalBall1->efxIndex = metalStartSFX;
 	enemies["metalball1"] = metalBall1;
 
 	Enemy* metalBall2 = new MetalBall(0, metalEnemy);
@@ -145,7 +146,7 @@ bool ModuleEnemy::Start()
 	metalBall2->anim.frames.push_back({ 78, 116, 64, 68 });
 	metalBall2->anim.speed = 2.0f;
 	metalBall2->speed = { 80.0f,-200.0f,-5.0f };
-	//TODO:Insert audio
+	metalBall2->efxIndex = metalStartSFX;
 	enemies["metalball2"] = metalBall2;
 
 	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
@@ -154,7 +155,7 @@ bool ModuleEnemy::Start()
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
 	drone->speed = {100.0f,100.0f,5.0f };
-	drone->efxIndex = DroneStartSFX;
+	drone->efxIndex = droneStartSFX;
 	enemies["drone0"] = drone;
 
 	Enemy* drone1 = new Drone(0,enemiesTexture);
@@ -162,7 +163,7 @@ bool ModuleEnemy::Start()
 	drone1->anim.frames.push_back({ 84,7,80,34 });
 	drone1->anim.frames.push_back({ 168,7,80,34 });
 	drone1->speed = { -100.0f,100.0f,5.0f };
-	drone1->efxIndex = DroneStartSFX;
+	drone1->efxIndex = droneStartSFX;
 	enemies["drone1"] = drone1;
 
 	Enemy* drone2 = new Drone(1, enemiesTexture);
@@ -170,7 +171,7 @@ bool ModuleEnemy::Start()
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
 	drone2->speed = { 100.0f,0.0f,5.0f };
-	drone2->efxIndex = DroneStartSFX;
+	drone2->efxIndex = droneStartSFX;
 	enemies["drone2"] = drone2;
 
 	Enemy* drone3 = new Drone(1, enemiesTexture);
@@ -178,7 +179,7 @@ bool ModuleEnemy::Start()
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
 	drone3->speed = { -100.0f,0.0f,5.0f };
-	drone3->efxIndex = DroneStartSFX;
+	drone3->efxIndex = droneStartSFX;
 	enemies["drone3"] = drone3;
 
 	Enemy* drone4 = new Drone(2, enemiesTexture);
@@ -186,7 +187,7 @@ bool ModuleEnemy::Start()
 	drone4->anim.frames.push_back({ 84,7,80,34 });
 	drone4->anim.frames.push_back({ 168,7,80,34 });
 	drone4->speed = { 50.0f,120.0f,-5.0f };
-	drone4->efxIndex = DroneStartSFX;
+	drone4->efxIndex = droneStartSFX;
 	enemies["drone4"] = drone4;
 
 	Enemy* drone5 = new Drone(2, enemiesTexture);
@@ -194,7 +195,7 @@ bool ModuleEnemy::Start()
 	drone5->anim.frames.push_back({ 84,7,80,34 });
 	drone5->anim.frames.push_back({ 168,7,80,34 });
 	drone5->speed = { -50.0f,120.0f,-5.0f };
-	drone5->efxIndex = DroneStartSFX;
+	drone5->efxIndex = droneStartSFX;
 	enemies["drone5"] = drone5;
 
 	Enemy* drone6 = new Drone(3, enemiesTexture);
@@ -202,7 +203,7 @@ bool ModuleEnemy::Start()
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
 	drone6->speed = { 100.0f,100.0f,5.0f };
-	drone6->efxIndex = DroneStartSFX;
+	drone6->efxIndex = droneStartSFX;
 	enemies["drone6"] = drone6;
 
 	Enemy* drone7 = new Drone(3, enemiesTexture);
@@ -210,7 +211,7 @@ bool ModuleEnemy::Start()
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
 	drone7->speed = { -100.0f,100.0f,5.0f };
-	drone7->efxIndex = DroneStartSFX;
+	drone7->efxIndex = droneStartSFX;
 	enemies["drone7"] = drone7;
 
 	Enemy* drone8 = new Drone(4,enemiesTexture);
@@ -218,7 +219,7 @@ bool ModuleEnemy::Start()
 	drone8->anim.frames.push_back({ 84,7,80,34 });
 	drone8->anim.frames.push_back({ 168,7,80,34 });
 	drone8->speed = { 110.0f,-350.0f,-5.0f };
-	drone8->efxIndex = DroneStartSFX;
+	drone8->efxIndex = droneStartSFX;
 	enemies["drone8"] = drone8;
 
 	Enemy* drone9 = new Drone(5, enemiesTexture);
@@ -226,7 +227,7 @@ bool ModuleEnemy::Start()
 	drone9->anim.frames.push_back({ 84,7,80,34 });
 	drone9->anim.frames.push_back({ 168,7,80,34 });
 	drone9->speed = { 25.0f,-50.0f,-5.0f };
-	drone9->efxIndex = DroneStartSFX;
+	drone9->efxIndex = droneStartSFX;
 	enemies["drone9"] = drone9;
 
 	Enemy* drone10 = new Drone(5, enemiesTexture);
@@ -234,7 +235,7 @@ bool ModuleEnemy::Start()
 	drone10->anim.frames.push_back({ 84,7,80,34 });
 	drone10->anim.frames.push_back({ 168,7,80,34 });
 	drone10->speed = { 0.0f,-50.0f,-5.0f };
-	drone10->efxIndex = DroneStartSFX;
+	drone10->efxIndex = droneStartSFX;
 	enemies["drone10"] = drone10;
 
 	Enemy* drone11 = new Drone(5, enemiesTexture);
@@ -242,7 +243,7 @@ bool ModuleEnemy::Start()
 	drone11->anim.frames.push_back({ 84,7,80,34 });
 	drone11->anim.frames.push_back({ 168,7,80,34 });
 	drone11->speed = { -25.0f,-50.0f,-5.0f };
-	drone11->efxIndex = DroneStartSFX;
+	drone11->efxIndex = droneStartSFX;
 	enemies["drone11"] = drone11;
 
 	Enemy* drone12 = new Drone(6, enemiesTexture);
@@ -250,7 +251,7 @@ bool ModuleEnemy::Start()
 	drone12->anim.frames.push_back({ 84,7,80,34 });
 	drone12->anim.frames.push_back({ 168,7,80,34 });
 	drone12->speed = { 100.0f,0.0f,5.0f };
-	drone12->efxIndex = DroneStartSFX;
+	drone12->efxIndex = droneStartSFX;
 	enemies["drone12"] = drone12;
 
 	Enemy* drone13 = new Drone(6, enemiesTexture);
@@ -258,7 +259,7 @@ bool ModuleEnemy::Start()
 	drone13->anim.frames.push_back({ 84,7,80,34 });
 	drone13->anim.frames.push_back({ 168,7,80,34 });
 	drone13->speed = { -100.0f,0.0f,5.0f };
-	drone13->efxIndex = DroneStartSFX;
+	drone13->efxIndex = droneStartSFX;
 	enemies["drone13"] = drone13;
 
 	Enemy* drone14 = new Drone(7, enemiesTexture);
@@ -266,7 +267,7 @@ bool ModuleEnemy::Start()
 	drone14->anim.frames.push_back({ 84,7,80,34 });
 	drone14->anim.frames.push_back({ 168,7,80,34 });
 	drone14->speed = { 120.0f,75.0f,7.5f };
-	drone14->efxIndex = DroneStartSFX;
+	drone14->efxIndex = droneStartSFX;
 	enemies["drone14"] = drone14;
 
 	Enemy* drone15 = new Drone(8, enemiesTexture);
@@ -274,7 +275,7 @@ bool ModuleEnemy::Start()
 	drone15->anim.frames.push_back({ 84,7,80,34 });
 	drone15->anim.frames.push_back({ 168,7,80,34 });
 	drone15->speed = { 180.0f,25.0f,7.5f };
-	drone15->efxIndex = DroneStartSFX;
+	drone15->efxIndex = droneStartSFX;
 	enemies["drone15"] = drone15;
 
 	Enemy* drone16 = new Drone(8, enemiesTexture);
@@ -282,38 +283,38 @@ bool ModuleEnemy::Start()
 	drone16->anim.frames.push_back({ 84,7,80,34 });
 	drone16->anim.frames.push_back({ 168,7,80,34 });
 	drone16->speed = { -180.0f,25.0f,7.5f };
-	drone16->efxIndex = DroneStartSFX;
+	drone16->efxIndex = droneStartSFX;
 	enemies["drone16"] = drone16;
 
 	//Fly needs x=150 or x=0 
 	Enemy* fly = new Fly(0,enemiesTexture);
 	fly->anim.frames.push_back({176,144,169,68});
 	fly->speed = {50.0f, -140.0f, -5.0f};
-	fly->efxIndex = FlyStartSFX;
+	fly->efxIndex = flyStartSFX;
 	enemies["fly1"] = fly;
 
 	Enemy* fly2 = new Fly(0, enemiesTexture);
 	fly2->anim.frames.push_back({ 176,144,169,68 });
 	fly2->speed = { 0.0f, -140.0f, -5.0f };
-	fly2->efxIndex = FlyStartSFX;
+	fly2->efxIndex = flyStartSFX;
 	enemies["fly2"] = fly2;
 
 	Enemy* fly3 = new Fly(0, enemiesTexture);
 	fly3->anim.frames.push_back({ 176,144,169,68 });
 	fly3->speed = { -50.0f, -140.0f, -5.0f };
-	fly3->efxIndex = FlyStartSFX;
+	fly3->efxIndex = flyStartSFX;
 	enemies["fly3"] = fly3;
 
 	Enemy* fly4 = new Fly(1, enemiesTexture);
 	fly4->anim.frames.push_back({ 176,144,169,68 });
 	fly4->speed = { 70.0f, -120.0f, -5.0f };
-	fly4->efxIndex = FlyStartSFX;
+	fly4->efxIndex = flyStartSFX;
 	enemies["fly4"] = fly4;
 
 	Enemy* fly5 = new Fly(1, enemiesTexture);
 	fly5->anim.frames.push_back({ 176,144,169,68 });
 	fly5->speed = { -70.0f, -120.0f, -5.0f };
-	fly5->efxIndex = FlyStartSFX;
+	fly5->efxIndex = flyStartSFX;
 	enemies["fly5"] = fly5;
 
 	Enemy* dragon1 = new Dragon1(nullptr);

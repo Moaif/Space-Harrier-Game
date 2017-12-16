@@ -37,9 +37,10 @@ private:
 	list<Enemy*> activeBodyParts;
 	map<string, Enemy*> enemies;
 
-	unsigned int DroneStartSFX;
-	unsigned int JellyStartSFX;
-	unsigned int FlyStartSFX;
+	unsigned int droneStartSFX;
+	unsigned int jellyStartSFX;
+	unsigned int flyStartSFX;
+	unsigned int metalStartSFX;
 };
 
 #endif // !_MODULEENEMY_H_

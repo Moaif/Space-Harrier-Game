@@ -81,6 +81,7 @@ bool ModuleParticles::Start()
 	explosion->anim.frames.push_back({ 2,79,98,87 });
 	explosion->anim.frames.push_back({ 106,80,94,85 });
 	explosion->anim.frames.push_back({ 202,87,97,79 });
+	explosion->efxIndex = App->audio->LoadFx("assets/music/SFX/Explosion.wav");
 	explosion->anim.speed=5.0f;
 	explosion->speed = 10.0f;
 	explosion->onlyOnce = true;

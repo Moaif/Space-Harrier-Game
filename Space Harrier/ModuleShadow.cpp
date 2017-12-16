@@ -5,7 +5,7 @@
 #include "SDL\include\SDL.h"
 
 ModuleShadow::ModuleShadow() {
-	shadowRect = {1,13,37,18};
+	shadowRect = {2,14,45,22};
 }
 
 ModuleShadow::~ModuleShadow() {
