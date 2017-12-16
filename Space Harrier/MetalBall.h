@@ -2,7 +2,6 @@
 #define _METALBALL_
 
 #include "Enemy.h"
-#include "Globals.h"
 
 class MetalBall : public Enemy
 {public:

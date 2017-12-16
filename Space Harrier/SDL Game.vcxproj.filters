@@ -142,6 +142,9 @@
     <ClInclude Include="MetalBall.h">
       <Filter>Enemies</Filter>
     </ClInclude>
+    <ClInclude Include="Dragon1.h">
+      <Filter>Enemies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -241,6 +244,9 @@
       <Filter>Game Modules</Filter>
     </ClCompile>
     <ClCompile Include="MetalBall.cpp">
+      <Filter>Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Dragon1.cpp">
       <Filter>Enemies</Filter>
     </ClCompile>
   </ItemGroup>

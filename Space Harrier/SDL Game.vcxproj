@@ -75,6 +75,7 @@
     <ClInclude Include="Application.h" />
     <ClInclude Include="BodyPart.h" />
     <ClInclude Include="Brofiler.h" />
+    <ClInclude Include="Dragon1.h" />
     <ClInclude Include="Dragon3.h" />
     <ClInclude Include="Drone.h" />
     <ClInclude Include="Enemy.h" />
@@ -115,6 +116,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BodyPart.cpp" />
+    <ClCompile Include="Dragon1.cpp" />
     <ClCompile Include="Dragon3.cpp" />
     <ClCompile Include="Drone.cpp" />
     <ClCompile Include="EnemyShoot.cpp" />

@@ -40,7 +40,7 @@ bool ModuleScene::Start()
 
 	timeElapsed = 0;
 	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/STage3.json");
+	LoadJson("assets/json/STage1.json");
 	LOG("list %d",elements.size());
 	
 	background = App->textures->Load(backgroundPath.c_str());
