@@ -69,14 +69,20 @@ bool ModuleEnemy::Start()
 
 
 	Enemy* rock = new Obstacle(rocks);
-	rock->anim.frames.push_back({191,71,61,39});
+	rock->anim.frames.push_back({5,87,136,93});
 	enemies["rock1"] = rock;
 
 	Enemy* bush = new Obstacle(rocks);
-	bush->anim.frames.push_back({192,7,61,43});
+	bush->anim.frames.push_back({ 4,5,126,71 });
 	bush->noDmg = true;
 	bush->shadow = false;
 	enemies["bush1"] = bush;
+
+	Enemy* bush2 = new Obstacle(rocks);
+	bush2->anim.frames.push_back({ 153,2,183,83 });
+	bush2->noDmg = true;
+	bush2->shadow = false;
+	enemies["bush2"] = bush2;
 
 	Enemy* jellyfish = new Jellyfish(200.0f,enemiesTexture);
 	jellyfish->anim.frames.push_back({0,43,80,90});
@@ -121,7 +127,7 @@ bool ModuleEnemy::Start()
 	metalBall->anim.speed = 2.0f;
 	metalBall->speed = {-80.0f,-200.0f,-5.0f};
 	metalBall->efxIndex = metalStartSFX;
-	enemies["metalball0"] = metalBall;
+	enemies["metalball1"] = metalBall;
 
 	Enemy* metalBall1 = new MetalBall(0, metalEnemy);
 	metalBall1->anim.frames.push_back({ 3, 2, 44, 44 });
@@ -134,7 +140,7 @@ bool ModuleEnemy::Start()
 	metalBall1->anim.speed = 2.0f;
 	metalBall1->speed = { 0.0f,200.0f,-5.0f };
 	metalBall1->efxIndex = metalStartSFX;
-	enemies["metalball1"] = metalBall1;
+	enemies["metalball2"] = metalBall1;
 
 	Enemy* metalBall2 = new MetalBall(0, metalEnemy);
 	metalBall2->anim.frames.push_back({ 3, 2, 44, 44 });
@@ -147,7 +153,7 @@ bool ModuleEnemy::Start()
 	metalBall2->anim.speed = 2.0f;
 	metalBall2->speed = { 80.0f,-200.0f,-5.0f };
 	metalBall2->efxIndex = metalStartSFX;
-	enemies["metalball2"] = metalBall2;
+	enemies["metalball3"] = metalBall2;
 
 	//Drone needs x=250 if comming from screen, or x=150 if comming from horizon
 	Enemy* drone = new Drone(0, enemiesTexture);

@@ -217,13 +217,13 @@ void Drone::Mode1_2() {
 
 	}
 	else if(elapsedTime < TIMEOFFSET*2.0f){
-		tempSpeed = { 0,-speed.y * 4 , 0};
+		tempSpeed = { 0,-speed.y * 3 , 0};
 	}else if(elapsedTime < TIMEOFFSET*3.0f){
 		if (!shoted) {
 			Shoot();
 			shoted = true;
 		}
-		tempSpeed.y = speed.y * 4;
+		tempSpeed.y = speed.y * 3;
 	}
 	else {
 		tempSpeed = { speed.x / 4,-speed.y / 4,speed.z * 2 };
