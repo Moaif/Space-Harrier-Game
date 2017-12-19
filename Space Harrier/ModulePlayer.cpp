@@ -23,8 +23,11 @@ const float ModulePlayer::FALL_SPEED = 2.0f;
 const float ModulePlayer::FALL_BOUNCE = 15.0f;
 const float ModulePlayer::RECOVER_TIME = 2.0f;
 const float ModulePlayer::SCREEN_SEGMENT = 0.4f;//5 screen zones
-const float ModulePlayer::COLLIDER_H = 30;
-const float ModulePlayer::COLLIDER_W = 10;
+const float ModulePlayer::COLLIDER_H = 30.0f;
+const float ModulePlayer::COLLIDER_W = 10.0f;
+const float ModulePlayer::WELCOME_RUN_TIME = 1.0f;
+const float ModulePlayer::WELCOME_TRANSITION_TIME = 0.5f;
+const float ModulePlayer::SHOOT_INTERVAL = 0.25f;
 
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
@@ -98,6 +101,8 @@ bool ModulePlayer::Restart() {
 	win = false;
 	centered = false;
 	destroyed = false;
+	welcome = false;
+	welcomeTimer = 0.0f;
 
 	return true;
 }
@@ -115,6 +120,11 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	//Welcome to the fantasy zone anim+
+	if (!welcome) {
+		AnimWelcome();
+		return UPDATE_CONTINUE;
+	}
 	//If ended the game
 	if (win) {
 		if (position.z < MAX_Z) {
@@ -188,9 +198,13 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_animation != &fall)
 		{
-			float y = position.y + (current_animation->GetCurrentFrame().h / 2);
-			App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
+			if (shootTimer <= 0) {
+				float y = position.y + (current_animation->GetCurrentFrame().h / 2);
+				App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
+				shootTimer = SHOOT_INTERVAL;
+			}
 		}
+		shootTimer -= App->time->GetDeltaTime();
 
 		if (current_animation == &fall) {
 			if (current_animation->Finished()) {
@@ -408,4 +422,19 @@ void ModulePlayer::AnimWin() {
 
 		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
 	}
+}
+
+void ModulePlayer::AnimWelcome() {
+	if (welcomeTimer >= WELCOME_RUN_TIME) {
+		float tempSpeed = ((SCREEN_HEIGHT / 2) - (center.GetCurrentFrame().h / 2)) / WELCOME_TRANSITION_TIME;
+		position.y += tempSpeed*App->time->GetDeltaTime();
+		current_animation = &center;
+		if (welcomeTimer >= WELCOME_RUN_TIME + WELCOME_TRANSITION_TIME) {
+			welcome = true;
+		}
+	}
+	welcomeTimer += App->time->GetDeltaTime();
+
+
+	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
 }

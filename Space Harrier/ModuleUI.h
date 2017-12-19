@@ -30,6 +30,7 @@ public:
 	void TheEnd();
 
 	void PauseMenu();
+	void ShowLevelTitle();
 
 	void SetScoreBoard(bool active);
 private:

@@ -62,7 +62,7 @@ typedef unsigned int uint;
 #define CLIPDISTANCE 3
 
 #define SHADOW_Z MAX_Z+10
-#define PLAYER_Z INT_MIN+1
+#define PLAYER_Z INT_MIN+100
 #define FONTS_Z INT_MIN
 
 int getPseudoRand();

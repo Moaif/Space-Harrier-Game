@@ -194,6 +194,10 @@ void ModuleUI::PauseMenu() {
 	App->renderer->DirectPrint(red,0,SCREEN_HEIGHT/2,"PAUSE",2);
 }
 
+void ModuleUI::ShowLevelTitle() {
+	startTitleTimer = 0.0f;
+}
+
 void ModuleUI::SetScoreBoard(bool active) {
 
 	scoreB = active;

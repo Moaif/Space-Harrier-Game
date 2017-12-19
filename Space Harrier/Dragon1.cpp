@@ -1,5 +1,7 @@
 #include "Dragon1.h"
 #include "BodyPart.h"
+#include "ModuleFadeToBlack.h"
+#include "ModuleScene.h"
 
 const float Dragon1::MAX_DRAGON_Z = 23.0f;
 const float Dragon1::MOVEMENT_UPDATE_TIME = 0.1;
@@ -65,6 +67,7 @@ void Dragon1::OnCollision(Collider* other) {
 			childs[i]->to_delete = true;
 			App->particles->AddParticle(*App->particles->explosion, childs[i]->position.x, childs[i]->position.y, childs[i]->position.z);
 		}
+		App->fade->FadeToBlack(App->scene,App->scene,0.01f);
 		to_delete = true;
 	}
 }

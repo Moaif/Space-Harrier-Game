@@ -31,22 +31,32 @@ bool ModuleScene::Start()
 {
 	LOG("Loading space scene");
 
-	App->player->Enable();
-	App->collision->Enable();
 	App->particles->Enable();
+	App->collision->Enable();
 	App->enemies->Enable();
+	App->player->Enable();
 	App->ui->Enable();
+	App->ui->ShowLevelTitle();
 	App->playing = true;
 
 	timeElapsed = 0;
-	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/Stage1.json");
+	currentStage++;
+	string path = "assets/json/Stage" + to_string(currentStage) + ".json";
+	LoadJson(path.c_str());
 	
 	background = App->textures->Load(backgroundPath.c_str());
 	stage = App->textures->Load(stagePath.c_str());
 	floor = App->textures->Load(floorPath.c_str());
 
 	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
+
+	if (fx == 0) {
+		fx = App->audio->LoadFx("assets/music/SFX/Welcome.wav");
+	}
+
+	if (currentStage == 1) {
+		App->audio->PlayFx(fx);
+	}
 	
 
 
@@ -54,7 +64,7 @@ bool ModuleScene::Start()
 }
 
 bool ModuleScene::Restart() {
-	currentStage = 2;//TODO: if introduced new stages, change
+	currentStage = 0;
 	return true;
 }
 
@@ -70,13 +80,6 @@ bool ModuleScene::CleanUp()
 		(*it).list.clear();
 	}
 	elements.clear();
-
- 	App->textures->Unload(background);
-	App->player->Disable();
-	App->collision->Disable();
-	App->particles->Disable();
-	App->enemies->Disable();
-	App->ui->Disable();
 
 	return true;
 }

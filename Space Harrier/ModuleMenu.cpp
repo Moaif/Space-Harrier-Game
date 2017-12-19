@@ -9,6 +9,9 @@
 #include "ModulePlayer.h"
 #include "ModuleFont.h"
 #include "ModuleUI.h"
+#include "ModuleCollision.h"
+#include "ModuleParticles.h"
+#include "ModuleEnemy.h"
 
 const float ModuleMenu::TEXT_INTERVAL = 1.0f;
 
@@ -92,12 +95,22 @@ bool ModuleMenu::Start()
 	red = App->fonts->GetFont("Red",__FILE__,redFontLineReference = __LINE__);
 
 	App->Restart();//We restart all modules to start a new game
+	
+	if (!firstPlay) {
+		App->player->Disable();
+		App->ui->Disable();
+		App->enemies->Disable();
+		App->particles->Disable();
+		App->collision->Disable();
+	}
+	firstPlay = false;
 
 	titleMult = 4;
 	textTimer = 0.0f;
 
-	if(fx == 0)
+	if (fx == 0) {
 		fx = App->audio->LoadFx("assets/music/SFX/Coin.wav");
+	}
 
 	return true;
 }
