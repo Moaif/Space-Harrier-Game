@@ -55,6 +55,7 @@ public:
 		temp.destructible = destructible;
 		temp.shadow = shadow;
 		temp.points = points;
+		temp.currentAnimation = &temp.anim;
 	}
 	virtual void Update() {}
 

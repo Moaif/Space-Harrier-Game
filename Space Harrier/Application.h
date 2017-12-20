@@ -5,6 +5,7 @@
 #include "Globals.h"
 #include "Module.h"
 
+class ModuleAnim;
 class ModuleRender;
 class ModuleWindow;
 class ModuleTextures;
@@ -40,6 +41,7 @@ public:
 	bool Restart();
 
 public:
+	ModuleAnim* anim = nullptr;
 	ModuleRender* renderer=nullptr;
 	ModuleWindow* window=nullptr;
 	ModuleTextures* textures=nullptr;

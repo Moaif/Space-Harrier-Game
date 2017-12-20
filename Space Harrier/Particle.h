@@ -44,6 +44,7 @@ public:
 		temp.anim = anim;
 		temp.onlyOnce = onlyOnce;
 		temp.speed = speed;
+		temp.currentAnimation = &temp.anim;
 	}
 	virtual void Update() {
 		collider->rect = screenPoint;

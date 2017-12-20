@@ -169,5 +169,6 @@ void ModuleParticles::AddParticle(const Particle& particle, const float& x, cons
 	Particle* p = particle.Copy(x,y,z);
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
+	App->anim->SubscribeAnim(&p->currentAnimation);
 }
 

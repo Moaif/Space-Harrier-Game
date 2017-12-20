@@ -105,6 +105,13 @@ bool ModuleMenu::Start()
 	}
 	firstPlay = false;
 
+	robotPointer = &robot;
+	App->anim->SubscribeAnim(&robotPointer);
+	eyePointer = &eye;
+	App->anim->SubscribeAnim(&eyePointer);
+	titlePointer = &title;
+	App->anim->SubscribeAnim(&titlePointer);
+
 	titleMult = 4;
 	textTimer = 0.0f;
 

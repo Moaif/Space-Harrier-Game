@@ -82,12 +82,14 @@ bool ModulePlayer::Start()
 		getReady=App->audio->LoadFx("assets/music/SFX/GetReady.wav");
 	}
 
+	App->anim->SubscribeAnim(&currentAnimation);
+
 	recoverTimer = RECOVER_TIME;
 	position.x = 0;
 	position.y = 0;
 	position.z = 0;
 	//Collider smaller than sprites, in order to make it easier
-	int y = (int)(position.y + (current_animation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
+	int y = (int)(position.y + (currentAnimation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
 	collider = App->collision->AddCollider({ (int)position.x,y,(int)COLLIDER_W,(int)COLLIDER_H },position.z,1, PLAYER, this);
 
 	return true;
@@ -96,7 +98,7 @@ bool ModulePlayer::Start()
 bool ModulePlayer::Restart() {
 
 	lives = INITIAL_LIVES;
-	current_animation = &run;
+	currentAnimation = &run;
 	actualHorizonPercentage = 0.0f;
 	win = false;
 	centered = false;
@@ -148,9 +150,9 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
-			if (position.x > ((-SCREEN_WIDTH / 2) + current_animation->GetCurrentFrame().w / 2)) {
+			if (position.x > ((-SCREEN_WIDTH / 2) + currentAnimation->GetCurrentFrame().w / 2)) {
 				position.x -= MOVEMENT_SPEED*App->time->GetDeltaTime();
-				if (current_animation != &run && current_animation != &fall) {
+				if (currentAnimation != &run && currentAnimation != &fall) {
 					VerifyFlyAnimation();
 				}
 				else
@@ -163,9 +165,9 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		{
-			if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
+			if (position.x < ((SCREEN_WIDTH / 2) - currentAnimation->GetCurrentFrame().w / 2)) {
 				position.x += MOVEMENT_SPEED*App->time->GetDeltaTime();
-				if (current_animation != &run && current_animation != &fall) {
+				if (currentAnimation != &run && currentAnimation != &fall) {
 					VerifyFlyAnimation();
 				}
 				else
@@ -176,44 +178,44 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && current_animation != &fall)
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && currentAnimation != &fall)
 		{
 			if (position.y > 0) {
 				position.y -= MOVEMENT_SPEED*App->time->GetDeltaTime();
 				if (position.y <= 0 ) {
-					current_animation = &run;
+					currentAnimation = &run;
 				}
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_animation != &fall)
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && currentAnimation != &fall)
 		{
-			if (position.y < (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h)) {
+			if (position.y < (SCREEN_HEIGHT - currentAnimation->GetCurrentFrame().h)) {
 				position.y += MOVEMENT_SPEED*App->time->GetDeltaTime();
-				if (current_animation == &run) {
+				if (currentAnimation == &run) {
 					VerifyFlyAnimation();
 				}
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_animation != &fall)
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && currentAnimation != &fall)
 		{
 			if (shootTimer <= 0) {
-				float y = position.y + (current_animation->GetCurrentFrame().h / 2);
+				float y = position.y + (currentAnimation->GetCurrentFrame().h / 2);
 				App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
 				shootTimer = SHOOT_INTERVAL;
 			}
 		}
 		shootTimer -= App->time->GetDeltaTime();
 
-		if (current_animation == &fall) {
-			if (current_animation->Finished()) {
+		if (currentAnimation == &fall) {
+			if (currentAnimation->Finished()) {
 				if (position.y > 0) {
 					VerifyFlyAnimation();
 				}
 				else
 				{
-					current_animation = &run;
+					currentAnimation = &run;
 				}
 			}
 		}
@@ -223,8 +225,8 @@ update_status ModulePlayer::Update()
 	// Draw everything --------------------------------------
 
 	collider->rect.x =(int) position.x;
-	collider->rect.y =(int)(position.y + (current_animation->GetCurrentFrame().h / 2) - (COLLIDER_H / 2));
-	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
+	collider->rect.y =(int)(position.y + (currentAnimation->GetCurrentFrame().h / 2) - (COLLIDER_H / 2));
+	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(currentAnimation->GetCurrentFrame()),nullptr);
 	App->shadows->DrawShadow(position.x,0,1);
 	
 
@@ -235,7 +237,7 @@ void ModulePlayer::OnCollision(Collider* other) {
 	if (other->type == NO_DMG_ENEMY) {
 		fall.Reset();
 		App->audio->PlayFx(ouch);
-		current_animation = &fall;
+		currentAnimation = &fall;
 	}
 	else {
 		--lives;
@@ -263,27 +265,27 @@ void ModulePlayer::VerifyFlyAnimation() {
 	float pos = GetRelativeWorldPosition().x;
 
 	if (pos <= (SCREEN_SEGMENT)-1) {
-		current_animation = &left2;
+		currentAnimation = &left2;
 		CalculateSpeed();
 		return;
 	}
 	if (pos <= (SCREEN_SEGMENT * 2)-1) {
-		current_animation = &left1;
+		currentAnimation = &left1;
 		CalculateSpeed();
 		return;
 	}
 	if (pos <= (SCREEN_SEGMENT * 3)-1) {
-		current_animation = &center;
+		currentAnimation = &center;
 		speedStage=0;
 		return;
 	}
 	if (pos <= (SCREEN_SEGMENT * 4)-1) {
-		current_animation = &right1;
+		currentAnimation = &right1;
 		CalculateSpeed();
 		return;
 	}
 	if (pos <= (SCREEN_SEGMENT * 5)-1) {
-		current_animation = &right2;
+		currentAnimation = &right2;
 		CalculateSpeed();
 		return;
 	}
@@ -316,7 +318,7 @@ void ModulePlayer::VerifyHorizonX() {
 void ModulePlayer::VerifyHorizonY() {
 
 	//Calculate percentual position from character
-	float temp = position.y / (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h);
+	float temp = position.y / (SCREEN_HEIGHT - currentAnimation->GetCurrentFrame().h);
 	//I dont put it on deltaTime base, cause i want the floor to change when the player "die"
 	if (actualHorizonPercentage < temp- HORIZON_Y_SPEED) {
 		actualHorizonPercentage += HORIZON_Y_SPEED;
@@ -335,17 +337,17 @@ void ModulePlayer::CalculateSpeed() {
 fPoint ModulePlayer::GetRelativeWorldPosition() const {
 	fPoint p;
 	p.x= (position.x*2) / (SCREEN_WIDTH);
-	p.y = (((position.y) *2) / (SCREEN_HEIGHT- current_animation->GetCurrentFrame().h))-1;
+	p.y = (((position.y) *2) / (SCREEN_HEIGHT- currentAnimation->GetCurrentFrame().h))-1;
 	p.z = 0.0f;
 	return p;
 }
 
 fPoint ModulePlayer::GetPlayerCenterPos()const {
-	return { position.x,position.y + current_animation->GetCurrentFrame().h/2,position.z };
+	return { position.x,position.y + currentAnimation->GetCurrentFrame().h/2,position.z };
 }
 
 void ModulePlayer::Death() {
-	current_animation = &death;
+	currentAnimation = &death;
 	if (!deathBounced) {
 		position.y += FALL_SPEED/2;
 		if (abs(deathStartingPosY - position.y) > FALL_BOUNCE) {
@@ -355,7 +357,7 @@ void ModulePlayer::Death() {
 	if (deathBounced && position.y > 0) {
 		position.y -= FALL_SPEED;
 	}
-	if (current_animation->Finished()) {
+	if (currentAnimation->Finished()) {
 		if (destroyed == true) {
 			App->scene->End();
 		}
@@ -365,7 +367,7 @@ void ModulePlayer::Death() {
 			App->time->SetTimeScale(1.0f);
 		}
 		death.Reset();
-		current_animation = &run;
+		currentAnimation = &run;
 		deathBounced = false;
 		recoverTimer = 0;
 		hit = false;
@@ -395,8 +397,8 @@ void ModulePlayer::AnimWin() {
 			App->ui->TheEnd();
 		}
 
-		resizeStruct resizeInfo = { (int)(current_animation->GetCurrentFrame().w *scale),(int)(current_animation->GetCurrentFrame().h *scale) };
-		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(current_animation->GetCurrentFrame()), &resizeInfo);
+		resizeStruct resizeInfo = { (int)(currentAnimation->GetCurrentFrame().w *scale),(int)(currentAnimation->GetCurrentFrame().h *scale) };
+		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(currentAnimation->GetCurrentFrame()), &resizeInfo);
 	}
 	else
 	{
@@ -410,17 +412,17 @@ void ModulePlayer::AnimWin() {
 		}
 		else
 		{
-			current_animation = &run;
+			currentAnimation = &run;
 			VerifyFloorSpeed();
 		}
 
 		if (currentLerpPercentaje >= 1.0f) {
 			centered = true;
 			position.z = 0;
-			current_animation = &run;
+			currentAnimation = &run;
 		}
 
-		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(currentAnimation->GetCurrentFrame()), nullptr);
 	}
 }
 
@@ -428,7 +430,7 @@ void ModulePlayer::AnimWelcome() {
 	if (welcomeTimer >= WELCOME_RUN_TIME) {
 		float tempSpeed = ((SCREEN_HEIGHT / 2) - (center.GetCurrentFrame().h / 2)) / WELCOME_TRANSITION_TIME;
 		position.y += tempSpeed*App->time->GetDeltaTime();
-		current_animation = &center;
+		currentAnimation = &center;
 		if (welcomeTimer >= WELCOME_RUN_TIME + WELCOME_TRANSITION_TIME) {
 			welcome = true;
 		}
@@ -436,5 +438,5 @@ void ModulePlayer::AnimWelcome() {
 	welcomeTimer += App->time->GetDeltaTime();
 
 
-	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(currentAnimation->GetCurrentFrame()), nullptr);
 }

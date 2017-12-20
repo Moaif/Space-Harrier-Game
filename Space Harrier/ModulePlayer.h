@@ -39,7 +39,6 @@ private:
 public:
 
 	SDL_Texture* graphics = nullptr;
-	Animation* current_animation = nullptr;
 	Animation run;
 	Animation center;
 	Animation left1;

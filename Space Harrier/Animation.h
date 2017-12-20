@@ -23,19 +23,23 @@ private:
 
 public:
 	Animation()
-	{}
+	{
+	}
 
 	Animation(const Animation& anim) : loop(anim.loop), speed(anim.speed), frames(anim.frames),randFrame(anim.randFrame)
-	{}
-
-	SDL_Rect& GetCurrentFrame()
 	{
+	}
+
+	~Animation() {
+	}
+
+	void Update() {
 		if (first) {
 			if (randFrame) {
 				current_frame = RAND() % frames.size();
 			}
 			if (!timeBased) {
-				timer = App->time->GetTimeSinceStart() + (1/speed);
+				timer = App->time->GetTimeSinceStart() + (1 / speed);
 			}
 			first = false;
 		}
@@ -49,7 +53,7 @@ public:
 				}
 				else
 				{
-					if(inversed){
+					if (inversed) {
 						--current_frame;
 					}
 					else
@@ -91,13 +95,15 @@ public:
 		{
 			current_frame = (loop) ? 0 : MAX(last_frame - 1, 0);
 			loops++;
-		} 
-
-		if (current_frame < 0) {
-			current_frame = (loop) ?MAX(last_frame - 1, 0):0;
-			loops++;
 		}
 
+		if (current_frame < 0) {
+			current_frame = (loop) ? MAX(last_frame - 1, 0) : 0;
+			loops++;
+		}
+	}
+	SDL_Rect& GetCurrentFrame() 
+	{
 		return frames[current_frame];
 	}
 

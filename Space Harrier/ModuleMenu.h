@@ -25,8 +25,11 @@ private:
 	SDL_Texture* content = nullptr;
 	SDL_Rect background;
 	Animation robot;
+	Animation* robotPointer=nullptr;
 	Animation eye;
+	Animation* eyePointer=nullptr; //TODO: check if posible to do double & to cast normal animation into Animation**
 	Animation title;
+	Animation* titlePointer=nullptr;
 	int titleMult;
 	SDL_Rect finalTitle;
 	Animation man;

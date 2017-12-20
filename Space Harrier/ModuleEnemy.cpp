@@ -678,7 +678,11 @@ void ModuleEnemy::AddEnemy(const Enemy& enemy, const float& x, const float& y, c
 	if (p->childs.size() > 0) {
 		for (unsigned int i = 0; i < p->childs.size(); ++i) {
 			activeBodyParts.push_back(p->childs[i]);
+			App->anim->SubscribeAnim(&p->childs[i]->currentAnimation);
 		}
+	}
+	else {
+		App->anim->SubscribeAnim(&p->currentAnimation);
 	}
 }
 

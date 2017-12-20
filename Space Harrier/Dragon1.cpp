@@ -4,7 +4,7 @@
 #include "ModuleScene.h"
 
 const float Dragon1::MAX_DRAGON_Z = 23.0f;
-const float Dragon1::MOVEMENT_UPDATE_TIME = 0.1;
+const float Dragon1::MOVEMENT_UPDATE_TIME = 0.1f;
 const float Dragon1::MIN_Z_SHOOT = 4.0f;
 const float Dragon1::SHOOT_INTERVAL = 0.25;
 
@@ -124,7 +124,7 @@ void Dragon1::Movement() {
 		}
 	}
 
-	for (int i = 0; i < partSpeed.size(); ++i) {
+	for (unsigned int i = 0; i < partSpeed.size(); ++i) {
 		childs[i]->speed = partSpeed[i];
 		childs[i]->Update();
 	}
