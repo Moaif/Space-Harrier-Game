@@ -39,7 +39,7 @@ bool ModuleParticles::Start()
 	laser->anim.frames.push_back({ 113, 0, 56, 38 });
 	laser->anim.frames.push_back({ 171, 0, 56, 38 });
 	laser->anim.randFrame = true;
-	laser->anim.speed = 1.0f;
+	laser->anim.speed = 3.0f;
 	laser->anim.timeBased = false;
 	laser->efxIndex = App->audio->LoadFx("assets/music/SFX/PlayerShoot.wav");
 	((PlayerShoot*)laser)->reboundEfx = App->audio->LoadFx("assets/music/SFX/ReboundShoot.wav");
@@ -50,7 +50,7 @@ bool ModuleParticles::Start()
 	fire->anim.frames.push_back({1,1,51,47});
 	fire->anim.frames.push_back({ 56,2,48,44 });
 	fire->anim.frames.push_back({ 110,0,50,48 });
-	fire->anim.speed = 5.0f;
+	fire->anim.speed = 15.0f;
 	fire->anim.timeBased = false;
 	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
 	fire->speed = 10.0f;
@@ -65,13 +65,13 @@ bool ModuleParticles::Start()
 	enemyLaser->anim.frames.push_back({ 76,76,59,59 });
 	enemyLaser->anim.frames.push_back({ 144,76,59,59 });
 	enemyLaser->anim.frames.push_back({ 213,76,59,59 });
-	enemyLaser->anim.speed = 5.0f;
+	enemyLaser->anim.speed = 15.0f;
 	enemyLaser->anim.timeBased = false;
 	enemyLaser->efxIndex = App->audio->LoadFx("assets/music/SFX/LaserShoot.wav");
 	enemyLaser->speed = 10.0f;
 	prototipeClearList.push_back(enemyLaser);
 
-	explosion = new Explosion(200.0f,exp);
+	explosion = new Explosion(400.0f,exp);
 	explosion->anim.frames.push_back({2,0,93,67});
 	explosion->anim.frames.push_back({ 99,1,92,67 });
 	explosion->anim.frames.push_back({ 197,1,94,72 });
@@ -82,8 +82,8 @@ bool ModuleParticles::Start()
 	explosion->anim.frames.push_back({ 106,80,94,85 });
 	explosion->anim.frames.push_back({ 202,87,97,79 });
 	explosion->efxIndex = App->audio->LoadFx("assets/music/SFX/Explosion.wav");
-	explosion->anim.speed=5.0f;
-	explosion->speed = 10.0f;
+	explosion->anim.speed= 30.0f;
+	explosion->speed = 15.0f;
 	explosion->onlyOnce = true;
 	prototipeClearList.push_back(explosion);
 
@@ -138,6 +138,7 @@ update_status ModuleParticles::Update()
 		Particle* p = *it;
 
 		p->Update();
+		p->anim.Update();
 		if (p->screenPoint.h == 0 && p->screenPoint.w == 0) {
 			App->renderer->AddToBlitBuffer(p->texture, p->position.x, p->position.y, p->position.z, &(p->anim.GetCurrentFrame()), nullptr);
 		}

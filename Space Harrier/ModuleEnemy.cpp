@@ -88,6 +88,7 @@ bool ModuleEnemy::Start()
 	jellyfish->anim.frames.push_back({0,43,80,90});
 	jellyfish->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish->anim.speed = 3.0f;
 	jellyfish->speed = { 30.0f, 200.0f, 0.0f };
 	jellyfish->efxIndex = jellyStartSFX;
 	enemies["jelly1"] = jellyfish;
@@ -96,6 +97,7 @@ bool ModuleEnemy::Start()
 	jellyfish2->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish2->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish2->anim.speed = 3.0f;
 	jellyfish2->speed = { -30.0f, 200.0f, 0.0f };
 	jellyfish2->efxIndex = jellyStartSFX;
 	enemies["jelly2"] = jellyfish2;
@@ -104,6 +106,7 @@ bool ModuleEnemy::Start()
 	jellyfish3->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish3->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish3->anim.speed = 3.0f;
 	jellyfish3->speed = { 30.0f, 100.0f, 0.0f };
 	jellyfish3->efxIndex = jellyStartSFX;
 	enemies["jelly3"] = jellyfish3;
@@ -112,6 +115,7 @@ bool ModuleEnemy::Start()
 	jellyfish4->anim.frames.push_back({ 0,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 83,43,80,90 });
 	jellyfish4->anim.frames.push_back({ 170,43,80,90 });
+	jellyfish4->anim.speed = 3.0f;
 	jellyfish4->speed = { -30.0f, 100.0f, 0.0f };
 	jellyfish4->efxIndex = jellyStartSFX;
 	enemies["jelly4"] = jellyfish4;
@@ -124,7 +128,7 @@ bool ModuleEnemy::Start()
 	metalBall->anim.frames.push_back({ 64, 53, 56, 56 });
 	metalBall->anim.frames.push_back({ 1, 116, 64, 68 });
 	metalBall->anim.frames.push_back({ 78, 116, 64, 68 });
-	metalBall->anim.speed = 2.0f;
+	metalBall->anim.speed = 8.0f;
 	metalBall->speed = {-80.0f,-200.0f,-5.0f};
 	metalBall->efxIndex = metalStartSFX;
 	enemies["metalball1"] = metalBall;
@@ -137,7 +141,7 @@ bool ModuleEnemy::Start()
 	metalBall1->anim.frames.push_back({ 64, 53, 56, 56 });
 	metalBall1->anim.frames.push_back({ 1, 116, 64, 68 });
 	metalBall1->anim.frames.push_back({ 78, 116, 64, 68 });
-	metalBall1->anim.speed = 2.0f;
+	metalBall1->anim.speed = 8.0f;
 	metalBall1->speed = { 0.0f,200.0f,-5.0f };
 	metalBall1->efxIndex = metalStartSFX;
 	enemies["metalball2"] = metalBall1;
@@ -150,7 +154,7 @@ bool ModuleEnemy::Start()
 	metalBall2->anim.frames.push_back({ 64, 53, 56, 56 });
 	metalBall2->anim.frames.push_back({ 1, 116, 64, 68 });
 	metalBall2->anim.frames.push_back({ 78, 116, 64, 68 });
-	metalBall2->anim.speed = 2.0f;
+	metalBall2->anim.speed = 8.0f;
 	metalBall2->speed = { 80.0f,-200.0f,-5.0f };
 	metalBall2->efxIndex = metalStartSFX;
 	enemies["metalball3"] = metalBall2;
@@ -160,6 +164,7 @@ bool ModuleEnemy::Start()
 	drone->anim.frames.push_back({ 0,7,80,34 });
 	drone->anim.frames.push_back({ 84,7,80,34 });
 	drone->anim.frames.push_back({ 168,7,80,34 });
+	drone->anim.speed=3.0f;
 	drone->speed = {100.0f,100.0f,5.0f };
 	drone->efxIndex = droneStartSFX;
 	enemies["drone0"] = drone;
@@ -168,6 +173,7 @@ bool ModuleEnemy::Start()
 	drone1->anim.frames.push_back({0,7,80,34});
 	drone1->anim.frames.push_back({ 84,7,80,34 });
 	drone1->anim.frames.push_back({ 168,7,80,34 });
+	drone1->anim.speed = 3.0f;
 	drone1->speed = { -100.0f,100.0f,5.0f };
 	drone1->efxIndex = droneStartSFX;
 	enemies["drone1"] = drone1;
@@ -176,6 +182,7 @@ bool ModuleEnemy::Start()
 	drone2->anim.frames.push_back({ 0,7,80,34 });
 	drone2->anim.frames.push_back({ 84,7,80,34 });
 	drone2->anim.frames.push_back({ 168,7,80,34 });
+	drone2->anim.speed = 3.0f;
 	drone2->speed = { 100.0f,0.0f,5.0f };
 	drone2->efxIndex = droneStartSFX;
 	enemies["drone2"] = drone2;
@@ -184,6 +191,7 @@ bool ModuleEnemy::Start()
 	drone3->anim.frames.push_back({ 0,7,80,34 });
 	drone3->anim.frames.push_back({ 84,7,80,34 });
 	drone3->anim.frames.push_back({ 168,7,80,34 });
+	drone3->anim.speed = 3.0f;
 	drone3->speed = { -100.0f,0.0f,5.0f };
 	drone3->efxIndex = droneStartSFX;
 	enemies["drone3"] = drone3;
@@ -192,6 +200,7 @@ bool ModuleEnemy::Start()
 	drone4->anim.frames.push_back({ 0,7,80,34 });
 	drone4->anim.frames.push_back({ 84,7,80,34 });
 	drone4->anim.frames.push_back({ 168,7,80,34 });
+	drone4->anim.speed = 3.0f;
 	drone4->speed = { 50.0f,120.0f,-5.0f };
 	drone4->efxIndex = droneStartSFX;
 	enemies["drone4"] = drone4;
@@ -200,6 +209,7 @@ bool ModuleEnemy::Start()
 	drone5->anim.frames.push_back({ 0,7,80,34 });
 	drone5->anim.frames.push_back({ 84,7,80,34 });
 	drone5->anim.frames.push_back({ 168,7,80,34 });
+	drone5->anim.speed = 3.0f;
 	drone5->speed = { -50.0f,120.0f,-5.0f };
 	drone5->efxIndex = droneStartSFX;
 	enemies["drone5"] = drone5;
@@ -208,6 +218,7 @@ bool ModuleEnemy::Start()
 	drone6->anim.frames.push_back({ 0,7,80,34 });
 	drone6->anim.frames.push_back({ 84,7,80,34 });
 	drone6->anim.frames.push_back({ 168,7,80,34 });
+	drone6->anim.speed = 3.0f;
 	drone6->speed = { 100.0f,100.0f,5.0f };
 	drone6->efxIndex = droneStartSFX;
 	enemies["drone6"] = drone6;
@@ -216,6 +227,7 @@ bool ModuleEnemy::Start()
 	drone7->anim.frames.push_back({ 0,7,80,34 });
 	drone7->anim.frames.push_back({ 84,7,80,34 });
 	drone7->anim.frames.push_back({ 168,7,80,34 });
+	drone7->anim.speed = 3.0f;
 	drone7->speed = { -100.0f,100.0f,5.0f };
 	drone7->efxIndex = droneStartSFX;
 	enemies["drone7"] = drone7;
@@ -224,6 +236,7 @@ bool ModuleEnemy::Start()
 	drone8->anim.frames.push_back({ 0,7,80,34 });
 	drone8->anim.frames.push_back({ 84,7,80,34 });
 	drone8->anim.frames.push_back({ 168,7,80,34 });
+	drone8->anim.speed = 3.0f;
 	drone8->speed = { 110.0f,-350.0f,-5.0f };
 	drone8->efxIndex = droneStartSFX;
 	enemies["drone8"] = drone8;
@@ -232,6 +245,7 @@ bool ModuleEnemy::Start()
 	drone9->anim.frames.push_back({ 0,7,80,34 });
 	drone9->anim.frames.push_back({ 84,7,80,34 });
 	drone9->anim.frames.push_back({ 168,7,80,34 });
+	drone9->anim.speed = 3.0f;
 	drone9->speed = { 25.0f,-50.0f,-5.0f };
 	drone9->efxIndex = droneStartSFX;
 	enemies["drone9"] = drone9;
@@ -240,6 +254,7 @@ bool ModuleEnemy::Start()
 	drone10->anim.frames.push_back({ 0,7,80,34 });
 	drone10->anim.frames.push_back({ 84,7,80,34 });
 	drone10->anim.frames.push_back({ 168,7,80,34 });
+	drone10->anim.speed = 3.0f;
 	drone10->speed = { 0.0f,-50.0f,-5.0f };
 	drone10->efxIndex = droneStartSFX;
 	enemies["drone10"] = drone10;
@@ -248,6 +263,7 @@ bool ModuleEnemy::Start()
 	drone11->anim.frames.push_back({ 0,7,80,34 });
 	drone11->anim.frames.push_back({ 84,7,80,34 });
 	drone11->anim.frames.push_back({ 168,7,80,34 });
+	drone11->anim.speed = 3.0f;
 	drone11->speed = { -25.0f,-50.0f,-5.0f };
 	drone11->efxIndex = droneStartSFX;
 	enemies["drone11"] = drone11;
@@ -264,6 +280,7 @@ bool ModuleEnemy::Start()
 	drone13->anim.frames.push_back({ 0,7,80,34 });
 	drone13->anim.frames.push_back({ 84,7,80,34 });
 	drone13->anim.frames.push_back({ 168,7,80,34 });
+	drone13->anim.speed = 3.0f;
 	drone13->speed = { -100.0f,0.0f,5.0f };
 	drone13->efxIndex = droneStartSFX;
 	enemies["drone13"] = drone13;
@@ -272,6 +289,7 @@ bool ModuleEnemy::Start()
 	drone14->anim.frames.push_back({ 0,7,80,34 });
 	drone14->anim.frames.push_back({ 84,7,80,34 });
 	drone14->anim.frames.push_back({ 168,7,80,34 });
+	drone14->anim.speed = 3.0f;
 	drone14->speed = { 120.0f,75.0f,7.5f };
 	drone14->efxIndex = droneStartSFX;
 	enemies["drone14"] = drone14;
@@ -280,6 +298,7 @@ bool ModuleEnemy::Start()
 	drone15->anim.frames.push_back({ 0,7,80,34 });
 	drone15->anim.frames.push_back({ 84,7,80,34 });
 	drone15->anim.frames.push_back({ 168,7,80,34 });
+	drone15->anim.speed = 3.0f;
 	drone15->speed = { 180.0f,25.0f,7.5f };
 	drone15->efxIndex = droneStartSFX;
 	enemies["drone15"] = drone15;
@@ -288,6 +307,7 @@ bool ModuleEnemy::Start()
 	drone16->anim.frames.push_back({ 0,7,80,34 });
 	drone16->anim.frames.push_back({ 84,7,80,34 });
 	drone16->anim.frames.push_back({ 168,7,80,34 });
+	drone16->anim.speed = 3.0f;
 	drone16->speed = { -180.0f,25.0f,7.5f };
 	drone16->efxIndex = droneStartSFX;
 	enemies["drone16"] = drone16;
@@ -646,6 +666,7 @@ update_status ModuleEnemy::Update()
 		Enemy* p = *it;
 
 		p->Update();
+		p->anim.Update();
 		if (p->texture == nullptr) {
 			for (vector<Enemy*>::iterator it2 = p->childs.begin(); it2 != p->childs.end(); ++it2) {
 				resizeStruct resizeInfo = { (*it2)->screenPoint.w,(*it2)->screenPoint.h };

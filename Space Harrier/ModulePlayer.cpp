@@ -55,11 +55,12 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	death.frames.push_back({ 108,2,26,49 });
 	death.timeBased = false;
 	death.loop = false;
-	death.speed = 0.35f;
+	death.speed = 1.0f;
 
 	fall.frames.push_back({5,117,24,40});
 	fall.frames.push_back({ 45,119,22,35 });
 	fall.frames.push_back({ 82,122,26,30 });
+	fall.speed = 5.0f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -83,9 +84,7 @@ bool ModulePlayer::Start()
 	}
 
 	recoverTimer = RECOVER_TIME;
-	position.x = 0;
-	position.y = 0;
-	position.z = 0;
+	position = { 0,0,0 };
 	//Collider smaller than sprites, in order to make it easier
 	int y = (int)(position.y + (current_animation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
 	collider = App->collision->AddCollider({ (int)position.x,y,(int)COLLIDER_W,(int)COLLIDER_H },position.z,1, PLAYER, this);
@@ -120,6 +119,9 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	current_animation->Update();
+	VerifyHorizonY();
+
 	//Welcome to the fantasy zone anim+
 	if (!welcome) {
 		AnimWelcome();
@@ -133,7 +135,6 @@ update_status ModulePlayer::Update()
 		return UPDATE_CONTINUE;
 	}
 	//Normal game
-	VerifyHorizonY();
 	if (hit) 
 	{
 		Death();

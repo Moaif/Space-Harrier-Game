@@ -27,6 +27,7 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 	title.frames.push_back({ 510,40,190,30 });
 	title.frames.push_back({ 710,20,180,70 });
 	title.frames.push_back({ 1100,10,180,100 });
+	title.speed = 5.0f;
 
 	finalTitle = { 1100,10,180,100 };
 
@@ -81,6 +82,7 @@ ModuleMenu::ModuleMenu(bool active) : Module(active)
 	man.frames.push_back({ 60,480,50,30 });
 	man.frames.push_back({ 110,480,50,30 });
 	man.frames.push_back({ 160,480,50,30 });
+	man.speed = 2.0f;
 }
 
 ModuleMenu::~ModuleMenu()
@@ -133,16 +135,20 @@ update_status ModuleMenu::Update()
 	App->renderer->Blit(content, 0, 0, &background, nullptr );	
 
 	//Eye
+	eye.Update();
 	App->renderer->Blit(content, -82, 102, &(eye.GetCurrentFrame()), nullptr);
 
 	//Robot
+	robot.Update();
 	App->renderer->Blit(content, 97,12,&(robot.GetCurrentFrame()),nullptr);
 
 	//Man
+	man.Update();
 	App->renderer->Blit(content,105,146,&(man.GetCurrentFrame()),nullptr);
 
 	//Title
 	if (titleMult > 0) {
+		title.Update();
 		resizeStruct size = { title.GetCurrentFrame().w / titleMult, title.GetCurrentFrame().h / titleMult };
 		App->renderer->Blit(content, 0, 120, &(title.GetCurrentFrame()), &size);
 
