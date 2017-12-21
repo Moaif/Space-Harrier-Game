@@ -42,12 +42,15 @@ bool ModuleScene::Start()
 	timeElapsed = 0;
 	currentStage++;
 	string path = "assets/json/Stage" + to_string(currentStage) + ".json";
-	//LoadJson(path.c_str());
-	LoadJson("assets/json/STest.json");
+	LoadJson(path.c_str());
+	
 	
 	background = App->textures->Load(backgroundPath.c_str());
+	ASSERT(background != nullptr,AT("Background texture failed on loading"));
 	stage = App->textures->Load(stagePath.c_str());
+	ASSERT(stage != nullptr, AT("Stage texture failed on loading"));
 	floor = App->textures->Load(floorPath.c_str());
+	ASSERT(floor != nullptr, AT("Floor texture failed on loading"));
 
 	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
 
@@ -121,11 +124,7 @@ update_status ModuleScene::Update()
 bool ModuleScene::LoadJson(const string& path) {
 	json input;
 	ifstream ifs(path);
-	if (ifs.fail()) {
-		string temp = "The file " + path + " could not be found in it's directory";
-		LOG(temp.c_str());
-		return false;
-	}
+	ASSERT(!ifs.fail(),AT("Could not fint json stage file"));
 	ifs >> input;
 	//Stage name
 	string tempName = input["name"];

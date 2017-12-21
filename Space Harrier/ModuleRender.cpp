@@ -106,10 +106,7 @@ bool ModuleRender::CleanUp()
 
 void ModuleRender::AddToBlitBuffer(SDL_Texture* texture,const float& x,const float& y, const float& z, SDL_Rect* section, resizeStruct* resizeInfo) {
 	
-	if (texture == nullptr) {
-		LOG("AddToBlitBuffer received a null texture");
-		return;
-	}
+	ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
 
 	SDL_Rect empty = { 0,0,0,0 };
 	resizeStruct noResize= { 0,0 };
@@ -134,10 +131,7 @@ void ModuleRender::AddToBlitBuffer(SDL_Texture* texture,const float& x,const flo
 bool ModuleRender::Blit(SDL_Texture* texture,float x,float y, SDL_Rect* section, resizeStruct* resizeInfo)
 {
 
-	if (texture == nullptr) {
-		LOG("Blit received a null texture");
-		return false;
-	}
+	ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
 
 	bool ret = true;
 	SDL_Rect rect;
@@ -181,10 +175,7 @@ bool ModuleRender::Blit(SDL_Texture* texture,float x,float y, SDL_Rect* section,
 
 bool ModuleRender::Print(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
 
-	if (font == nullptr) {
-		LOG("Print received a null font");
-		return false;
-	}
+	ASSERT(font != nullptr,AT("Font parameter received as null"));
 
 	bool ret = true;
 
@@ -193,10 +184,7 @@ bool ModuleRender::Print(const Font* font,const float& x,const float& y,const st
 	}
 
 	SDL_Texture* tempTexture = App->fonts->GetMessage(font,mesage);
-	if (tempTexture == nullptr) {
-		LOG("Message texture failed on construction");
-		ret = false;
-	}
+	ASSERT(tempTexture != nullptr,AT("Failed on creating new message texture"));
 
 	SDL_Rect rect;
 	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
@@ -208,55 +196,22 @@ bool ModuleRender::Print(const Font* font,const float& x,const float& y,const st
 
 bool ModuleRender::DirectPrint(const Font* font,const float& x,const float& y,const string& mesage, float fontSize) {
 
-	if (font == nullptr) {
-		LOG("DirectPrint received a null font");
-		return false;
-	}
+	ASSERT(font != nullptr, AT("Font parameter received as null"));
 
 	bool ret = true;
-	int xSize = font->GetXSize();
-	int ySize = font->GetYSize();
 
 	if (fontSize < 0) {
 		fontSize = 0;
 	}
 
-	SDL_Surface* tempSurface = font->GetImage();
-	SDL_Surface* surfaceFinal = SDL_CreateRGBSurface(0, mesage.length() * xSize, ySize, 32, 0, 0, 0, 0);
-	SDL_FillRect(surfaceFinal, NULL, 0xFF00FF);
-	SDL_SetColorKey(surfaceFinal, SDL_TRUE, SDL_MapRGB(surfaceFinal->format, 255, 0, 255));
-
-	SDL_Rect srcrect;
-	srcrect.h = ySize;
-	srcrect.w = xSize;
-	SDL_Rect dstrect;
-	dstrect.h = ySize;
-	dstrect.w = xSize;
-	if (tempSurface == nullptr)
-	{
-		printf("Unable to load image %s! SDL Error: %s\n", "Font.bmp", SDL_GetError());
-		ret = false;
-	}
-	for (unsigned int i = 0; i < mesage.size(); ++i) {
-		int offset = font->GetCharOffset(mesage[i]);
-		srcrect.x = offset*xSize;
-		srcrect.y = 0;
-		dstrect.x = i*xSize;
-		dstrect.y = 0;
-		SDL_BlitSurface(tempSurface, &srcrect, surfaceFinal, &dstrect);
-	}
-	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(renderer, surfaceFinal);
-	if (tempTexture == nullptr) {
-		printf("Unable to create texture from surface SDL Error: %s\n", SDL_GetError());
-		ret = false;
-	}
+	SDL_Texture* tempTexture = App->fonts->GetMessage(font, mesage);
+	ASSERT(tempTexture != nullptr, AT("Failed on creating new message texture"));
 
 	SDL_Rect rect;
 	SDL_QueryTexture(tempTexture, NULL, NULL, &rect.w, &rect.h);
 	resizeStruct size = { (int)(rect.w*fontSize),(int)(rect.h*fontSize) };
 
 	Blit(tempTexture, x, y, nullptr, &size);
-	SDL_FreeSurface(surfaceFinal);
 
 	return ret;
 }

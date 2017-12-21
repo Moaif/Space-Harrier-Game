@@ -343,7 +343,7 @@ bool ModuleEnemy::Start()
 	fly5->efxIndex = flyStartSFX;
 	enemies["fly5"] = fly5;
 
-	Enemy* dragon1 = new Dragon1(nullptr);
+	Enemy* dragon1 = new Dragon1();
 	dragon1->speed = {80.0f,80.0f,-5.0f};
 	dragon1->hits = 6;
 	Enemy* head1 = new BodyPart(dragonTexture2,dragon1);
@@ -444,7 +444,7 @@ bool ModuleEnemy::Start()
 	prototypePartsClearList.push_back(tail1);
 
 
-	Enemy* dragon3_1 = new Dragon3(0,nullptr);
+	Enemy* dragon3_1 = new Dragon3(0);
 	dragon3_1->speed = {-20,25,-4};
 	dragon3_1->hits = 7;
 	Enemy* head3_1 = new BodyPart(dragonTexture, dragon3_1);
@@ -518,7 +518,7 @@ bool ModuleEnemy::Start()
 	prototypePartsClearList.push_back(body3_1_4);
 	prototypePartsClearList.push_back(body3_1_5);
 
-	Enemy* dragon3_2 = new Dragon3(1,nullptr);
+	Enemy* dragon3_2 = new Dragon3(1);
 	dragon3_2->speed = { 20,-25,-4 };
 	dragon3_2->hits = 7;
 	Enemy* head3_2 = new BodyPart(dragonTexture, dragon3_2);
@@ -602,16 +602,23 @@ bool ModuleEnemy::CleanUp()
 {
 	LOG("Unloading enemies");
 	App->textures->Unload(enemiesTexture);
+	ASSERT(enemiesTexture != nullptr,AT("Enemies failed loading textures"));
 	App->textures->Unload(trees);
+	ASSERT(trees != nullptr, AT("Enemies failed loading textures"));
 	App->textures->Unload(trees3);
+	ASSERT(trees3 != nullptr, AT("Enemies failed loading textures"));
 	App->textures->Unload(rocks);
+	ASSERT(rocks != nullptr, AT("Enemies failed loading textures"));
 	App->textures->Unload(metalEnemy);
+	ASSERT(metalEnemy != nullptr, AT("Enemies failed loading textures"));
 	App->textures->Unload(dragonTexture);
+	ASSERT(dragonTexture != nullptr, AT("Enemies failed loading textures"));
 	App->textures->Unload(dragonTexture2);
+	ASSERT(dragonTexture2 != nullptr, AT("Enemies failed loading textures"));
 
-	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it)
+	for (list<Enemy*>::iterator it = active.begin(); it != active.end(); ++it) {
 		RELEASE(*it);
-
+	}
 	active.clear();
 
 	for (map<string, Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
@@ -695,6 +702,7 @@ update_status ModuleEnemy::Update()
 void ModuleEnemy::AddEnemy(const Enemy& enemy, const float& x, const float& y, const float& z,Enemy* father)
 {
 	Enemy* p = enemy.Copy(x, y, z,father);
+	ASSERT(p != nullptr,AT("Failed on enemy creation"));
 	active.push_back(p);
 	if (p->childs.size() > 0) {
 		for (unsigned int i = 0; i < p->childs.size(); ++i) {

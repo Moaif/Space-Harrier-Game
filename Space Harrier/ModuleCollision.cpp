@@ -120,10 +120,7 @@ bool ModuleCollision::CleanUp()
 
 Collider* ModuleCollision::AddCollider(const SDL_Rect& rect,const float& z,const float& speed,const CollisionType& type,GameObject* callback)
 {
-	if (callback == nullptr) {
-		LOG("AddCollider received a null callback");
-		return nullptr;
-	}
+	ASSERT(callback != nullptr,AT("Parameter Callback was received as null"));
 	Collider* ret = new Collider(rect,z,speed,type,callback);
 
 	colliders.push_back(ret);

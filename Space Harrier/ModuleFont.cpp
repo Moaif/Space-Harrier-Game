@@ -4,7 +4,6 @@
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "Font.h"
-#include <string>
 
 using namespace std;
 
@@ -76,7 +75,7 @@ const Font* ModuleFont::GetFont(const string& fontName, const string& file,const
 		links[fontMap[fontName]][file][line] = true;
 		return fontMap[fontName];
 	}
-	printf("Error, there is no %s in our database", fontName.c_str());
+	LOG("Error, there is no %s in our database", fontName.c_str());
 	return nullptr;
 }
 
@@ -91,16 +90,16 @@ void ModuleFont::FreeFont(const Font ** p,const string& file,const int& line) {
 		return;
 	}
 
-	map<const Font*, map<string, map<int, bool>>>::iterator it = links.begin();
+	map<const Font*, map<string, map<int, bool>>>::iterator it = links.find(*p);
 	if (it != links.end()) {
-		map<string, map<int, bool>>::iterator it2 = (*it).second.begin();
+		map<string, map<int, bool>>::iterator it2 = (*it).second.find(file);
 		if (it2 != (*it).second.end()) {
-			map<int, bool>::iterator it3 = (*it2).second.begin();
+			map<int, bool>::iterator it3 = (*it2).second.find(line);
 			if (it3 != (*it2).second.end()) {
 				(*it3).second = false;
+				*p = nullptr;
 			}
 		}
-		*p = nullptr;
 	}
 }
 
@@ -128,10 +127,7 @@ bool ModuleFont::VerifyLinks() {
 
 SDL_Texture* ModuleFont::GetMessage(const Font* font,const string& message) {
 	
-	if (font == nullptr) {
-		LOG("GetMessage received a null font");
-		return nullptr;
-	}
+	ASSERT(font != nullptr,AT("Font parameter was received as null"));
 
 	//First we search if the message is in cache
 	if (!messageCache.empty()) {
@@ -149,10 +145,7 @@ SDL_Texture* ModuleFont::GetMessage(const Font* font,const string& message) {
 
 	//If we dont fint it, we made it
 	SDL_Texture* temp = CreateMessage(font,message);
-	if (temp == nullptr) {
-		LOG("Failed on CreateMessage");
-		return nullptr;
-	}
+	ASSERT(temp != nullptr,AT("Failed on creating new message texture"));
 	if (messageCache[font].size() > MAX_CACHE_SIZE_PER_FONT) {//Cache full case
 		int minTtl= MAX_TIME_TO_LIVE+1;
 		string messageToRemove="";
@@ -163,10 +156,8 @@ SDL_Texture* ModuleFont::GetMessage(const Font* font,const string& message) {
 			}
 		}
 		//Error
-		if (messageToRemove == "") {
-			LOG("Could not find a message to remove in messageCache");
-			return nullptr;
-		}
+		ASSERT(messageToRemove != "",AT("Could not find any space to allocate the new message"));
+
 		SDL_DestroyTexture(messageCache[font][messageToRemove].texture);
 		messageCache[font][messageToRemove].texture=nullptr;
 		messageCache[font].erase(messageToRemove);
@@ -232,10 +223,7 @@ bool ModuleFont::LoadFontYellow() {
 
 SDL_Texture* ModuleFont::CreateMessage(const Font* font,const string& message) {
 
-	if (font == nullptr) {
-		LOG("CreateMessage received a null font");
-		return nullptr;
-	}
+	ASSERT(font != nullptr,AT("Font parameter was received as null"));
 
 	int xSize = font->GetXSize();
 	int ySize = font->GetYSize();
@@ -253,7 +241,7 @@ SDL_Texture* ModuleFont::CreateMessage(const Font* font,const string& message) {
 	dstrect.w = xSize;
 	if (tempSurface == nullptr)
 	{
-		printf("Unable to create a temporal SDL surface for message SDL Error: %s\n", SDL_GetError());
+		LOG("Unable to create a temporal SDL surface for message SDL Error: %s\n", SDL_GetError());
 		return nullptr;
 	}
 	for (unsigned int i = 0; i < message.size(); ++i) {
@@ -266,7 +254,7 @@ SDL_Texture* ModuleFont::CreateMessage(const Font* font,const string& message) {
 	}
 	SDL_Texture* tempTexture = SDL_CreateTextureFromSurface(App->renderer->renderer, surfaceFinal);
 	if (tempTexture == nullptr) {
-		printf("Unable to create message texture from surface SDL Error: %s\n", SDL_GetError());
+		LOG("Unable to create message texture from surface SDL Error: %s\n", SDL_GetError());
 		return nullptr;
 	}
 

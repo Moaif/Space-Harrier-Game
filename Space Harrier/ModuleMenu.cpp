@@ -94,7 +94,10 @@ bool ModuleMenu::Start()
 	LOG("Loading space intro");
 	
 	content = App->textures->Load("assets/Menu.png");
+	ASSERT(content != nullptr,AT("Menu failed at loading textures"));
+
 	red = App->fonts->GetFont("Red",__FILE__,redFontLineReference = __LINE__);
+	ASSERT(content != nullptr, AT("Menu failed at getting fonts"));
 
 	App->Restart();//We restart all modules to start a new game
 	

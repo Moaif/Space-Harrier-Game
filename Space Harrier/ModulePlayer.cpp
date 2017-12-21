@@ -72,6 +72,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	graphics = App->textures->Load("assets/character.png");
+	ASSERT(graphics != nullptr,AT("Player failed on loading it's textures"));
 
 	if (ouch == 0) {
 		ouch=App->audio->LoadFx("assets/music/SFX/Ouch.wav");

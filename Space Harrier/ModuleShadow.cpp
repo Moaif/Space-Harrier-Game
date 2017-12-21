@@ -14,6 +14,7 @@ ModuleShadow::~ModuleShadow() {
 bool ModuleShadow::Start() {
 	LOG("Loading shadow");
 	shadow = App->textures->Load("assets/Shadow.png");
+	ASSERT(shadow != nullptr,AT("Failed on loading shadow texture"));
 
 	return true;
 }

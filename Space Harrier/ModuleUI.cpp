@@ -8,7 +8,6 @@
 #include "ModuleInput.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleMenu.h"
-#include <string>
 #include "Font.h"
 #include "json.hpp"
 #include <fstream>
@@ -48,10 +47,15 @@ ModuleUI::~ModuleUI() {
 bool ModuleUI::Start() {
 	LOG("Loading UI textures");
 	graphics = App->textures->Load("assets/UI.png");
+	ASSERT(graphics != nullptr,AT("Failed on loading UI textures"));
 	red = App->fonts->GetFont("Red", __FILE__, redFontLineReference=__LINE__);
+	ASSERT(red != nullptr,AT("Failed on getting red Font"));
 	blue = App->fonts->GetFont("Blue", __FILE__, blueFontLineReference=__LINE__);
+	ASSERT(blue != nullptr, AT("Failed on getting blue Font"));
 	green = App->fonts->GetFont("Green", __FILE__,greenFontLineReference=__LINE__);
+	ASSERT(green != nullptr, AT("Failed on getting green Font"));
 	yellow = App->fonts->GetFont("Yellow", __FILE__,yellowFontLineReference=__LINE__);
+	ASSERT(yellow != nullptr, AT("Failed on getting yellow Font"));
 
 	startTitleTimer = 0.0f;
 	pointsTimer = 0.0f;

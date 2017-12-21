@@ -6,7 +6,7 @@
 class Dragon1 :public Enemy 
 {
 public:
-	Dragon1(SDL_Texture* texture, Enemy* father = nullptr);
+	Dragon1();
 	~Dragon1();
 
 	Enemy* Copy(const float& x, const float& y, const float& z, Enemy* father = nullptr)const override;
@@ -14,7 +14,7 @@ public:
 	void OnCollision(Collider* other) override;
 
 private:
-	Dragon1(fPoint speed, SDL_Texture* texture, Enemy* father = nullptr);
+	Dragon1(fPoint speed);
 	void Shoot();
 	void Movement();
 	void ReorderPartSpeed();

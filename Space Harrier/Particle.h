@@ -15,10 +15,7 @@ struct SDL_Texture;
 class Particle :public GameObject {
 public:
 	Particle(SDL_Texture* texture):texture(texture){
-		if (texture == nullptr) {
-			LOG("Particle receive a null texture");
-			return;
-		}
+		ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
 	}
 	~Particle(){}
 

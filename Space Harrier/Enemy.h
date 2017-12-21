@@ -19,11 +19,13 @@ struct SDL_Texture;
 
 class Enemy:public GameObject {
 public:
+	Enemy() {
+	
+	}
+
 	Enemy(SDL_Texture* texture,Enemy* father=nullptr) :texture(texture),father(father) { 
-		if (texture == nullptr) {
-			LOG("Enemy received a null texture");
-			return;
-		}
+		ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
+
 		if (father != nullptr) {
 			father->childs.push_back(this);
 		}

@@ -27,9 +27,13 @@ bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
 	lasers = App->textures->Load("assets/Shoots.png");
+	ASSERT(lasers != nullptr,AT("Failed on loading texture"));
 	shots = App->textures->Load("assets/Shoots2.png");
+	ASSERT(shots != nullptr, AT("Failed on loading texture"));
 	exp = App->textures->Load("assets/Explosion.png");
+	ASSERT(exp != nullptr, AT("Failed on loading texture"));
 	enemLaser = App->textures->Load("assets/EnemyShot.png");
+	ASSERT(enemLaser != nullptr, AT("Failed on loading texture"));
 
 
 	// Creating shoot particle
@@ -168,6 +172,7 @@ update_status ModuleParticles::Update()
 void ModuleParticles::AddParticle(const Particle& particle, const float& x, const float& y, const float& z)
 {
 	Particle* p = particle.Copy(x,y,z);
+	ASSERT(p != nullptr,AT("Failed on creating a new Particle"));
 	p->position.y = (y - (p->anim.GetCurrentFrame().h / 2));
 	active.push_back(p);
 }
