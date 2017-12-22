@@ -26,22 +26,16 @@ ModuleParticles::~ModuleParticles()
 bool ModuleParticles::Start()
 {
 	LOG("Loading particles");
-	lasers = App->textures->Load("assets/Shoots.png");
-	ASSERT(lasers != nullptr,AT("Failed on loading texture"));
-	shots = App->textures->Load("assets/Shoots2.png");
-	ASSERT(shots != nullptr, AT("Failed on loading texture"));
-	exp = App->textures->Load("assets/Explosion.png");
-	ASSERT(exp != nullptr, AT("Failed on loading texture"));
-	enemLaser = App->textures->Load("assets/EnemyShot.png");
-	ASSERT(enemLaser != nullptr, AT("Failed on loading texture"));
+	graphics = App->textures->Load("assets/ModuleParticles.png");
+	ASSERT(graphics != nullptr,AT("Failed on loading particles texture"));
 
 
 	// Creating shoot particle
-	laser = new PlayerShoot(lasers);
-	laser->anim.frames.push_back({ 0, 0, 56, 38 });
-	laser->anim.frames.push_back({ 57, 0, 56, 38 });
-	laser->anim.frames.push_back({ 113, 0, 56, 38 });
-	laser->anim.frames.push_back({ 171, 0, 56, 38 });
+	laser = new PlayerShoot(graphics);
+	laser->anim.frames.push_back({ 1, 170, 56, 38 });
+	laser->anim.frames.push_back({ 58, 170, 56, 38 });
+	laser->anim.frames.push_back({ 114, 170, 56, 38 });
+	laser->anim.frames.push_back({ 172, 170, 56, 38 });
 	laser->anim.randFrame = true;
 	laser->anim.speed = 3.0f;
 	laser->anim.timeBased = false;
@@ -50,17 +44,17 @@ bool ModuleParticles::Start()
 	laser->speed = 150.0f;
 	prototipeClearList.push_back(laser);
 
-	fire = new EnemyShoot(shots);
-	fire->anim.frames.push_back({1,1,51,47});
-	fire->anim.frames.push_back({ 56,2,48,44 });
-	fire->anim.frames.push_back({ 110,0,50,48 });
+	fire = new EnemyShoot(graphics);
+	fire->anim.frames.push_back({1,221,51,47});
+	fire->anim.frames.push_back({ 56,222,48,44 });
+	fire->anim.frames.push_back({ 110,220,50,48 });
 	fire->anim.speed = 15.0f;
 	fire->anim.timeBased = false;
 	fire->efxIndex = App->audio->LoadFx("assets/music/SFX/FireShoot.wav");
 	fire->speed = 10.0f;
 	prototipeClearList.push_back(fire);
 
-	enemyLaser = new EnemyShoot(enemLaser);
+	enemyLaser = new EnemyShoot(graphics);
 	enemyLaser->anim.frames.push_back({ 8,8,59,59});
 	enemyLaser->anim.frames.push_back({ 76,8,59,59 });
 	enemyLaser->anim.frames.push_back({ 144,8,59,59 });
@@ -75,16 +69,16 @@ bool ModuleParticles::Start()
 	enemyLaser->speed = 10.0f;
 	prototipeClearList.push_back(enemyLaser);
 
-	explosion = new Explosion(400.0f,exp);
-	explosion->anim.frames.push_back({2,0,93,67});
-	explosion->anim.frames.push_back({ 99,1,92,67 });
-	explosion->anim.frames.push_back({ 197,1,94,72 });
-	explosion->anim.frames.push_back({ 293,0,98,77 });
-	explosion->anim.frames.push_back({ 397,5,95,70 });
+	explosion = new Explosion(400.0f,graphics);
+	explosion->anim.frames.push_back({2,279,92,67});
+	explosion->anim.frames.push_back({ 99,280,92,67 });
+	explosion->anim.frames.push_back({ 197,280,94,72 });
+	explosion->anim.frames.push_back({ 293,283,95,71 });
+	explosion->anim.frames.push_back({ 397,287,95,68 });
 	explosion->anim.frames.push_back({ 498,8,96,67 });
-	explosion->anim.frames.push_back({ 2,79,98,87 });
-	explosion->anim.frames.push_back({ 106,80,94,85 });
-	explosion->anim.frames.push_back({ 202,87,97,79 });
+	explosion->anim.frames.push_back({ 2,359,98,87 });
+	explosion->anim.frames.push_back({ 106,360,94,84 });
+	explosion->anim.frames.push_back({ 202,366,97,79 });
 	explosion->efxIndex = App->audio->LoadFx("assets/music/SFX/Explosion.wav");
 	explosion->anim.speed= 30.0f;
 	explosion->speed = 15.0f;
@@ -98,10 +92,7 @@ bool ModuleParticles::Start()
 bool ModuleParticles::CleanUp()
 {
 	LOG("Unloading particles");
-	App->textures->Unload(lasers);
-	App->textures->Unload(shots);
-	App->textures->Unload(exp);
-	App->textures->Unload(enemLaser);
+	App->textures->Unload(graphics);
 
 	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 		RELEASE(*it);

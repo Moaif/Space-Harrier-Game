@@ -35,9 +35,9 @@ const int ModuleUI::MAX_LETTER_PER_NAME = 3;
 const float ModuleUI::LETTER_INTERVAL = 0.25f;
 
 ModuleUI::ModuleUI(bool active):Module(active) {
-	topScore = {1,0,38,15};
-	score = {40,0,60,15};
-	liveImg = {105,2,6,10};
+	topScore = {9,15,32,14};
+	score = {1,0,48,14};
+	liveImg = {20,31,10,16};
 }
 
 ModuleUI::~ModuleUI() {

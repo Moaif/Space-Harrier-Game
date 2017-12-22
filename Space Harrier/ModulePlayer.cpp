@@ -136,7 +136,7 @@ update_status ModulePlayer::Update()
 		return UPDATE_CONTINUE;
 	}
 	//Normal game
-	if (hit) 
+	if (hit)
 	{
 		Death();
 	}
@@ -182,7 +182,7 @@ update_status ModulePlayer::Update()
 		{
 			if (position.y > 0) {
 				position.y -= MOVEMENT_SPEED*App->time->GetDeltaTime();
-				if (position.y <= 0 ) {
+				if (position.y <= 0) {
 					current_animation = &run;
 				}
 			}
@@ -221,17 +221,17 @@ update_status ModulePlayer::Update()
 		}
 	}
 
-
 	// Draw everything --------------------------------------
 
 	collider->rect.x =(int) position.x;
 	collider->rect.y =(int)(position.y + (current_animation->GetCurrentFrame().h / 2) - (COLLIDER_H / 2));
 	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
-	App->shadows->DrawShadow(position.x,0,1);
+	App->shadows->DrawShadow(position.x,(float)-(App->shadows->GetShadowSize().h/2),1);
 	
 
 	return UPDATE_CONTINUE;
 }
+
 
 void ModulePlayer::OnCollision(Collider* other) {
 	if (other->type == NO_DMG_ENEMY) {
@@ -389,14 +389,13 @@ void ModulePlayer::AnimWin() {
 
 		float scale = 1 - (screenY / App->floor->horizon.y);
 
-		App->shadows->DrawShadow(position.x, screenY, scale);
+		App->shadows->DrawShadow(position.x, screenY-((App->shadows->GetShadowSize().h/2)*scale), scale);
 
 		screenY += position.y*scale;
 
 		if (position.z >= MAX_Z) {
 			App->ui->TheEnd();
 		}
-
 		resizeStruct resizeInfo = { (int)(current_animation->GetCurrentFrame().w *scale),(int)(current_animation->GetCurrentFrame().h *scale) };
 		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(current_animation->GetCurrentFrame()), &resizeInfo);
 	}
@@ -423,6 +422,7 @@ void ModulePlayer::AnimWin() {
 		}
 
 		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+		App->shadows->DrawShadow(position.x, (float)-(App->shadows->GetShadowSize().h / 2), 1);
 	}
 }
 
@@ -437,6 +437,6 @@ void ModulePlayer::AnimWelcome() {
 	}
 	welcomeTimer += App->time->GetDeltaTime();
 
-
 	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+	App->shadows->DrawShadow(position.x, (float)-(App->shadows->GetShadowSize().h / 2), 1);
 }

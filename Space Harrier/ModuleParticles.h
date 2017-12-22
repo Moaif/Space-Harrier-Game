@@ -26,10 +26,7 @@ public:
 
 private:
 
-	SDL_Texture* lasers = nullptr;
-	SDL_Texture* shots = nullptr;
-	SDL_Texture* exp = nullptr;
-	SDL_Texture* enemLaser = nullptr;
+	SDL_Texture* graphics = nullptr;
 	list<Particle*> active;
 
 public:
