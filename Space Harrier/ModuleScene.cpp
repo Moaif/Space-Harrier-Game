@@ -42,8 +42,7 @@ bool ModuleScene::Start()
 	timeElapsed = 0;
 	currentStage++;
 	string path = "assets/json/Stage" + to_string(currentStage) + ".json";
-	//LoadJson(path.c_str());
-	LoadJson("assets/json/STest.json");
+	LoadJson(path.c_str());
 	
 	
 	background = App->textures->Load(backgroundPath.c_str());
