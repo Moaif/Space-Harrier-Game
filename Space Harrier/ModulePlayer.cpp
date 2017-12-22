@@ -148,7 +148,7 @@ update_status ModulePlayer::Update()
 		}
 		recoverTimer += App->time->GetDeltaTime();
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		{
 			if (position.x > ((-SCREEN_WIDTH / 2) + current_animation->GetCurrentFrame().w / 2)) {
 				position.x -= MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -163,7 +163,7 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		{
 			if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
 				position.x += MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -178,7 +178,7 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && current_animation != &fall)
+		if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) && current_animation != &fall)
 		{
 			if (position.y > 0) {
 				position.y -= MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -188,7 +188,7 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_animation != &fall)
+		if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) && current_animation != &fall)
 		{
 			if (position.y < (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h)) {
 				position.y += MOVEMENT_SPEED*App->time->GetDeltaTime();

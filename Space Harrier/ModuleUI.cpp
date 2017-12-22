@@ -286,13 +286,13 @@ void ModuleUI::ScoreBoard() {
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 			if (++actualLetterSelected > 90) {
 				actualLetterSelected = 65;
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 			if (--actualLetterSelected < 65) {
 				actualLetterSelected = 90;
 			}
@@ -306,7 +306,7 @@ void ModuleUI::ScoreBoard() {
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			if (actualLetterInName == MAX_LETTER_PER_NAME) {
 				scores[playerPosInScore].name = actualPlayerName;
 				Write();
