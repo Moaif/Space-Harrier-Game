@@ -8,7 +8,7 @@
 using namespace std;
 
 const int ModuleFont::MAX_TIME_TO_LIVE = 25;
-const int ModuleFont::MAX_CACHE_SIZE_PER_FONT = 500;
+const int ModuleFont::MAX_CACHE_SIZE_PER_FONT = 1000;
 
 ModuleFont::ModuleFont() {
 
@@ -59,10 +59,11 @@ update_status ModuleFont::PreUpdate() {
 			++next_it2;
 			if ((--(*it2).second.timeToLive) <= 0) {
 				if ((*it2).second.texture != nullptr) {
+					//LOG((*it2).first.c_str());
 					SDL_DestroyTexture((*it2).second.texture);
 				}
 				(*it2).second.texture = nullptr;
-				(*it).second.erase((*it2).first);
+				(*it).second.erase(it2);
 			}
 		}
 	}
@@ -160,7 +161,7 @@ SDL_Texture* ModuleFont::GetMessage(const Font* font,const string& message) {
 
 		SDL_DestroyTexture(messageCache[font][messageToRemove].texture);
 		messageCache[font][messageToRemove].texture=nullptr;
-		messageCache[font].erase(messageToRemove);
+		messageCache[font].erase(messageCache[font].find(messageToRemove));
 		messageCache[font][message] = { temp,MAX_TIME_TO_LIVE };
 	}
 	else {
