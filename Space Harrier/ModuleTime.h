@@ -16,6 +16,7 @@ public:
 	float GetDeltaTime()const;
 	float GetUnscaledDeltaTime() const;
 	float GetTimeSinceStart()const;
+	float GetTimeScale()const;
 private:
 	float previousTicks;
 	float deltaTime;

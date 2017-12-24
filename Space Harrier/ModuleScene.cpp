@@ -29,7 +29,7 @@ ModuleScene::~ModuleScene()
 // Load assets
 bool ModuleScene::Start()
 {
-	LOG("Loading space scene");
+	LOG("Loading scene");
 
 	App->particles->Enable();
 	App->collision->Enable();
@@ -75,7 +75,7 @@ bool ModuleScene::Restart() {
 // UnLoad assets
 bool ModuleScene::CleanUp()
 {
-	LOG("Unloading space scene");
+	LOG("Unloading scene");
 	App->textures->Unload(background);
 	App->textures->Unload(stage);
 	App->textures->Unload(floor);

@@ -92,7 +92,7 @@ ModuleMenu::~ModuleMenu()
 // Load assets
 bool ModuleMenu::Start()
 {
-	LOG("Loading space intro");
+	LOG("Loading menu");
 	
 	content = App->textures->Load("assets/Menu.png");
 	ASSERT(content != nullptr,AT("Menu failed at loading textures"));
@@ -124,7 +124,7 @@ bool ModuleMenu::Start()
 // UnLoad assets
 bool ModuleMenu::CleanUp()
 {
-	LOG("Unloading space scene");
+	LOG("Unloading menu");
 
 	App->textures->Unload(content);
 	App->fonts->FreeFont(&red,__FILE__,redFontLineReference);

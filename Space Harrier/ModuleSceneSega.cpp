@@ -33,7 +33,7 @@ bool ModuleSceneSega::Start() {
 }
 
 bool ModuleSceneSega::CleanUp() {
-	LOG("Unloading sega scene");
+	LOG("Unloading sega intro");
 
 	App->textures->Unload(background);
 

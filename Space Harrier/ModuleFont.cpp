@@ -59,7 +59,7 @@ update_status ModuleFont::PreUpdate() {
 			++next_it2;
 			if ((--(*it2).second.timeToLive) <= 0) {
 				if ((*it2).second.texture != nullptr) {
-					//LOG((*it2).first.c_str());
+					LOG((*it2).first.c_str());
 					SDL_DestroyTexture((*it2).second.texture);
 				}
 				(*it2).second.texture = nullptr;
@@ -67,6 +67,7 @@ update_status ModuleFont::PreUpdate() {
 			}
 		}
 	}
+
 	return UPDATE_CONTINUE;
 }
 

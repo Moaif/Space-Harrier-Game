@@ -200,7 +200,7 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_animation != &fall)
 		{
-			if (shootTimer <= 0) {
+			if (shootTimer <= 0  && App->time->GetTimeScale() > 0) {
 				float y = position.y + (current_animation->GetCurrentFrame().h / 2);
 				App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
 				shootTimer = SHOOT_INTERVAL;

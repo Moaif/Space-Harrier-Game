@@ -44,3 +44,7 @@ float ModuleTime::GetUnscaledDeltaTime() const {
 float ModuleTime::GetTimeSinceStart() const {
 	return (float)SDL_GetTicks() / 1000.0f;
 }
+
+float ModuleTime::GetTimeScale()const {
+	return scale;
+}
