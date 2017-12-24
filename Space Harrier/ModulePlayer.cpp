@@ -247,7 +247,7 @@ void ModulePlayer::OnCollision(Collider* other) {
 		collider->active = false;
 		App->time->SetTimeScale(0.0f);
 		if (lives <= 0) {
-			collider->to_delete = true;
+			collider->active = false;
 			destroyed = true;
 		}
 	}

@@ -74,7 +74,7 @@ update_status ModuleCollision::Update()
 	for (list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		if((*it)->active){
 			for (list<Collider*>::iterator it2 = it; it2 != colliders.end(); ++it2) {
-				if ((*it2)->active) {
+				if ((*it2)->active && (*it)->active) {//Needed to check again, in case that it changes inside the for loop
 					if (!((*it)->to_delete || (*it2)->to_delete)) {//If one collider is already set to delete, we dont check again, he exist no more
 						if ((*it)->CheckCollision((*it2)->rect, (*it2)->z, (*it2)->speed)) {
 							if (hits[(*it)->type][(*it2)->type]) {

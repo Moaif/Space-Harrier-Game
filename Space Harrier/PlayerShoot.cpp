@@ -54,7 +54,7 @@ void PlayerShoot::Update() {
 void PlayerShoot::OnCollision(Collider* other) {
 	if (!((Enemy*)(other->callback))->destructible) {
 		App->audio->PlayFx(reboundEfx);
-		collider->to_delete = true;
+		collider->active = false;
 		int sign = RAND() % 2;
 		if (sign == 0) {//Positive
 			reboundXSpeed = speed * 3;
@@ -63,6 +63,7 @@ void PlayerShoot::OnCollision(Collider* other) {
 		{//Negative
 			reboundXSpeed = -speed * 3;
 		}
+		LOG("R: %f",reboundXSpeed);
 		speed = 0;
 	}
 	else
