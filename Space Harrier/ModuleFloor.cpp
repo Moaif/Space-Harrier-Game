@@ -138,10 +138,7 @@ void ModuleFloor::DrawAlphaLines()
 
 bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
 	
-	if (texture == nullptr) {
-		LOG("DrawBackground received a null texture");
-		return false;
-	}
+	ASSERT( texture != nullptr,AT("Texture parameter was received as null"));
 
 	bool ret = true;
 	SDL_Rect rect;
@@ -180,10 +177,7 @@ bool ModuleFloor::DrawBackground(SDL_Texture* texture) {
 
 bool ModuleFloor::DrawStage(SDL_Texture* texture) {
 
-	if (texture == nullptr) {
-		LOG("DrawStage received a null texture");
-		return false;
-	}
+	ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
 
 	bool ret = true;
 	SDL_Rect rect;

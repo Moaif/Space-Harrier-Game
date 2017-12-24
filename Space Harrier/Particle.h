@@ -15,10 +15,7 @@ struct SDL_Texture;
 class Particle :public GameObject {
 public:
 	Particle(SDL_Texture* texture):texture(texture){
-		if (texture == nullptr) {
-			LOG("Particle receive a null texture");
-			return;
-		}
+		ASSERT(texture != nullptr,AT("Texture parameter was received as null"));
 	}
 	~Particle(){}
 
@@ -52,9 +49,6 @@ public:
 	}
 
 	void OnCollision(Collider* other) override{
-		if (other->type == PLAYER) {
-			return;
-		}
 		collider->to_delete = true;
 		to_delete = true;
 	}
@@ -69,8 +63,6 @@ public:
 	bool onlyOnce = false;
 	float speed;
 	fPoint reduction;
-
-	fPoint pathVector;
 
 	SDL_Texture* texture=nullptr;
 	SDL_Rect screenPoint = { 0,0,0,0 };

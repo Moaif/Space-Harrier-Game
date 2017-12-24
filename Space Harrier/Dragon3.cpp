@@ -10,14 +10,14 @@ const float Dragon3::TAILMOVEMENT = 3.0f;
 const float Dragon3::TIMEOFFSET = 1.0f / 2.0f;
 const float Dragon3::NUMBEROFSHOOTS = 4;
 
-Dragon3::Dragon3(int dragonMode,SDL_Texture* texture,Enemy* father):Enemy(texture,father),dragonMode(dragonMode) {
+Dragon3::Dragon3(int dragonMode):Enemy(),dragonMode(dragonMode) {
 	elapsedTime = 0.0f;
 	timerBetweenShoots = 0;
 	shotTimer = 0.0f; 
 	actualShot = 0;
 }
 
-Dragon3::Dragon3(int dragonMode,float startingY,fPoint speed, SDL_Texture* texture, Enemy* father):Enemy(texture,father),
+Dragon3::Dragon3(int dragonMode,float startingY,fPoint speed):Enemy(),
 dragonMode(dragonMode),startingY(startingY) {
 	elapsedTime = 0.0f;
 	timerBetweenShoots = 0;
@@ -33,7 +33,7 @@ Dragon3::~Dragon3() {
 }
 
 Enemy* Dragon3::Copy(const float& x, const float& y, const float& z, Enemy* father)const {
-	Enemy* temp = new Dragon3(dragonMode,y,speed,texture, father);
+	Enemy* temp = new Dragon3(dragonMode,y,speed);
 	App->scene->numEnemies++;
 	temp->collider = nullptr;
 	temp->speed = speed;
@@ -69,7 +69,7 @@ void Dragon3::Update() {
 	}
 
 
-	elapsedTime += App->time->GetDeltaTime();
+	elapsedTime += App->time->GetUnscaledDeltaTime();
 
 	position = childs[0]->position;
 

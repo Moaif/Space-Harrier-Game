@@ -3,6 +3,8 @@
 
 #include "MemLeaks.h"
 #include "SDL/include/SDL_rect.h"
+#include <assert.h>
+#include <string>
 
 #define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
 
@@ -62,11 +64,19 @@ typedef unsigned int uint;
 #define CLIPDISTANCE 3
 
 #define SHADOW_Z MAX_Z+10
-#define PLAYER_Z INT_MIN+1
+#define PLAYER_Z INT_MIN+100
 #define FONTS_Z INT_MIN
 
 int getPseudoRand();
 int getRand();
+void toFileLog(std::string message);
 
+#define ASSERT(condition, statement) \
+    do { \
+        if (!(condition)) { toFileLog(statement); assert(condition); } \
+    } while (false)
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+#define AT(message) __FILE__ ":" TOSTRING(__LINE__) " " message
 
 #endif //__GLOBALS_H__

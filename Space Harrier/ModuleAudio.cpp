@@ -58,12 +58,15 @@ bool ModuleAudio::CleanUp()
 		Mix_FreeMusic(music);
 	}
 
-	for(vector<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); ++it)
+	for (vector<Mix_Chunk*>::iterator it = fx.begin(); it != fx.end(); ++it) {
 		Mix_FreeChunk(*it);
+	}
 
 	fx.clear();
 	Mix_CloseAudio();
-	Mix_Quit();
+	while (Mix_Init(0)) {
+		Mix_Quit();
+	}
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 	return true;
 }

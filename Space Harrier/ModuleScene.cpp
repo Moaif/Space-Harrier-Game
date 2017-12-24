@@ -29,25 +29,38 @@ ModuleScene::~ModuleScene()
 // Load assets
 bool ModuleScene::Start()
 {
-	LOG("Loading space scene");
+	LOG("Loading scene");
 
-	App->player->Enable();
-	App->collision->Enable();
 	App->particles->Enable();
+	App->collision->Enable();
 	App->enemies->Enable();
+	App->player->Enable();
 	App->ui->Enable();
+	App->ui->ShowLevelTitle();
 	App->playing = true;
 
 	timeElapsed = 0;
-	currentStage++;//TODO: Finish loadJson with currenStage when more stages are added
-	LoadJson("assets/json/STage3.json");
-	LOG("list %d",elements.size());
+	currentStage++;
+	string path = "assets/json/Stage" + to_string(currentStage) + ".json";
+	LoadJson(path.c_str());
+	
 	
 	background = App->textures->Load(backgroundPath.c_str());
+	ASSERT(background != nullptr,AT("Background texture failed on loading"));
 	stage = App->textures->Load(stagePath.c_str());
+	ASSERT(stage != nullptr, AT("Stage texture failed on loading"));
 	floor = App->textures->Load(floorPath.c_str());
+	ASSERT(floor != nullptr, AT("Floor texture failed on loading"));
 
 	App->audio->PlayMusic("assets/music/Theme.ogg", 1.0f);
+
+	if (fx == 0) {
+		fx = App->audio->LoadFx("assets/music/SFX/Welcome.wav");
+	}
+
+	if (currentStage == 1) {
+		App->audio->PlayFx(fx);
+	}
 	
 
 
@@ -55,14 +68,14 @@ bool ModuleScene::Start()
 }
 
 bool ModuleScene::Restart() {
-	currentStage = 2;//TODO: if introduced new stages, change
+	currentStage = 0;
 	return true;
 }
 
 // UnLoad assets
 bool ModuleScene::CleanUp()
 {
-	LOG("Unloading space scene");
+	LOG("Unloading scene");
 	App->textures->Unload(background);
 	App->textures->Unload(stage);
 	App->textures->Unload(floor);
@@ -71,13 +84,6 @@ bool ModuleScene::CleanUp()
 		(*it).list.clear();
 	}
 	elements.clear();
-
- 	App->textures->Unload(background);
-	App->player->Disable();
-	App->collision->Disable();
-	App->particles->Disable();
-	App->enemies->Disable();
-	App->ui->Disable();
 
 	return true;
 }
@@ -118,11 +124,7 @@ update_status ModuleScene::Update()
 bool ModuleScene::LoadJson(const string& path) {
 	json input;
 	ifstream ifs(path);
-	if (ifs.fail()) {
-		string temp = "The file " + path + " could not be found in it's directory";
-		LOG(temp.c_str());
-		return false;
-	}
+	ASSERT(!ifs.fail(),AT("Could not fint json stage file"));
 	ifs >> input;
 	//Stage name
 	string tempName = input["name"];
@@ -148,9 +150,7 @@ bool ModuleScene::LoadJson(const string& path) {
 			float x = input["enemies"][i]["list"][j]["x"];
 			float y = input["enemies"][i]["list"][j]["y"];
 			float z = input["enemies"][i]["list"][j]["z"];
-			if (z > 0) {
-				z = MAX_Z;
-			}
+			z = z*MAX_Z;//z is a percentaje
 			string id = input["enemies"][i]["list"][j]["id"];
 			const Enemy* enemy = App->enemies->GetById(id);
 			EnemyInstantiate temp = { x,y,z,enemy };

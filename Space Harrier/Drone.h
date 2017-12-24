@@ -14,10 +14,14 @@ public:
 private:
 	Drone(int droneMode, fPoint speed, SDL_Texture* texture, Enemy* father = nullptr);
 	void Shoot();
-	void Mode0();
-	void Mode1();
-	void Mode2();
-	void Mode3();
+	void Mode3_1();
+	void Mode3_2(bool doubleSoot);
+	void Mode3_3();
+	void Mode3_4();
+	void Mode1_1();
+	void Mode1_2();
+	void Mode1_3();
+	void Mode1_4();
 
 public:
 	int droneMode;

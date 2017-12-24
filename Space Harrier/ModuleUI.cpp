@@ -8,7 +8,6 @@
 #include "ModuleInput.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleMenu.h"
-#include <string>
 #include "Font.h"
 #include "json.hpp"
 #include <fstream>
@@ -36,9 +35,9 @@ const int ModuleUI::MAX_LETTER_PER_NAME = 3;
 const float ModuleUI::LETTER_INTERVAL = 0.25f;
 
 ModuleUI::ModuleUI(bool active):Module(active) {
-	topScore = {1,0,38,15};
-	score = {40,0,60,15};
-	liveImg = {105,2,6,10};
+	topScore = {9,15,32,14};
+	score = {1,0,48,14};
+	liveImg = {20,31,10,16};
 }
 
 ModuleUI::~ModuleUI() {
@@ -48,10 +47,15 @@ ModuleUI::~ModuleUI() {
 bool ModuleUI::Start() {
 	LOG("Loading UI textures");
 	graphics = App->textures->Load("assets/UI.png");
+	ASSERT(graphics != nullptr,AT("Failed on loading UI textures"));
 	red = App->fonts->GetFont("Red", __FILE__, redFontLineReference=__LINE__);
+	ASSERT(red != nullptr,AT("Failed on getting red Font"));
 	blue = App->fonts->GetFont("Blue", __FILE__, blueFontLineReference=__LINE__);
+	ASSERT(blue != nullptr, AT("Failed on getting blue Font"));
 	green = App->fonts->GetFont("Green", __FILE__,greenFontLineReference=__LINE__);
+	ASSERT(green != nullptr, AT("Failed on getting green Font"));
 	yellow = App->fonts->GetFont("Yellow", __FILE__,yellowFontLineReference=__LINE__);
+	ASSERT(yellow != nullptr, AT("Failed on getting yellow Font"));
 
 	startTitleTimer = 0.0f;
 	pointsTimer = 0.0f;
@@ -194,6 +198,10 @@ void ModuleUI::PauseMenu() {
 	App->renderer->DirectPrint(red,0,SCREEN_HEIGHT/2,"PAUSE",2);
 }
 
+void ModuleUI::ShowLevelTitle() {
+	startTitleTimer = 0.0f;
+}
+
 void ModuleUI::SetScoreBoard(bool active) {
 
 	scoreB = active;
@@ -278,13 +286,13 @@ void ModuleUI::ScoreBoard() {
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN) {
 			if (++actualLetterSelected > 90) {
 				actualLetterSelected = 65;
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN) {
 			if (--actualLetterSelected < 65) {
 				actualLetterSelected = 90;
 			}
@@ -298,7 +306,7 @@ void ModuleUI::ScoreBoard() {
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) {
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN || App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) {
 			if (actualLetterInName == MAX_LETTER_PER_NAME) {
 				scores[playerPosInScore].name = actualPlayerName;
 				Write();

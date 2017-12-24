@@ -25,18 +25,32 @@ void Drone::Update() {
 	switch (droneMode)
 	{
 	case 0:
-		Mode0();
+		Mode3_1();
 		break;
 	case 1:
-		Mode1();
+		Mode3_2(true);
 		break;
 	case 2:
-		Mode2();
+		Mode3_3();
 		break;
 	case 3:
-		Mode3();
+		Mode3_4();
 		break;
-
+	case 4:
+		Mode1_1();
+		break;
+	case 5:
+		Mode1_2();
+		break;
+	case 6:
+		Mode3_2(false);//Same movement, but only 1 shoot
+		break;
+	case 7:
+		Mode1_3();
+		break;
+	case 8:
+		Mode1_4();
+		break;
 	}
 	elapsedTime += App->time->GetDeltaTime();
 
@@ -64,17 +78,12 @@ void Drone::Update() {
 }
 
 void Drone::Shoot() {
-	fPoint unitaryVector = App->player->position - position;
-	float div = (sqrt((pow(unitaryVector.x, 2) + pow(unitaryVector.y, 2) + pow(unitaryVector.z, 2))));
-	unitaryVector = unitaryVector / div;
-	App->particles->AddParticle(*App->particles->enemyLaser, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z, unitaryVector);
+	App->particles->AddParticle(*App->particles->enemyLaser, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z);
 }
 
-void Drone::Mode0() {
+void Drone::Mode3_1() {
 	float maxBounce = 100;
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+	position += tempSpeed * App->time->GetDeltaTime();
 
 	if (position.y >= maxBounce || position.y <= 0) {
 		tempSpeed.y = -tempSpeed.y;
@@ -95,15 +104,12 @@ void Drone::Mode0() {
 			Shoot();
 			shoted = false;
 		}
-		tempSpeed.x = -speed.x;
-		tempSpeed.y = 0;
+		tempSpeed = { -speed.x ,0,speed.z };
 	}
 }
 
-void Drone::Mode1() {
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+void Drone::Mode3_2(bool doubleShoot) {
+	position += tempSpeed * App->time->GetDeltaTime();
 
 
 	if (elapsedTime < TIMEOFFSET) {
@@ -116,20 +122,19 @@ void Drone::Mode1() {
 		}
 	}
 	else {
-
-		if (shoted) {
-			Shoot();
-			shoted = false;
+		if (doubleShoot) {
+			if (shoted) {
+				Shoot();
+				shoted = false;
+			}
 		}
 		tempSpeed.x = -speed.x;
 	}
 }
 
-void Drone::Mode2() {
+void Drone::Mode3_3() {
 	float maxBounce = 100;
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+	position += tempSpeed * App->time->GetDeltaTime();
 
 	if (bouncing && (position.y >= maxBounce || position.y <= 0)) {
 		tempSpeed.y = -tempSpeed.y;
@@ -146,9 +151,7 @@ void Drone::Mode2() {
 	}
 	else if (elapsedTime < TIMEOFFSET*1.5f) {
 		bouncing = false;
-
-		tempSpeed.x = 0;
-		tempSpeed.y = speed.y;
+		tempSpeed = { 0,speed.y,speed.z };
 	}else{
 		if (!shoted) {
 			Shoot();
@@ -161,10 +164,8 @@ void Drone::Mode2() {
 	}
 }
 
-void Drone::Mode3() {
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+void Drone::Mode3_4() {
+	position += tempSpeed * App->time->GetDeltaTime();
 
 
 	if (elapsedTime < TIMEOFFSET*1.5f) {
@@ -175,15 +176,11 @@ void Drone::Mode3() {
 			Shoot();
 			shoted = true;
 		}
-		tempSpeed.x = -speed.x;
-		tempSpeed.y = -speed.y*1.5f;
-		tempSpeed.z = speed.z / 2;
+		tempSpeed = { -speed.x ,-speed.y*1.5f ,speed.z / 2 };
 	}
 	else if(elapsedTime < TIMEOFFSET*2.8f)
 	{
-		tempSpeed.x = speed.x*2;
-		tempSpeed.y = speed.y/3;
-		tempSpeed.z = -speed.z;
+		tempSpeed = { speed.x * 2 ,speed.y / 3,-speed.z };
 	}
 	else
 	{
@@ -191,5 +188,86 @@ void Drone::Mode3() {
 			Shoot();
 			shoted = false;
 		}
+	}
+}
+
+void Drone::Mode1_1() {
+	position += tempSpeed * App->time->GetDeltaTime();
+
+	if (position.y <= 0) {
+		position.y = 0;
+	}
+
+	if (elapsedTime < TIMEOFFSET*1.8f) {
+		tempSpeed = {speed.x,0,0};
+	}
+	else{
+		tempSpeed = { -speed.x * 2 ,speed.y, speed.z };
+	}
+}
+
+void Drone::Mode1_2() {
+	position += tempSpeed * App->time->GetDeltaTime();
+
+	if (position.y <= 0) {
+		position.y = 0;
+	}
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if(elapsedTime < TIMEOFFSET*2.0f){
+		tempSpeed = { 0,-speed.y * 3 , 0};
+	}else if(elapsedTime < TIMEOFFSET*3.0f){
+		if (!shoted) {
+			Shoot();
+			shoted = true;
+		}
+		tempSpeed.y = speed.y * 3;
+	}
+	else {
+		tempSpeed = { speed.x / 4,-speed.y / 4,speed.z * 2 };
+	}
+}
+
+void Drone::Mode1_3() {
+	position += tempSpeed * App->time->GetDeltaTime();
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if (elapsedTime < TIMEOFFSET*1.5f) {
+		tempSpeed = { -speed.x / 2,speed.y * 4,speed.z / 2 };
+	}
+	else if (elapsedTime < TIMEOFFSET*2.0f) {
+		tempSpeed = { -speed.x,-speed.y * 4 ,-speed.z / 2 };
+	}
+	else
+	{
+		tempSpeed = { speed.x / 2.0f,-speed.y,-speed.z / 1.5f };
+	}
+}
+
+void Drone::Mode1_4() {
+	position += tempSpeed * App->time->GetDeltaTime();
+
+	if (elapsedTime < TIMEOFFSET*1.0f) {
+
+	}
+	else if (elapsedTime < TIMEOFFSET*1.25f) {
+		tempSpeed.x = 0;
+	}
+	else if (elapsedTime < TIMEOFFSET*1.65f) {
+		tempSpeed = { -speed.x / 1.3f ,speed.z / 5.0f ,0.0f};
+	}
+	else if (elapsedTime < TIMEOFFSET*2.0f) {
+		tempSpeed = { -speed.x / 1.3f ,0.0f,-speed.z / 5.0f };
+	}
+	else {
+		if (!shoted) {
+			Shoot();
+			shoted = true;
+		}
+		tempSpeed = { -speed.x / 4 ,-speed.y,-speed.z };
 	}
 }

@@ -17,6 +17,8 @@ public:
 
 	void DrawShadow(const float& x,const float& y,const float& scale);
 
+	SDL_Rect GetShadowSize()const;
+
 private:
 	SDL_Texture* shadow=nullptr;
 	SDL_Rect shadowRect;

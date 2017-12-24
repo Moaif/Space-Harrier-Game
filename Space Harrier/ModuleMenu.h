@@ -32,6 +32,8 @@ private:
 	Animation man;
 	//Sound
 	uint fx = 0;
+	//Repetition variable
+	bool firstPlay=true;
 	//Static variables
 	static const float TEXT_INTERVAL;
 

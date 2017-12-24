@@ -25,19 +25,16 @@ public:
 
 private:
 
-	SDL_Texture* enemiesTexture = nullptr;
-	SDL_Texture* trees = nullptr;
-	SDL_Texture* trees3 = nullptr;
-	SDL_Texture* rocks = nullptr;
-	SDL_Texture* dragonTexture = nullptr;
+	SDL_Texture* graphics = nullptr;
 	list<Enemy*> active;
 	list<Enemy*> prototypePartsClearList;
 	list<Enemy*> activeBodyParts;
 	map<string, Enemy*> enemies;
 
-	unsigned int DroneStartSFX;
-	unsigned int JellyStartSFX;
-	unsigned int FlyStartSFX;
+	unsigned int droneStartSFX;
+	unsigned int jellyStartSFX;
+	unsigned int flyStartSFX;
+	unsigned int metalStartSFX;
 };
 
 #endif // !_MODULEENEMY_H_

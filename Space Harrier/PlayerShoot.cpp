@@ -17,8 +17,8 @@ Particle* PlayerShoot::Copy(const float & x, const float & y, const float & z)co
 }
 
 void PlayerShoot::Update() {
-	position.z += speed*App->time->GetDeltaTime();
-	position.x += reboundXSpeed*App->time->GetDeltaTime();
+	position.z += speed*App->time->GetUnscaledDeltaTime();
+	position.x += reboundXSpeed*App->time->GetUnscaledDeltaTime();
 
 	if (position.z >= MAX_Z) {
 		collider->to_delete = true;
@@ -54,7 +54,7 @@ void PlayerShoot::Update() {
 void PlayerShoot::OnCollision(Collider* other) {
 	if (!((Enemy*)(other->callback))->destructible) {
 		App->audio->PlayFx(reboundEfx);
-		collider->to_delete = true;
+		collider->active = false;
 		int sign = RAND() % 2;
 		if (sign == 0) {//Positive
 			reboundXSpeed = speed * 3;
@@ -63,6 +63,7 @@ void PlayerShoot::OnCollision(Collider* other) {
 		{//Negative
 			reboundXSpeed = -speed * 3;
 		}
+		LOG("R: %f",reboundXSpeed);
 		speed = 0;
 	}
 	else

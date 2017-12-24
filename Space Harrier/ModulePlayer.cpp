@@ -23,8 +23,11 @@ const float ModulePlayer::FALL_SPEED = 2.0f;
 const float ModulePlayer::FALL_BOUNCE = 15.0f;
 const float ModulePlayer::RECOVER_TIME = 2.0f;
 const float ModulePlayer::SCREEN_SEGMENT = 0.4f;//5 screen zones
-const float ModulePlayer::COLLIDER_H = 30;
-const float ModulePlayer::COLLIDER_W = 10;
+const float ModulePlayer::COLLIDER_H = 30.0f;
+const float ModulePlayer::COLLIDER_W = 10.0f;
+const float ModulePlayer::WELCOME_RUN_TIME = 1.0f;
+const float ModulePlayer::WELCOME_TRANSITION_TIME = 0.5f;
+const float ModulePlayer::SHOOT_INTERVAL = 0.25f;
 
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
@@ -52,11 +55,12 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	death.frames.push_back({ 108,2,26,49 });
 	death.timeBased = false;
 	death.loop = false;
-	death.speed = 1.5f;
+	death.speed = 1.0f;
 
 	fall.frames.push_back({5,117,24,40});
 	fall.frames.push_back({ 45,119,22,35 });
 	fall.frames.push_back({ 82,122,26,30 });
+	fall.speed = 5.0f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -68,6 +72,7 @@ bool ModulePlayer::Start()
 	LOG("Loading player");
 
 	graphics = App->textures->Load("assets/character.png");
+	ASSERT(graphics != nullptr,AT("Player failed on loading it's textures"));
 
 	if (ouch == 0) {
 		ouch=App->audio->LoadFx("assets/music/SFX/Ouch.wav");
@@ -79,9 +84,8 @@ bool ModulePlayer::Start()
 		getReady=App->audio->LoadFx("assets/music/SFX/GetReady.wav");
 	}
 
-	position.x = 0;
-	position.y = 0;
-	position.z = 0;
+	recoverTimer = RECOVER_TIME;
+	position = { 0,0,0 };
 	//Collider smaller than sprites, in order to make it easier
 	int y = (int)(position.y + (current_animation->GetCurrentFrame().h/2)-(COLLIDER_H / 2));
 	collider = App->collision->AddCollider({ (int)position.x,y,(int)COLLIDER_W,(int)COLLIDER_H },position.z,1, PLAYER, this);
@@ -97,6 +101,8 @@ bool ModulePlayer::Restart() {
 	win = false;
 	centered = false;
 	destroyed = false;
+	welcome = false;
+	welcomeTimer = 0.0f;
 
 	return true;
 }
@@ -114,6 +120,14 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+	current_animation->Update();
+	VerifyHorizonY();
+
+	//Welcome to the fantasy zone anim+
+	if (!welcome) {
+		AnimWelcome();
+		return UPDATE_CONTINUE;
+	}
 	//If ended the game
 	if (win) {
 		if (position.z < MAX_Z) {
@@ -122,8 +136,7 @@ update_status ModulePlayer::Update()
 		return UPDATE_CONTINUE;
 	}
 	//Normal game
-	VerifyHorizonY();
-	if (hit) 
+	if (hit)
 	{
 		Death();
 	}
@@ -135,7 +148,7 @@ update_status ModulePlayer::Update()
 		}
 		recoverTimer += App->time->GetDeltaTime();
 
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		{
 			if (position.x > ((-SCREEN_WIDTH / 2) + current_animation->GetCurrentFrame().w / 2)) {
 				position.x -= MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -150,7 +163,7 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		{
 			if (position.x < ((SCREEN_WIDTH / 2) - current_animation->GetCurrentFrame().w / 2)) {
 				position.x += MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -165,17 +178,17 @@ update_status ModulePlayer::Update()
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT && current_animation != &fall)
+		if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) && current_animation != &fall)
 		{
 			if (position.y > 0) {
 				position.y -= MOVEMENT_SPEED*App->time->GetDeltaTime();
-				if (position.y <= 0 ) {
+				if (position.y <= 0) {
 					current_animation = &run;
 				}
 			}
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT && current_animation != &fall)
+		if ((App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT || App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) && current_animation != &fall)
 		{
 			if (position.y < (SCREEN_HEIGHT - current_animation->GetCurrentFrame().h)) {
 				position.y += MOVEMENT_SPEED*App->time->GetDeltaTime();
@@ -187,9 +200,13 @@ update_status ModulePlayer::Update()
 
 		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && current_animation != &fall)
 		{
-			float y = position.y + (current_animation->GetCurrentFrame().h / 2);
-			App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
+			if (shootTimer <= 0  && App->time->GetTimeScale() > 0) {
+				float y = position.y + (current_animation->GetCurrentFrame().h / 2);
+				App->particles->AddParticle(*App->particles->laser, position.x, y, position.z);
+				shootTimer = SHOOT_INTERVAL;
+			}
 		}
+		shootTimer -= App->time->GetDeltaTime();
 
 		if (current_animation == &fall) {
 			if (current_animation->Finished()) {
@@ -204,17 +221,17 @@ update_status ModulePlayer::Update()
 		}
 	}
 
-
 	// Draw everything --------------------------------------
 
 	collider->rect.x =(int) position.x;
 	collider->rect.y =(int)(position.y + (current_animation->GetCurrentFrame().h / 2) - (COLLIDER_H / 2));
 	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, (float)PLAYER_Z,&(current_animation->GetCurrentFrame()),nullptr);
-	App->shadows->DrawShadow(position.x,0,1);
+	App->shadows->DrawShadow(position.x,(float)-(App->shadows->GetShadowSize().h/2),1);
 	
 
 	return UPDATE_CONTINUE;
 }
+
 
 void ModulePlayer::OnCollision(Collider* other) {
 	if (other->type == NO_DMG_ENEMY) {
@@ -228,8 +245,9 @@ void ModulePlayer::OnCollision(Collider* other) {
 		hit = true;
 		deathStartingPosY = position.y;
 		collider->active = false;
+		App->time->SetTimeScale(0.0f);
 		if (lives <= 0) {
-			collider->to_delete = true;
+			collider->active = false;
 			destroyed = true;
 		}
 	}
@@ -324,8 +342,11 @@ fPoint ModulePlayer::GetRelativeWorldPosition() const {
 	return p;
 }
 
+fPoint ModulePlayer::GetPlayerCenterPos()const {
+	return { position.x,position.y + current_animation->GetCurrentFrame().h/2,position.z };
+}
+
 void ModulePlayer::Death() {
-	App->time->SetTimeScale(0.0f);
 	current_animation = &death;
 	if (!deathBounced) {
 		position.y += FALL_SPEED/2;
@@ -368,14 +389,13 @@ void ModulePlayer::AnimWin() {
 
 		float scale = 1 - (screenY / App->floor->horizon.y);
 
-		App->shadows->DrawShadow(position.x, screenY, scale);
+		App->shadows->DrawShadow(position.x, screenY-((App->shadows->GetShadowSize().h/2)*scale), scale);
 
 		screenY += position.y*scale;
 
 		if (position.z >= MAX_Z) {
 			App->ui->TheEnd();
 		}
-
 		resizeStruct resizeInfo = { (int)(current_animation->GetCurrentFrame().w *scale),(int)(current_animation->GetCurrentFrame().h *scale) };
 		App->renderer->AddToBlitBuffer(graphics, position.x, screenY, position.z, &(current_animation->GetCurrentFrame()), &resizeInfo);
 	}
@@ -402,5 +422,21 @@ void ModulePlayer::AnimWin() {
 		}
 
 		App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+		App->shadows->DrawShadow(position.x, (float)-(App->shadows->GetShadowSize().h / 2), 1);
 	}
+}
+
+void ModulePlayer::AnimWelcome() {
+	if (welcomeTimer >= WELCOME_RUN_TIME) {
+		float tempSpeed = ((SCREEN_HEIGHT / 2) - (center.GetCurrentFrame().h / 2)) / WELCOME_TRANSITION_TIME;
+		position.y += tempSpeed*App->time->GetDeltaTime();
+		current_animation = &center;
+		if (welcomeTimer >= WELCOME_RUN_TIME + WELCOME_TRANSITION_TIME) {
+			welcome = true;
+		}
+	}
+	welcomeTimer += App->time->GetDeltaTime();
+
+	App->renderer->AddToBlitBuffer(graphics, position.x, position.y, position.z, &(current_animation->GetCurrentFrame()), nullptr);
+	App->shadows->DrawShadow(position.x, (float)-(App->shadows->GetShadowSize().h / 2), 1);
 }

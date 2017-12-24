@@ -19,7 +19,7 @@ bool ModuleSceneSega::Start() {
 	LOG("Loading sega intro");
 
 	background = App->textures->Load("assets/SegaLogo.png");
-
+	ASSERT(background != nullptr,AT("Failed on loading SegaLogo"));
 	
 	SDL_QueryTexture(background, NULL, NULL, &totalRect.w, &totalRect.h);
 
@@ -33,7 +33,7 @@ bool ModuleSceneSega::Start() {
 }
 
 bool ModuleSceneSega::CleanUp() {
-	LOG("Unloading sega scene");
+	LOG("Unloading sega intro");
 
 	App->textures->Unload(background);
 

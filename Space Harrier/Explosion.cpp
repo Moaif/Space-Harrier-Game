@@ -31,10 +31,17 @@ void Explosion::Update() {
 	if (position.y >0) {
 		App->shadows->DrawShadow(position.x*scale, screenY, scale);
 	}
-	screenY += position.y*scale;
+
+	if (position.y >= 0) {
+		screenY += position.y*scale;
+	}
 
 	screenPoint.w = 1 + (int)(anim.GetCurrentFrame().w *scale);
 	screenPoint.h = 1 + (int)(anim.GetCurrentFrame().h *scale);
 	screenPoint.x = (int)(position.x*scale);
 	screenPoint.y = (int)(screenY);
+
+	if (position.z <= 0) {
+		to_delete = true;
+	}
 }

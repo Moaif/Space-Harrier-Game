@@ -41,9 +41,9 @@ Application::Application()
 	modules.push_back(scene = new ModuleScene(false));
 
 	// Modules to draw on top of game logic
-	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(enemies = new ModuleEnemy());
+	modules.push_back(collision = new ModuleCollision());//Collision after all enemies and particles have move
 	modules.push_back(ui = new ModuleUI(false));
 
 	//Renderer must be here to draw from buffer after all other modules had request to blit

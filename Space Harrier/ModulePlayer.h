@@ -23,6 +23,7 @@ public:
 	void SetLives(const int& amount);
 	int GetLives()const;
 	fPoint GetRelativeWorldPosition() const;
+	fPoint GetPlayerCenterPos()const;
 	void Win();
 
 private:
@@ -33,6 +34,7 @@ private:
 	void CalculateSpeed();
 	void Death();
 	void AnimWin();
+	void AnimWelcome();
 
 public:
 
@@ -69,6 +71,11 @@ private:
 	bool centered=false;
 	fPoint initialPosition;
 	float currentLerpPercentaje;
+	//Welcome anim
+	bool welcome = false;
+	float welcomeTimer;
+	//Shoot
+	float shootTimer;
 	//Static variables
 	static const int INITIAL_LIVES;
 	static const float MIN_X_SPEED;
@@ -81,6 +88,9 @@ private:
 	static const float RECOVER_TIME;
 	static const float COLLIDER_W;
 	static const float COLLIDER_H;
+	static const float WELCOME_RUN_TIME;
+	static const float WELCOME_TRANSITION_TIME;
+	static const float SHOOT_INTERVAL;
 };
 
 #endif

@@ -11,6 +11,7 @@ public:
 	bool loop = true;
 	bool randFrame = false;
 	bool timeBased = true;
+	bool inversed = false;
 	float speed = 1.0f;
 	vector<SDL_Rect> frames;
 
@@ -27,14 +28,13 @@ public:
 	Animation(const Animation& anim) : loop(anim.loop), speed(anim.speed), frames(anim.frames),randFrame(anim.randFrame)
 	{}
 
-	SDL_Rect& GetCurrentFrame()
-	{
+	void Update() {
 		if (first) {
 			if (randFrame) {
 				current_frame = RAND() % frames.size();
 			}
 			if (!timeBased) {
-				timer = App->time->GetTimeSinceStart() + (1/speed);
+				timer = App->time->GetTimeSinceStart() + (1 / speed);
 			}
 			first = false;
 		}
@@ -48,7 +48,13 @@ public:
 				}
 				else
 				{
-					++current_frame;
+					if (inversed) {
+						--current_frame;
+					}
+					else
+					{
+						++current_frame;
+					}
 				}
 				timer = 0;
 			}
@@ -58,15 +64,25 @@ public:
 			}
 		}
 		else {
-			if (App->time->GetTimeSinceStart() > timer) {
+			if (timer >= 1) {
 				if (randFrame) {
 					current_frame = RAND() % frames.size();
 				}
 				else
 				{
-					++current_frame;
+					if (inversed) {
+						--current_frame;
+					}
+					else
+					{
+						++current_frame;
+					}
 				}
-				timer = App->time->GetTimeSinceStart() + (1/speed);
+				timer = 0;
+			}
+			else
+			{
+				timer += speed*App->time->GetUnscaledDeltaTime();
 			}
 		}
 
@@ -74,8 +90,16 @@ public:
 		{
 			current_frame = (loop) ? 0 : MAX(last_frame - 1, 0);
 			loops++;
-		} 
+		}
 
+		if (current_frame < 0) {
+			current_frame = (loop) ? MAX(last_frame - 1, 0) : 0;
+			loops++;
+		}
+	}
+
+	SDL_Rect& GetCurrentFrame()
+	{
 		return frames[current_frame];
 	}
 
@@ -86,7 +110,12 @@ public:
 
 	void Reset()
 	{
-		current_frame = 0;
+		if (inversed) {
+			current_frame = MAX(frames.size()-1,0);
+		}
+		else {
+			current_frame = 0;
+		}
 		loops = 0;
 		timer = 0;
 		first = true;
@@ -97,6 +126,24 @@ public:
 	}
 
 	void SetNextFrame() {
-		current_frame=(current_frame+1) %frames.size();
+		if (inversed) {
+			current_frame = (current_frame - 1)+frames.size() % frames.size();
+		}
+		else {
+			current_frame = (current_frame + 1) % frames.size();
+		}
+	}
+
+	void SetPreviousFrame() {
+		if (inversed) {
+			current_frame = (current_frame + 1) % frames.size();
+		}
+		else {
+			current_frame = (current_frame - 1) + frames.size() % frames.size();
+		}
+	}
+
+	int GetCurrentFrameIndex()const {
+		return current_frame;
 	}
 };

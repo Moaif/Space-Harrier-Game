@@ -16,7 +16,7 @@ Fly::~Fly() {
 
 Enemy* Fly::Copy(const float& x, const float& y, const float& z, Enemy* father) const {
 	Enemy* temp = new Fly(flyMode, speed, texture, father);
-	CopyValuesInto(*(temp), x, y, z);
+	CopyValuesInto(*temp, x, y, z);
 	return temp;
 }
 
@@ -57,16 +57,11 @@ void Fly::Update() {
 }
 
 void Fly::Shoot() {
-	fPoint unitaryVector = App->player->position - position;
-	float div = (sqrt((pow(unitaryVector.x, 2) + pow(unitaryVector.y, 2) + pow(unitaryVector.z, 2))));
-	unitaryVector = unitaryVector / div;
-	App->particles->AddParticle(*App->particles->fire, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z, unitaryVector);
+	App->particles->AddParticle(*App->particles->fire, position.x, position.y + anim.GetCurrentFrame().h / 2, position.z);
 }
 
 void Fly::Mode0() {
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+	position += tempSpeed * App->time->GetDeltaTime();
 
 	if (elapsedTime < TIMEOFFSET*4.5f) {
 		if (position.y <= 50) {
@@ -74,8 +69,7 @@ void Fly::Mode0() {
 		}
 	}
 	else  {
-		tempSpeed.x = 0;
-		tempSpeed.y = -speed.y*5;
+		tempSpeed = { 0,-speed.y * 5,speed.z };
 		if (!shoted) {
 			Shoot();
 			shoted = true;
@@ -84,9 +78,7 @@ void Fly::Mode0() {
 }
 
 void Fly::Mode1() {
-	position.y += tempSpeed.y * App->time->GetDeltaTime();
-	position.x += tempSpeed.x * App->time->GetDeltaTime();
-	position.z += tempSpeed.z * App->time->GetDeltaTime();
+	position += tempSpeed * App->time->GetDeltaTime();
 
 	if (elapsedTime < TIMEOFFSET*4.5f) {
 		if (position.y <= 50) {
@@ -94,9 +86,7 @@ void Fly::Mode1() {
 		}
 	}
 	else {
-		tempSpeed.y = -speed.y * 3;
-		tempSpeed.x = speed.x * 2;
-		tempSpeed.z = speed.z * 1.5f;
+		tempSpeed = { speed.x * 2,-speed.y * 3 ,speed.z * 1.5f };
 		if (!shoted) {
 			Shoot();
 			shoted = true;

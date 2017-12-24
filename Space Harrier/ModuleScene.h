@@ -55,6 +55,8 @@ private:
 	static const float INTERVAL_DELAY;
 	float timeElapsed;
 	list<DelayList> elements;
+	//Initial sound
+	uint fx = 0;
 };
 
 #endif // __MODULESCENE_H__
