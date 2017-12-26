@@ -81,15 +81,9 @@ const Font* ModuleFont::GetFont(const string& fontName, const string& file,const
 }
 
 void ModuleFont::FreeFont(const Font ** p,const string& file,const int& line) {
-	if (p == nullptr) {
-		LOG("FreeFont received a null p")
-		return;
-	}
+	ASSERT(p != nullptr, AT("FreeFont received a null Font"));
 
-	if (*p == nullptr) {
-		LOG("FreeFont received a null *p");
-		return;
-	}
+	ASSERT(*p != nullptr, AT("FreeFont received a null *Font"));
 
 	map<const Font*, map<string, map<int, bool>>>::iterator it = links.find(*p);
 	if (it != links.end()) {
