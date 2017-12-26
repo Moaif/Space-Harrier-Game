@@ -16,7 +16,7 @@ On this game, you have to avoid/destroy all obstacles comming to you, if you des
 ## Video
 
 ### Original
-
+[![Original Game](https://i.imgur.com/7QgaJ3V.png)](https://youtu.be/Ia9l6qCxayg?t=11)
 ### Mine
 
 ## Features
@@ -53,3 +53,5 @@ On this game, you have to avoid/destroy all obstacles comming to you, if you des
 - Deltatime usage
 
 ## Download
+
+https://github.com/Moaif/Space-Harrier-Game/releases
