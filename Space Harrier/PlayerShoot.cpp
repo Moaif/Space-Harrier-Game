@@ -63,7 +63,6 @@ void PlayerShoot::OnCollision(Collider* other) {
 		{//Negative
 			reboundXSpeed = -speed * 3;
 		}
-		LOG("R: %f",reboundXSpeed);
 		speed = 0;
 	}
 	else
