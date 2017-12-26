@@ -54,4 +54,4 @@ On this game, you have to avoid/destroy all obstacles comming to you, if you des
 
 ## Download
 
-https://github.com/Moaif/Space-Harrier-Game/releases
+[Click Here](https://github.com/Moaif/Space-Harrier-Game/releases)
