@@ -40,8 +40,8 @@ On this game, you have to avoid/destroy all obstacles comming to you, if you des
 - Deep blit buffer to print ordered by z
 - Prototipe object instantiation model
 - Load from Json:
-  -- Levels
-  -- Scoreboard
+  - Levels
+  - Scoreboard
 - Write Scoreboard in Json
 - Hierarchy based classes
 - Deltatime usage
