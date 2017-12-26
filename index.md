@@ -1,37 +1,55 @@
-## Welcome to GitHub Pages
+## Objective
+I've started this proyect as a UPC videogame master task, which challenge us to make a "replica" of an old racing game from a list of them. In my case, I've chossen Space-Harrier (and yes, it's considered as racing game).
 
-You can use the [editor on GitHub](https://github.com/Moaif/Space-Harrier-Game/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## Game Info
+Space Harrier (Japanese: スペースハリアー Hepburn: Supēsu Hariā) is an arcade video game developed and released by Sega Enterprises in December 1985. Originally conceived as a realistic military-themed game played in the third-person perspective and featuring a player-controlled fighter jet, technical and memory restrictions at the time resulted in Sega developer Yu Suzuki redesigning it to fit a fantasy setting centered around a jet-propelled human character.[Link](https://en.wikipedia.org/wiki/Space_Harrier)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### How to play
+On this game, you have to avoid/destroy all obstacles comming to you, if you destroy them, you earn points, also, however some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard. 
 
-### Markdown
+#### Controls
+- A/W/S/D or arrows to move chararcter
+- Space  to shoot
+- Enter to pause game
+- Esc to exit game
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Features
 
-```markdown
-Syntax highlighted code block
+### Game Features implemented
 
-# Header 1
-## Header 2
-### Header 3
+- All player actions
+- Level 1
+- Level 3
+- Intro
+- Menu
+- Level enemies actions
+- Level bosses
+- Shadows
+- Scroller 2 layers background
+- Lateral and vertical moving floor
+- Fast level change
+- Full game UI
+- Replayable without closing game
 
-- Bulleted
-- List
+### Code Featured implemented
 
-1. Numbered
-2. List
+- Texture cache for all font based ones
+- Font factory with knowledge of which file/line has a pointer to a font
+- GameObject based Colliders
+- Collision speed based
+- Deep blit buffer to print ordered by z
+- Prototipe object instantiation model
+- Load from Json:
+  -- Levels
+  -- Scoreboard
+- Write Scoreboard in Json
+- Hierarchy based classes
+- Deltatime usage
 
-**Bold** and _Italic_ and `Code` text
+## Video
 
-[Link](url) and ![Image](src)
-```
+### Original
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### Mine
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Moaif/Space-Harrier-Game/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+## Download
