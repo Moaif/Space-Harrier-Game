@@ -18,7 +18,7 @@ On this game, you have to avoid/destroy all obstacles comming to you, if you des
 ### Original
 [![Original Game](https://i.imgur.com/7QgaJ3V.png)](https://youtu.be/Ia9l6qCxayg?t=11)
 ### Mine
-[![My Game](https://i.imgur.com/hpR6iAI.png)](https://youtu.be/93oocWbM7HU?t=2)
+[![My Game](https://i.imgur.com/hpR6iAI.png)](https://youtu.be/93oocWbM7HU)
 
 ## Features
 
