@@ -17,7 +17,7 @@ Releases: https://github.com/Moaif/Space-Harrier-Game/releases
 First you should unzip the release you've downloaded, this will generate a folder which contains an executable called Space Harrier.exe just execute it, and now your are playing. Have Fun!
 
 ## How to Play
-On this game, you have to avoid/destroy all obstacles comming to you, if you destroy them, you earn points, also, however some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard.
+On this game, you have to avoid/destroy all obstacles comming to you. If you destroy them, you earn points, also. However some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard.
 
 ### Controls
 - A/W/S/D or arrows to move chararcter
