@@ -5,7 +5,7 @@ I've started this proyect as a UPC videogame master task, which challenge us to 
 Space Harrier (Japanese: スペースハリアー Hepburn: Supēsu Hariā) is an arcade video game developed and released by Sega Enterprises in December 1985. Originally conceived as a realistic military-themed game played in the third-person perspective and featuring a player-controlled fighter jet, technical and memory restrictions at the time resulted in Sega developer Yu Suzuki redesigning it to fit a fantasy setting centered around a jet-propelled human character. [Wiki](https://en.wikipedia.org/wiki/Space_Harrier)
 
 ### How to play
-On this game, you have to avoid/destroy all obstacles comming to you, if you destroy them, you earn points, also, however some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard. 
+On this game, you have to avoid/destroy all obstacles comming to you. If you destroy them, you earn points. However some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard. 
 
 #### Controls
 - A/W/S/D or arrows to move chararcter
