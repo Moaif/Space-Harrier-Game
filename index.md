@@ -2,7 +2,9 @@
 I've started this proyect as a UPC videogame master task, which challenge us to make a "replica" of an old racing game from a list of them. In my case, I've chossen Space-Harrier (and yes, it's considered as racing game).
 
 ## Game Info
-Space Harrier (Japanese: スペースハリアー Hepburn: Supēsu Hariā) is an arcade video game developed and released by Sega Enterprises in December 1985. Originally conceived as a realistic military-themed game played in the third-person perspective and featuring a player-controlled fighter jet, technical and memory restrictions at the time resulted in Sega developer Yu Suzuki redesigning it to fit a fantasy setting centered around a jet-propelled human character. [Wiki](https://en.wikipedia.org/wiki/Space_Harrier)
+Space Harrier (Japanese: スペースハリアー Hepburn: Supēsu Hariā) is an arcade video game developed and released by Sega Enterprises in December 1985. Originally conceived as a realistic military-themed game played in the third-person perspective and featuring a player-controlled fighter jet, technical and memory restrictions at the time resulted in Sega developer Yu Suzuki redesigning it to fit a fantasy setting centered around a jet-propelled human character. [Wikipedia](https://en.wikipedia.org/wiki/Space_Harrier)
+
+[Github Wiki](https://github.com/Moaif/Space-Harrier-Game/wiki)
 
 ### How to play
 On this game, you have to avoid/destroy all obstacles comming to you. If you destroy them, you earn points. However some obstacles are not destructible, forcing you to evade them. The objective of the game is adquiring the best score in order to enter into the Scoreboard. 
@@ -17,9 +19,8 @@ On this game, you have to avoid/destroy all obstacles comming to you. If you des
 
 ### Original
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Ia9l6qCxayg" frameborder="0" allowfullscreen></iframe>
-[![Original Game](https://i.imgur.com/7QgaJ3V.png)](https://youtu.be/Ia9l6qCxayg?t=11)
 ### Mine
-[![My Game](https://i.imgur.com/hpR6iAI.png)](https://youtu.be/93oocWbM7HU)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/93oocWbM7HU" frameborder="0" allowfullscreen></iframe>
 
 ## Features
 
