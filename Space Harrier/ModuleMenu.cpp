@@ -113,6 +113,14 @@ bool ModuleMenu::Start()
 	return true;
 }
 
+bool ModuleMenu::Restart() {
+	eye.Reset();
+	man.Reset();
+	title.Reset();
+
+	return true;
+}
+
 // UnLoad assets
 bool ModuleMenu::CleanUp()
 {

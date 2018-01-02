@@ -13,6 +13,7 @@ public:
 	~ModuleMenu();
 
 	bool Start()override;
+	bool Restart() override;
 	update_status Update()override;
 	bool CleanUp()override;
 
