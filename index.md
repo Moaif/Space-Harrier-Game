@@ -16,7 +16,7 @@ On this game, you have to avoid/destroy all obstacles comming to you. If you des
 ## Video
 
 ### Original
-<iframe width="560" height="315" src="https://www.youtube.com/embed/v-EPVxW6f4s" frameborder="0" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://youtu.be/Ia9l6qCxayg?t=11" frameborder="0" allowfullscreen></iframe>
 [![Original Game](https://i.imgur.com/7QgaJ3V.png)](https://youtu.be/Ia9l6qCxayg?t=11)
 ### Mine
 [![My Game](https://i.imgur.com/hpR6iAI.png)](https://youtu.be/93oocWbM7HU)
