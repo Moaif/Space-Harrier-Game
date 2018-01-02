@@ -17,73 +17,66 @@ const float ModuleMenu::TEXT_INTERVAL = 1.0f;
 
 ModuleMenu::ModuleMenu(bool active) : Module(active)
 {
-	//Background
-	background = {8,531,340,224};
-	
-	//Title
-	title.frames.push_back({ 7,13,127,72 });
-	title.frames.push_back({ 156,26,155,48 });
-	title.frames.push_back({ 330,44,164,19 });
-	title.frames.push_back({ 518,46,171,20 });
-	title.frames.push_back({ 713,31,172,54 });
-	title.frames.push_back({ 905,21,166,80 });
-	title.frames.push_back({ 1105,11,163,92 });
-	title.speed = 5.0f;
+	background = {1943,57,320,224};
 
-	finalTitle = { 1105,11,163,92 };
+	man.frames.push_back({ 17, 5, 51, 35 });
+	man.frames.push_back({ 69, 5, 51, 35 });
+	man.frames.push_back({ 17, 40, 51, 35 });
+	man.frames.push_back({ 69, 5, 51, 35 });
+	man.speed = 1.5f;
 
-	//Eye
-	eye.frames.push_back({8,141,35,17});
-	eye.frames.push_back({ 51,141,35,17 });
-	eye.frames.push_back({ 93,141,35,17 });
-	eye.frames.push_back({ 135,141,35,17 });
-	eye.frames.push_back({ 93,141,35,17 });
-	eye.frames.push_back({ 51,141,35,17 });
-	eye.frames.push_back({ 8,141,35,17 });
-	eye.frames.push_back({ 178,141,35,17 });
-	eye.frames.push_back({ 220,141,35,17 });
-	eye.frames.push_back({ 263,141,35,17 });
-	eye.frames.push_back({ 305,141,35,17 });
-	eye.frames.push_back({ 347,141,35,17 });
-	eye.frames.push_back({ 305,141,35,17 });
-	eye.frames.push_back({ 263,141,35,17 });
-	eye.speed = 3.0f;
+	eye.frames.push_back({ 17, 82, 31, 19 });
+	eye.frames.push_back({ 50, 82, 31, 19 });
+	eye.frames.push_back({ 84, 82, 31, 19 });
+	eye.frames.push_back({ 50, 82, 31, 19 });
+	eye.frames.push_back({ 17, 82, 31, 19 });
+	eye.frames.push_back({ 17, 103, 31, 19 });
+	eye.frames.push_back({ 50, 103, 31, 19 });
+	eye.frames.push_back({ 84, 103, 31, 19 });
+	eye.frames.push_back({ 50, 103, 31, 19 });
+	eye.frames.push_back({ 17, 103, 31, 19 });
+	eye.frames.push_back({ 17, 82, 31, 19 });
+	eye.frames.push_back({ 17, 123, 31, 19 });
+	eye.frames.push_back({ 50, 123, 31, 19 });
+	eye.frames.push_back({ 84, 123, 31, 19 });
+	eye.frames.push_back({ 50, 123, 31, 19 });
+	eye.frames.push_back({ 17, 123, 31, 19 });
+	eye.speed = 4.0f;
 
-	//Robot
-	robot.frames.push_back({ 10,180,112,138 });
-	robot.frames.push_back({ 130,180,112,138 });
-	robot.frames.push_back({ 250,180,112,138 });
-	robot.frames.push_back({ 370,180,112,138 });
-	robot.frames.push_back({ 490,180,112,138 });
-	robot.frames.push_back({ 610,180,112,138 });
-	robot.frames.push_back({ 730,180,112,138 });
-	robot.frames.push_back({ 850,180,112,138 });
-	robot.frames.push_back({ 970,180,112,138 });
-	robot.frames.push_back({ 1090,180,112,138 });
-	robot.frames.push_back({ 1210,180,112,138 });
-	robot.frames.push_back({ 1330,180,112,138 });
-	robot.frames.push_back({ 1450,180,112,138 });
-	robot.frames.push_back({ 10,330,112,138 });
-	robot.frames.push_back({ 130,330,112,138 });
-	robot.frames.push_back({ 250,330,112,138 });
-	robot.frames.push_back({ 370,330,112,138 });
-	robot.frames.push_back({ 490,330,112,138 });
-	robot.frames.push_back({ 610,330,112,138 });
-	robot.frames.push_back({ 730,330,112,138 });
-	robot.frames.push_back({ 850,330,112,138 });
-	robot.frames.push_back({ 970,330,112,138 });
-	robot.frames.push_back({ 1090,330,112,138 });
-	robot.frames.push_back({ 1210,330,112,138 });
-	robot.frames.push_back({ 1330,330,112,138 });
-	robot.frames.push_back({ 1450,330,112,138 });
-	robot.speed = 5.0f;
-
-	//Man
-	man.frames.push_back({11,482,40,31 });
-	man.frames.push_back({ 62,482,40,31 });
-	man.frames.push_back({ 113,482,40,31 });
-	man.frames.push_back({ 164,482,40,31 });
-	man.speed = 2.0f;
+	title.frames.push_back({ 129, 5, 158, 92 });
+	title.frames.push_back({ 129, 102, 158, 92 });
+	title.frames.push_back({ 129, 200, 158, 92 });
+	title.frames.push_back({ 295, 5, 158, 92 });
+	title.frames.push_back({ 295, 102, 158, 92 });
+	title.frames.push_back({ 295, 200, 158, 92 });
+	title.frames.push_back({ 459, 5, 158, 92 });
+	title.frames.push_back({ 459, 102, 158, 92 });
+	title.frames.push_back({ 459, 200, 158, 92 });
+	title.frames.push_back({ 623, 5, 158, 92 });
+	title.frames.push_back({ 623, 102, 158, 92 });
+	title.frames.push_back({ 623, 200, 158, 92 });
+	title.frames.push_back({ 786, 5, 158, 92 });
+	title.frames.push_back({ 786, 102, 158, 92 });
+	title.frames.push_back({ 786, 200, 158, 92 });
+	title.frames.push_back({ 948, 5, 158, 92 });
+	title.frames.push_back({ 948, 102, 158, 92 });
+	title.frames.push_back({ 948, 200, 158, 92 });
+	title.frames.push_back({ 1110, 5, 158, 92 });
+	title.frames.push_back({ 1110, 102, 158, 92 });
+	title.frames.push_back({ 1110, 200, 158, 92 });
+	title.frames.push_back({ 1275, 5, 158, 92 });
+	title.frames.push_back({ 1275, 102, 158, 92 });
+	title.frames.push_back({ 1275, 200, 158, 92 });
+	title.frames.push_back({ 1439, 5, 158, 92 });
+	title.frames.push_back({ 1439, 102, 158, 92 });
+	title.frames.push_back({ 1439, 200, 158, 92 });
+	title.frames.push_back({ 1603, 5, 158, 92 });
+	title.frames.push_back({ 1603, 102, 158, 92 });
+	title.frames.push_back({ 1603, 200, 158, 92 });
+	title.frames.push_back({ 1766, 5, 158, 92 });
+	title.frames.push_back({ 1766, 102, 158, 92 });
+	title.loop = false;
+	title.speed = 4.0f;
 }
 
 ModuleMenu::~ModuleMenu()
@@ -111,7 +104,6 @@ bool ModuleMenu::Start()
 	}
 	firstPlay = false;
 
-	titleMult = 4;
 	textTimer = 0.0f;
 
 	if (fx == 0) {
@@ -140,31 +132,15 @@ update_status ModuleMenu::Update()
 
 	//Eye
 	eye.Update();
-	App->renderer->Blit(content, -82, 102, &(eye.GetCurrentFrame()), nullptr);
-
-	//Robot
-	robot.Update();
-	App->renderer->Blit(content, 97,11,&(robot.GetCurrentFrame()),nullptr);
+	App->renderer->Blit(content, -79, 102, &(eye.GetCurrentFrame()), nullptr);
 
 	//Man
 	man.Update();
-	App->renderer->Blit(content,101,146,&(man.GetCurrentFrame()),nullptr);
+	App->renderer->Blit(content,100,151,&(man.GetCurrentFrame()),nullptr);
 
-	//Title
-	if (titleMult > 0) {
-		title.Update();
-		resizeStruct size = { title.GetCurrentFrame().w / titleMult, title.GetCurrentFrame().h / titleMult };
-		App->renderer->Blit(content, 0, 120, &(title.GetCurrentFrame()), &size);
-
-		if (title.Finished()) {
-			title.Reset();
-			--titleMult;
-		}
-	}
-	else
-	{
-		App->renderer->Blit(content, 0, 120, &(finalTitle), nullptr);
-	}
+	// Title
+	title.Update();
+	App->renderer->Blit(content, 0, 130, &(title.GetCurrentFrame()), nullptr);
 
 	//Print "press start..."
 	textTimer += App->time->GetDeltaTime();

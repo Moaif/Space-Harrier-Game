@@ -24,11 +24,8 @@ private:
 	//Images
 	SDL_Texture* content = nullptr;
 	SDL_Rect background;
-	Animation robot;
 	Animation eye;
 	Animation title;
-	int titleMult;
-	SDL_Rect finalTitle;
 	Animation man;
 	//Sound
 	uint fx = 0;
